@@ -1,0 +1,32 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px #333;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 1em;
+  width: 15em;
+}
+
+.input label {
+  /* margin-bottom: 0.6em; */
+  font-weight: bold;
+}
+
+.input input {
+  /* padding: 0.7em; */
+  /* border-radius: 0; */
+  border: none;
+  /* width: 200px; */
+  width: 100%;
+  font-size: 1em;
+}
+
+.input input::placeholder {
+  /* color: red; */
+  font-size: 1em;
+}
+
+.input input:focus {
+  outline: none;
+}
