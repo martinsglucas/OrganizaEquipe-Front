@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  height: 100vh;
+  /* overflow-y: auto; */
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* .title svg {
+  cursor: pointer;
+  font-size: 2em;
+} */
+
+.pencil {
+  cursor: pointer;
+  font-size: 2em;
+}
+
+.close {
+  cursor: pointer;
+  font-size: 2.5em;
+}
+
+.btn {
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #333;
+  /* background-color: #c42d2d; */
+  border-radius: 1em;
+  color: white;
+  font-size: 16px;
+  /* margin: 0.5em; */
+}
