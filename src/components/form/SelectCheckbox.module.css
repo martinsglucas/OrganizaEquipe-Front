@@ -1,0 +1,11 @@
+.container {
+  border: solid 1px #333;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 1em;
+  width: 15em;
+}
+
+.container span {
+  font-weight: bold;
+}
