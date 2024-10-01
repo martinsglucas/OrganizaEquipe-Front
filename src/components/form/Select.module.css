@@ -1,16 +1,29 @@
-.form_control {
+.container {
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
 }
 
-.form_control label {
+.container label {
   margin-bottom: 0.6em;
   font-weight: bold;
 }
 
-.form_control select {
-  padding: 0.7em;
-  border-radius: 0;
-  border: none;
+.container select {
+  display: flex;
+  align-items: center;
+  width: 14em;
+  height: 3em;
+  border: solid 1px #333;
+  border-radius: 20px;
+  justify-content: center;
+}
+
+.container select:focus {
+  outline: none;
+}
+
+.container option {
+  width: 100%;
+  font-size: 0.7em;
 }
