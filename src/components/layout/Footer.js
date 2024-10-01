@@ -6,7 +6,7 @@ import { TiHome } from "react-icons/ti";
 
 import { Link, useLocation } from "react-router-dom";
 
-function Footer() {
+function Footer({ setSidebar }) {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -16,25 +16,26 @@ function Footer() {
       <Link
         className={`${styles.item} ${isActive("/") ? styles.active : ""}`}
         to="/"
+        onClick={() => setSidebar(false)}
       >
         <TiHome />
-        {/* <span>Início</span> */}
+        <span>Início</span>
       </Link>
       <Link
         className={`${styles.item} ${isActive("/escala") ? styles.active : ""}`}
         to="/escala"
+        onClick={() => setSidebar(false)}
       >
         <FaCalendarAlt />
-        {/* <span>Escala</span> */}
+        <span>Escala</span>
       </Link>
       <Link
-        className={`${styles.item} ${
-          isActive("/ministerio") ? styles.active : ""
-        }`}
-        to="/ministerio"
+        className={`${styles.item} ${isActive("/equipe") ? styles.active : ""}`}
+        to="/equipe"
+        onClick={() => setSidebar(false)}
       >
         <RiTeamFill />
-        {/* <span>Ministério</span> */}
+        <span>Equipe</span>
       </Link>
     </footer>
   );
