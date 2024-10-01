@@ -6,10 +6,9 @@ import LinkButton from "../components/LinkButton";
 
 function Cadastro() {
   const navigate = useNavigate();
-  const handleCadastro = async (username, first_name, email, password) => {
+  const handleCadastro = async (first_name, email, password) => {
     try {
       const response = await createUser({
-        username,
         first_name,
         email,
         password,

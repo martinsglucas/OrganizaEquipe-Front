@@ -5,7 +5,6 @@ import UserData from "../components/UserData";
 import styles from "./Perfil.module.css";
 import { FaPencilAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { BsPencilFill } from "react-icons/bs";
 
 function Perfil() {
   const user_id = localStorage.getItem("userId");
@@ -14,18 +13,6 @@ function Perfil() {
 
   const navigate = useNavigate();
 
-  // const getDataUser = async () => {
-  //   try {
-  //     const user = await getUser(user_id);
-  //     setUsername(user.username);
-  //   } catch (error) {
-  //     console.error("Erro ao buscar usuário:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getDataUser();
-  // }, [user_id]);
   const getDataUser = useCallback(async () => {
     try {
       const user = await getUser(user_id);

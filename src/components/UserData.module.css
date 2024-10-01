@@ -17,7 +17,7 @@
 }
 
 .data span {
-  /* margin-bottom: 0.6em; */
+  margin-bottom: 0.3em;
   font-weight: bold;
 }
 
@@ -38,6 +38,8 @@
   border-radius: 1em;
   color: white;
   font-size: 1em;
+  /* position: fixed; */
+  /* bottom: 15vh; */
 }
 
 .btn span {

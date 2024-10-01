@@ -23,3 +23,19 @@
   margin-bottom: 1em;
   font-size: 1em;
 }
+
+.button_password {
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  /* background-color: #333; */
+  background-color: white;
+  border-radius: 1em;
+  color: #000;
+  font-weight: bold;
+  border-width: 0.08em;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+  height: 3.2em;
+}

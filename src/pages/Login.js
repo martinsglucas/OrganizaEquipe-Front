@@ -6,11 +6,10 @@ import LinkButton from "../components/LinkButton";
 
 function Login() {
   const navigate = useNavigate();
-  const handleLogin = async (username, password) => {
+  const handleLogin = async (email, password) => {
     try {
-      // const response = await loginUser({ username, password });
       await loginUser({
-        username,
+        email,
         password,
       });
 

@@ -2,31 +2,21 @@ import styles from "./EditUser.module.css";
 import { useState } from "react";
 
 import Input from "./form/Input";
-import PasswordInput from "./form/PasswordInput";
 import SubmitButton from "./form/SubmitButton";
-import SelectCheckbox from "./form/SelectCheckbox";
+import ModalPassword from "./ModalPassword";
 
-function EditUser({ user, handle, cancel }) {
+function EditUser({ user, handleUser, handlePassword, cancel }) {
   function handleUpdate(e) {
     e.preventDefault();
-    handle(user.id, username, name, email, password);
+    handleUser(user.id, name, email);
   }
 
-  const [username, setUsername] = useState(user ? user.username : "");
   const [name, setName] = useState(user ? user.first_name : "");
   const [email, setEmail] = useState(user ? user.email : "");
-  const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <form className={styles.form} onSubmit={handleUpdate}>
-      <Input
-        text={"Usuário"}
-        name={"username"}
-        type={"username"}
-        placeholder={"Digite seu usuário"}
-        handleOnChange={(e) => setUsername(e.target.value)}
-        value={username}
-      />
       <Input
         text={"Nome"}
         name={"name"}
@@ -43,30 +33,17 @@ function EditUser({ user, handle, cancel }) {
         handleOnChange={(e) => setEmail(e.target.value)}
         value={email}
       />
-      {/* <Input
-            text={"Senha"}
-            name={"password"}
-            type={"password"}
-            placeholder={"Digite seu senha"}
-            handleOnChange={(e) => setPassword(e.target.value)}
-            value={password}
-          /> */}
-      {/* <PasswordInput
-        text={"Senha"}
-        name={"password"}
-        placeholder={"Digite sua senha"}
-        handleOnChange={(e) => setPassword(e.target.value)}
-        value={password}
-      /> */}
 
-      <SelectCheckbox
-        options={[
-          { id: "Teclado", name: "Teclado" },
-          { id: "Violão", name: "Violão" },
-          { id: "Bateria", name: "Bateria" },
-          { id: "Voz", name: "Voz" },
-        ]}
-      />
+      <button
+        type="button"
+        className={styles.button_password}
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
+        Alterar senha
+      </button>
+
       <div className={styles.buttons}>
         <SubmitButton text={"Salvar"} />
         <button
@@ -77,6 +54,14 @@ function EditUser({ user, handle, cancel }) {
           Cancelar
         </button>
       </div>
+      {showModal && (
+        <ModalPassword
+          closeModal={() => {
+            setShowModal(false);
+          }}
+          handlePassword={handlePassword}
+        />
+      )}
     </form>
   );
 }

@@ -11,14 +11,23 @@ import { FaTrash } from "react-icons/fa";
 function UserData({ edit, setEdit, user, reload }) {
   const navigate = useNavigate();
 
-  const putUser = async (user_id, username, first_name, email, password) => {
+  const putUser = async (user_id, first_name, email) => {
     try {
-      await updateUser(user_id, { username, first_name, email, password });
-      // await updateUser(user_id, { username, first_name, email });
+      await updateUser(user_id, { first_name, email });
       setEdit(false);
       reload();
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
+    }
+  };
+
+  const updatePassword = async (password) => {
+    try {
+      await updateUser(user.id, { password });
+      setEdit(false);
+      reload();
+    } catch (error) {
+      console.error("Erro ao atualizar senha:", error);
     }
   };
 
@@ -37,7 +46,12 @@ function UserData({ edit, setEdit, user, reload }) {
       {edit && (
         <div className={styles.container}>
           {/* <div> */}
-          <EditUser user={user} handle={putUser} cancel={setEdit} />
+          <EditUser
+            user={user}
+            handleUser={putUser}
+            handlePassword={updatePassword}
+            cancel={setEdit}
+          />
           <button
             className={styles.btn}
             onClick={() => {
@@ -53,20 +67,12 @@ function UserData({ edit, setEdit, user, reload }) {
         <div className={styles.container}>
           <div>
             <div className={styles.data}>
-              <span>Usuário</span>
-              <p>{user.username}</p>
-            </div>
-            <div className={styles.data}>
               <span>Nome</span>
               <p>{user.first_name}</p>
             </div>
             <div className={styles.data}>
               <span>Email</span>
               <p>{user.email}</p>
-            </div>
-            <div className={styles.data}>
-              <span>Funções</span>
-              {/* <p>{user.funcoes}</p> */}
             </div>
           </div>
         </div>

@@ -33,10 +33,11 @@
   padding: 0.5em 1em;
   text-decoration: none;
   transition: 0.5s;
-  background-color: #333;
-  /* background-color: #c42d2d; */
+  /* background-color: #333; */
+  background-color: #c42d2d;
   border-radius: 1em;
   color: white;
   font-size: 16px;
+  width: 8em;
   /* margin: 0.5em; */
 }
