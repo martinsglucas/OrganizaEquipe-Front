@@ -3,15 +3,19 @@ import FormUser from "../components/FormUser";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/services/userService";
 import LinkButton from "../components/LinkButton";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
+  const { setUser } = useAuth();
   const navigate = useNavigate();
   const handleLogin = async (email, password) => {
     try {
-      await loginUser({
+      const { user } = await loginUser({
         email,
         password,
       });
+
+      setUser(user);
 
       navigate("/");
 

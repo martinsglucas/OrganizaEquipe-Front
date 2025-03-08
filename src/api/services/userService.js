@@ -55,15 +55,12 @@ export const loginUser = async (credentials) => {
   try {
     const response = await apiClient.post("token/", credentials);
 
-    const { access, refresh, user_id } = response.data;
+    const { access, refresh, user } = response.data;
 
     localStorage.setItem("accessToken", access);
-    localStorage.setItem("userId", user_id);
+    localStorage.setItem("user", JSON.stringify(user));
 
     document.cookie = `refreshToken=${refresh}; HttpOnly; Secure; SameSite=Strict;`;
-
-    console.log(user_id);
-    console.log(access);
 
     return response.data;
   } catch (error) {
@@ -75,10 +72,27 @@ export const loginUser = async (credentials) => {
 export const logoutUser = () => {
   try {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
+    document.cookie = "refreshToken=; HttpOnly; Secure; SameSite=Strict;";
     console.log("Logout realizado com sucesso!");
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
     throw error;
   }
 };
+
+export const verifyToken = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    return false;
+  }
+
+  try {
+    await apiClient.post("token/verify/", { token });
+    return true;
+  } catch (error) {
+    console.error("Erro ao verificar token:", error);
+    return false;
+  }
+}

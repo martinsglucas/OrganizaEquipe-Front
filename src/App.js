@@ -13,63 +13,66 @@ import Footer from "./components/layout/Footer";
 import Container from "./components/layout/Container";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import { EquipeProvider } from "./context/EquipeContext";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   const [sidebar, setSidebar] = useState(false);
 
   return (
-    <EquipeProvider>
-      <Router>
-        <Header sidebar={sidebar} setSitebar={setSidebar} />
-        <Container customClass="min_height">
-          <Routes>
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/indisponibilidade"
-              element={
-                <ProtectedRoute>
-                  <Indisponibilidade />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/escala"
-              element={
-                <ProtectedRoute>
-                  <Escala />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/equipe"
-              element={
-                <ProtectedRoute>
-                  <Equipe />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/perfil"
-              element={
-                <ProtectedRoute>
-                  <Perfil />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Container>
-        <Footer setSidebar={setSidebar} />
-      </Router>
-    </EquipeProvider>
+    <AuthProvider>
+      <EquipeProvider>
+        <Router>
+          <Header sidebar={sidebar} setSitebar={setSidebar} />
+          <Container customClass="min_height">
+            <Routes>
+              <Route path="/cadastro" element={<Cadastro />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/indisponibilidade"
+                element={
+                  <ProtectedRoute>
+                    <Indisponibilidade />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/escala"
+                element={
+                  <ProtectedRoute>
+                    <Escala />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/equipe"
+                element={
+                  <ProtectedRoute>
+                    <Equipe />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/perfil"
+                element={
+                  <ProtectedRoute>
+                    <Perfil />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Container>
+          <Footer setSidebar={setSidebar} />
+        </Router>
+      </EquipeProvider>
+    </AuthProvider>
   );
 }
 

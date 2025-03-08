@@ -1,33 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { getUser, logoutUser } from "../api/services/userService";
-import { useEffect, useState, useCallback } from "react";
+import { logoutUser } from "../api/services/userService";
+import { useState } from "react";
 import UserData from "../components/UserData";
 import styles from "./Perfil.module.css";
 import { FaPencilAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { useAuth } from "../context/AuthContext";
 
 function Perfil() {
-  const user_id = localStorage.getItem("userId");
-  const [user, setUser] = useState({});
   const [edit, setEdit] = useState(false);
+
+  const { setUser } = useAuth();
 
   const navigate = useNavigate();
 
-  const getDataUser = useCallback(async () => {
-    try {
-      const user = await getUser(user_id);
-      setUser(user);
-    } catch (error) {
-      console.error("Erro ao buscar usuário:", error);
-    }
-  }, [user_id]);
-
-  useEffect(() => {
-    getDataUser();
-  }, [getDataUser]);
-
   const logout = () => {
     logoutUser();
+    setUser(null);
     navigate("/login");
   };
 
@@ -50,10 +39,10 @@ function Perfil() {
         )}
       </div>
       <UserData
-        user={user}
+        // user={user}
         edit={edit}
         setEdit={setEdit}
-        reload={getDataUser}
+        // reload={getDataUser}
       />
       {!edit && (
         <button
