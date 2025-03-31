@@ -1,6 +1,6 @@
 import styles from "./Sidebar.module.css";
 import { FaTimes } from "react-icons/fa";
-import { MdPerson, MdPersonOff } from "react-icons/md";
+import { MdPerson, MdPersonOff, MdNotifications } from "react-icons/md";
 
 import SidebarItem from "./SidebarItem";
 
@@ -21,6 +21,12 @@ function Sidebar({ active }) {
           to={"/indisponibilidade"}
           Icon={MdPersonOff}
           Text={"Indisponibilidade"}
+          onClick={closeSidebar}
+        />
+        <SidebarItem
+          to={"/notificacoes"}
+          Icon={MdNotifications}
+          Text={"Notificações"}
           onClick={closeSidebar}
         />
       </div>
