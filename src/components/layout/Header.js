@@ -20,6 +20,10 @@ function Header({ sidebar, setSitebar }) {
         return "Indisponibilidade";
       case "/perfil":
         return "Perfil";
+      case "/organizacao":
+        return "Organização";
+      case "/notificacoes":
+        return "Notificações"
       default:
         return "";
     }
