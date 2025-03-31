@@ -1,0 +1,23 @@
+.button_submit {
+  display: flex;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #333;
+  border-radius: 1em;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.button_cancel {
+  display: flex;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #c42d2d;
+  border-radius: 1em;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
