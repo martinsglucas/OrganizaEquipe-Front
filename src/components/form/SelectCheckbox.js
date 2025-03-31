@@ -2,29 +2,36 @@ import styles from "./SelectCheckbox.module.css";
 import Checkbox from "./Checkbox";
 import { useState, useEffect } from "react";
 
-function SelectCheckbox({ options }) {
-  const [selected, setSelected] = useState([]);
+function SelectCheckbox({ text, options, info, checked, handleOnChange }) {
+  const [selected, setSelected] = useState(checked);
 
-  // useEffect(() => {
-  //   console.log(selected);
-  // }, [selected]);
+  // Sincronizar o estado 'selected' com a prop 'checked'
+  useEffect(() => {
+    setSelected(checked.map((item) => item.id));
+  }, [checked]);
 
-  const handleOnChange = (option) => {
+  const handleSelectionChange = (option) => {
     if (selected.includes(option.id)) {
-      setSelected(selected.filter((item) => item !== option.id));
+      // Remove da seleção
+      const updatedSelection = selected.filter((id) => id !== option.id);
+      setSelected(updatedSelection);
+      handleOnChange(updatedSelection); // Atualiza o estado no componente pai
     } else {
-      setSelected([...selected, option.id]);
+      // Adiciona à seleção
+      const updatedSelection = [...selected, option.id];
+      setSelected(updatedSelection);
+      handleOnChange(updatedSelection); // Atualiza o estado no componente pai
     }
   };
   return (
     <div className={styles.container}>
-      <span>Funções</span>
+      <span>{text}</span>
       {options.map((option) => (
         <Checkbox
           key={option.id}
-          text={option.name}
+          text={option[info]}
           checked={selected.includes(option.id)}
-          handleOnChange={() => handleOnChange(option)}
+          handleOnChange={() => handleSelectionChange(option)}
           id={option.id}
         />
       ))}
