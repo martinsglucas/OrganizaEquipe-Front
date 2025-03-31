@@ -1,4 +1,6 @@
 import axios from "axios";
+import { logoutUser } from "./services/userService";
+import { toast } from "react-toastify";
 
 const apiClient = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
@@ -10,7 +12,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    const token = sessionStorage.getItem("accessToken");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -26,6 +28,13 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response && error.response.status === 401) {
+      logoutUser();
+      toast.warn("Sessão expirada. Faça login novamente.");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+    }
     return Promise.reject(error);
   }
 );
