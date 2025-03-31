@@ -1,20 +1,17 @@
 import styles from "./DateInput.module.css";
-import { useState } from "react";
 
-function DateInput({ name, value, placeholder, handleOnChange }) {
-  const [date, setDate] = useState("");
-
-  const handleDateChange = (e) => {
-    setDate(e.target.value);
+function DateInput({ name, value, placeholder, onChange }) {
+  const handleOnChange = (event) => {
+    onChange(event.target.value);
   };
   return (
     <input
       className={styles.input}
       type="date"
       name={name}
-      value={date}
+      value={value}
+      onChange={handleOnChange}
       placeholder={placeholder}
-      onChange={handleDateChange}
     />
   );
 }
