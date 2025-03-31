@@ -1,12 +1,17 @@
 import { createContext, useContext, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 const EquipeContext = createContext();
 
 export const EquipeProvider = ({ children }) => {
   const [equipe, setEquipe] = useState(null);
+  const { user } = useAuth();
+  const administrador = equipe?.administradores.some(
+    (admin) => admin.id === user?.id
+  ) || false;
 
   return (
-    <EquipeContext.Provider value={{ equipe, setEquipe }}>
+    <EquipeContext.Provider value={{ equipe, setEquipe, administrador }}>
       {children}
     </EquipeContext.Provider>
   );
