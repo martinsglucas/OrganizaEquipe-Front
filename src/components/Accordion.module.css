@@ -1,0 +1,94 @@
+.accordion {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+.item {
+  border-bottom: 1.5px solid #ddd;
+}
+
+.button {
+  width: 100%;
+  background: #f7f7f7;
+  border: none;
+  text-align: left;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.3s ease-in-out;
+}
+
+.button:hover {
+  background: #e0e0e0;
+}
+
+.iconOpen {
+  font-size: 20px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.content {
+  background: #fafafa;
+  padding: 0 12px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.open {
+  max-height: 300px; /* Ajuste conforme necessário */
+  padding: 10px 12px;
+}
+
+.list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.list li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* .buttonEdit {
+  background: none;
+  cursor: pointer;
+  border: 1px solid #333;
+  border-radius: 20px;
+  height: 2em;
+  margin-left: .5em;
+} */
+.buttonEdit {
+  display: flex;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #333;
+  border-radius: 1em;
+  color: white;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.iconTitle {
+  font-size: 20px;
+  margin-right: .5em; 
+}
