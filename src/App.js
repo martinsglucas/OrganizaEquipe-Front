@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Perfil from "./pages/Perfil";
 import Header from "./components/layout/Header";
 import Indisponibilidade from "./pages/Indisponibilidade";
+import Organizacao from "./pages/Organizacao";
 import Footer from "./components/layout/Footer";
 import Container from "./components/layout/Container";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
@@ -16,6 +17,7 @@ import { EquipeProvider } from "./context/EquipeContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Notificacoes from "./pages/Notificacoes";
 
 function App() {
   const [sidebar, setSidebar] = useState(false);
@@ -62,10 +64,26 @@ function App() {
                 }
               />
               <Route
+                path="/organizacao"
+                element={
+                  <ProtectedRoute>
+                    <Organizacao />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/perfil"
                 element={
                   <ProtectedRoute>
                     <Perfil />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/notificacoes"
+                element={
+                  <ProtectedRoute>
+                    <Notificacoes />
                   </ProtectedRoute>
                 }
               />
