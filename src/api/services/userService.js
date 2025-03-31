@@ -57,8 +57,8 @@ export const loginUser = async (credentials) => {
 
     const { access, refresh, user } = response.data;
 
-    localStorage.setItem("accessToken", access);
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("accessToken", access);
+    sessionStorage.setItem("user", JSON.stringify(user));
 
     document.cookie = `refreshToken=${refresh}; HttpOnly; Secure; SameSite=Strict;`;
 
@@ -71,8 +71,8 @@ export const loginUser = async (credentials) => {
 
 export const logoutUser = () => {
   try {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
     document.cookie = "refreshToken=; HttpOnly; Secure; SameSite=Strict;";
     console.log("Logout realizado com sucesso!");
   } catch (error) {
@@ -82,7 +82,7 @@ export const logoutUser = () => {
 };
 
 export const verifyToken = async () => {
-  const token = localStorage.getItem("accessToken");
+  const token = sessionStorage.getItem("accessToken");
 
   if (!token) {
     return false;
