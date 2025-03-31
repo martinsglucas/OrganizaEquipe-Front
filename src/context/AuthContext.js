@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Token expirado! Fazendo logout...");
         logoutUser();
       } else {
-        const storedUser = localStorage.getItem("user");
+        const storedUser = sessionStorage.getItem("user");
         setUser(storedUser ? JSON.parse(storedUser) : null);
       }
     };
