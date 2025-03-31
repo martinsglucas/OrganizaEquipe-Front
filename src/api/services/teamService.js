@@ -1,8 +1,11 @@
 import apiClient from "../apiClient";
 
-export const getTeams = async (userOnly = false) => {
+export const getTeams = async (userOnly = false, codeAccess = null) => {
   try {
-    const queryParam = userOnly ? "?userOnly=true" : "";
+    let queryParam = userOnly ? "?userOnly=true" : "";
+    if (codeAccess) {
+      queryParam += queryParam ? `&codeAccess=${codeAccess}` : `?codeAccess=${codeAccess}`;
+    }
     const response = await apiClient.get(`/equipes${queryParam}`);
     return response.data;
   } catch (error) {
