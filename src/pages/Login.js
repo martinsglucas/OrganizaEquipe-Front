@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/services/userService";
 import LinkButton from "../components/LinkButton";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Login() {
   const { setUser } = useAuth();
@@ -22,6 +23,7 @@ function Login() {
       console.log("Login realizado com sucesso!");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+      toast.error("Erro ao fazer login");
     }
   };
   return (

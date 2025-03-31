@@ -3,6 +3,7 @@ import { createUser } from "../api/services/userService";
 import FormUser from "../components/FormUser";
 import styles from "./Cadastro.module.css";
 import LinkButton from "../components/LinkButton";
+import { toast } from "react-toastify";
 
 function Cadastro() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Cadastro() {
         password,
       });
       console.log("Usuário cadastrado com sucesso!", response);
+      toast.success("Conta criada com sucesso!");
       navigate("/login");
     } catch (error) {
       console.error("Erro ao fazer cadastro:", error);
