@@ -1,0 +1,38 @@
+.members {
+display: flex;
+flex-direction: column;
+/* align-items: center; */
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* background-color: #333; */
+  border: 1px solid #333;
+  /* color: white; */
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  margin: 0.5em 0;
+  min-width: 10em;
+}
+
+.delete {
+  color: #f44336;
+}
+
+.add {
+  display: flex;
+  justify-content: center;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  /* background-color: #333; */
+  background: none;
+  border: 1px solid #333;
+  border-radius: 1em;
+  /* color: white; */
+  font-size: 1em;
+  cursor: pointer;
+  margin: 0.5em 0;
+}
