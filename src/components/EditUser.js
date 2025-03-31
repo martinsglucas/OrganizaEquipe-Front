@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import Input from "./form/Input";
 import SubmitButton from "./form/SubmitButton";
-import ModalPassword from "./ModalPassword";
+import ModalPassword from "./modals/ModalPassword";
 
 function EditUser({ user, handleUser, handlePassword, cancel }) {
   function handleUpdate(e) {
@@ -45,7 +45,6 @@ function EditUser({ user, handleUser, handlePassword, cancel }) {
       </button>
 
       <div className={styles.buttons}>
-        <SubmitButton text={"Salvar"} />
         <button
           type="button"
           className={styles.button_cancel}
@@ -53,6 +52,7 @@ function EditUser({ user, handleUser, handlePassword, cancel }) {
         >
           Cancelar
         </button>
+        <SubmitButton text={"Salvar"} />
       </div>
       {showModal && (
         <ModalPassword

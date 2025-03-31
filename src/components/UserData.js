@@ -7,15 +7,18 @@ import {
 } from "../api/services/userService";
 import { useNavigate } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
-function UserData({ edit, setEdit, user, reload }) {
+function UserData({ edit, setEdit }) {
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const putUser = async (user_id, first_name, email) => {
     try {
       await updateUser(user_id, { first_name, email });
       setEdit(false);
-      reload();
+      toast.success("Informações atualizadas com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
     }
@@ -25,7 +28,7 @@ function UserData({ edit, setEdit, user, reload }) {
     try {
       await updateUser(user.id, { password });
       setEdit(false);
-      reload();
+      toast.success("Senha atualizada com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar senha:", error);
     }
@@ -36,6 +39,7 @@ function UserData({ edit, setEdit, user, reload }) {
       await deleteUser(user.id);
       logoutUser();
       navigate("/login");
+      toast.success("Conta deletada com sucesso!");
     } catch (error) {
       console.error("Erro ao deletar conta:", error);
     }
@@ -45,7 +49,6 @@ function UserData({ edit, setEdit, user, reload }) {
     <>
       {edit && (
         <div className={styles.container}>
-          {/* <div> */}
           <EditUser
             user={user}
             handleUser={putUser}
