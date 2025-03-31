@@ -1,0 +1,48 @@
+.functions {
+display: flex;
+flex-direction: column;
+/* align-items: center; */
+}
+
+.func {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* background-color: #333; */
+  border: 1px solid #333;
+  /* color: white; */
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  margin: 0.5em 0;
+  min-width: 10em;
+}
+
+.add {
+  display: flex;
+  justify-content: center;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  /* background-color: #333; */
+  background: none;
+  border: 1px solid #333;
+  border-radius: 1em;
+  /* color: white; */
+  font-size: 1em;
+  cursor: pointer;
+  margin: 0.5em 0;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.delete {
+  color: #f44336;
+}
+
+.edit {
+  font-size: 20px;
+  margin-right: .5em;
+}
