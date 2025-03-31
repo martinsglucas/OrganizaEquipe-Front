@@ -1,0 +1,33 @@
+/* .MuiDateCalendar-root {
+  position: relative;
+  z-index: auto;
+} */
+
+/* .MuiButtonBase-root.MuiPickersDay-root {
+  position: relative;
+  z-index: -1;
+} */
+/* .MuiBadge-badge.MuiBadge-standard.MuiBadge-anchorOriginTopRight.MuiBadge-anchorOriginTopRightCircular.MuiBadge-overlapCircularbadge {
+  position: relative;
+  z-index: -1;
+} */
+
+.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin.MuiPickersDay-today {
+  background-color: #c7c7c7;
+  /* color: white; */
+  /* border: 1px solid #333; */
+  border: none;
+}
+.MuiButtonBase-root.MuiPickersDay-root.Mui-selected.MuiPickersDay-dayWithMargin {
+  background-color: #333;
+  color: white;
+  /* z-index: -1; */
+}
+.MuiPickersYear-yearButton.Mui-selected {
+  background-color: #333 !important;
+  color: white;
+}
+.MuiPickersMonth-monthButton.Mui-selected {
+  background-color: #333 !important;
+  color: white;
+}
