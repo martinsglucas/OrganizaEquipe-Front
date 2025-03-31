@@ -14,6 +14,8 @@ import Container from "./components/layout/Container";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import { EquipeProvider } from "./context/EquipeContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [sidebar, setSidebar] = useState(false);
@@ -70,6 +72,19 @@ function App() {
             </Routes>
           </Container>
           <Footer setSidebar={setSidebar} />
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            // theme="dark"
+          />
         </Router>
       </EquipeProvider>
     </AuthProvider>
