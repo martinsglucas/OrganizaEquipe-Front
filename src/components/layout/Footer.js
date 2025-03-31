@@ -3,6 +3,7 @@ import styles from "./Footer.module.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
 import { TiHome } from "react-icons/ti";
+import { FaBuilding } from "react-icons/fa6";
 
 import { Link, useLocation } from "react-router-dom";
 
@@ -19,7 +20,6 @@ function Footer({ setSidebar }) {
         onClick={() => setSidebar(false)}
       >
         <TiHome />
-        <span>Início</span>
       </Link>
       <Link
         className={`${styles.item} ${isActive("/escala") ? styles.active : ""}`}
@@ -27,7 +27,6 @@ function Footer({ setSidebar }) {
         onClick={() => setSidebar(false)}
       >
         <FaCalendarAlt />
-        <span>Escala</span>
       </Link>
       <Link
         className={`${styles.item} ${isActive("/equipe") ? styles.active : ""}`}
@@ -35,7 +34,15 @@ function Footer({ setSidebar }) {
         onClick={() => setSidebar(false)}
       >
         <RiTeamFill />
-        <span>Equipe</span>
+      </Link>
+      <Link
+        className={`${styles.item} ${
+          isActive("/organizacao") ? styles.active : ""
+        }`}
+        to="/organizacao"
+        onClick={() => setSidebar(false)}
+      >
+        <FaBuilding />
       </Link>
     </footer>
   );
