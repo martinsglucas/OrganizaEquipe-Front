@@ -4,7 +4,7 @@ import { getTeams, getTeam, createTeam } from "../api/services/teamService";
 import EquipeCard from "../components/EquipeCard";
 import { useNavigate } from "react-router-dom";
 import { useEquipe } from "../context/EquipeContext";
-import ModalCreateTeam from "../components/ModalCreateTeam";
+import ModalCreateTeam from "../components/modals/ModalCreateTeam";
 
 function Home() {
   const [equipes, setEquipes] = useState([]);
