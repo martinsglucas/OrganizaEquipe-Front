@@ -3,12 +3,14 @@ import Modal from "./Modal";
 import ModalCreateTeam from "./ModalCreateTeam";
 import { useState } from "react";
 import { createTeam } from "../../api/services/teamService";
+import { useOrganization } from "../../context/OrganizationContext";
 
 function ModalSwapTeam({ closeModal, handleSwapTeam, equipes }) {
   const [showModal, setShowModal] = useState(false);
+  const { organization } = useOrganization();
 
-  const handleAddTeam = async (nome) => {
-    const equipe = await createTeam({ nome });
+  const handleAddTeam = async (name) => {
+    const equipe = await createTeam({ name, organization: organization.id });
     handleSwapTeam(equipe);
     setShowModal(false);
     equipes.push(equipe);
@@ -23,7 +25,7 @@ function ModalSwapTeam({ closeModal, handleSwapTeam, equipes }) {
             className={styles.equipe}
             onClick={() => handleSwapTeam(equipe)}
           >
-            {equipe.nome}
+            {equipe.name}
           </button>
         ))}
         <button className={styles.add} onClick={() => setShowModal(true)}>
