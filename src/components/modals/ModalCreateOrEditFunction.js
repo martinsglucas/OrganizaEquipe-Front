@@ -8,13 +8,13 @@ import { toast } from "react-toastify";
 
 function ModalCreateOrEditFunction({ title, func, onClose }) {
   const [name, setName] = useState(func ? func.name : "");
-  const { equipe, setEquipe } = useTeam();
+  const { team, setTeam } = useTeam();
 
   const handleCreateFunction = async () => {
     try {
       if (name){
-        const newFunction = await createFunction({ team: equipe.id, name });
-        setEquipe({ ...equipe, roles: [...equipe.roles, newFunction] });
+        const newFunction = await createFunction({ team: team.id, name });
+        setTeam({ ...team, roles: [...team.roles, newFunction] });
         toast.success("Função criada com sucesso!");
         onClose();
       } else {
@@ -30,9 +30,9 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
     try {
       if (name){
         const updatedFunction = await updateFunction(func.id, {name});
-        setEquipe({
-          ...equipe,
-          roles: equipe.roles.map((f) =>
+        setTeam({
+          ...team,
+          roles: team.roles.map((f) =>
             f.id === func.id ? updatedFunction : f
           ),
         });

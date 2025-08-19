@@ -8,7 +8,7 @@ import { createTeam } from "../api/services/teamService";
 import { useOrganization } from "../context/OrganizationContext";
 
 function Team() {
-  const { equipe, setEquipe, teams, setTeams } = useTeam();
+  const { team, setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
   const [showModal, setShowModal] = useState(false);
 
@@ -23,15 +23,15 @@ function Team() {
 
   const getEquipe = async () => {
     try {
-      const team = await getTeam(equipe.id);
-      setEquipe(team);
+      const team = await getTeam(team.id);
+      setTeam(team);
     } catch (error) {
       console.error("Erro ao buscar equipe:", error);
     }
   };
 
   useEffect(() => {
-    if (!equipe){
+    if (!team){
       getEquipes();
     } else {
       getEquipe();
@@ -40,36 +40,36 @@ function Team() {
 
 
   const handleSwapTeam = async (id) => {
-    const equipe = await getTeam(id);
-    setEquipe(equipe);
+    const team = await getTeam(id);
+    setTeam(team);
   };
 
   const addEquipe = async (name, organization) => {
-    const equipe = await createTeam({ name, organization });
-    setTeams([...teams, equipe]);
+    const team = await createTeam({ name, organization });
+    setTeams([...teams, team]);
     setShowModal(false);
   };
 
   if (!organization) {
     return (
       <div className={`${styles.container} ${styles.center}`}>
-        <h2 className={styles.aviso}>Você ainda não faz parte de uma organização. <br></br> Crie ou ingresse em uma</h2>
+        <h2 className={styles.warning}>Você ainda não faz parte de uma organização. <br></br> Crie ou ingresse em uma</h2>
       </div>
     );
   }
 
-  if (!equipe) {
+  if (!team) {
     return (
       <div className={styles.container}>
-        <h2 className={styles.aviso}>Nenhuma equipe selecionada</h2>
-        <div className={styles.equipes}>
-          {teams.map((equipe) => (
+        <h2 className={styles.warning}>Nenhuma equipe selecionada</h2>
+        <div className={styles.teams}>
+          {teams.map((team) => (
             <button
-              key={equipe.id}
-              className={styles.equipe}
-              onClick={() => handleSwapTeam(equipe.id)}
+              key={team.id}
+              className={styles.team}
+              onClick={() => handleSwapTeam(team.id)}
             >
-              <h3>{equipe.name}</h3>
+              <h3>{team.name}</h3>
             </button>
           ))}
           <button className={styles.add} onClick={() => setShowModal(true)}>
@@ -88,7 +88,7 @@ function Team() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.equipes}></div>
+      <div className={styles.teams}></div>
       <TeamDetail/>
     </div>
   );

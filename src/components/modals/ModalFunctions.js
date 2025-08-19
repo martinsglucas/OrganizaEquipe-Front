@@ -15,7 +15,7 @@ function ModalFunctions({ onClose, functions }) {
   const [functionToDelete, setFunctionToDelete] = useState(null);
   const [functionToEdit, setFunctionToEdit] = useState(null);
 
-  const { equipe, setEquipe } = useTeam();
+  const { team, setTeam } = useTeam();
 
   const handleDeleteFunction = (func) => {
     setFunctionToDelete(func);
@@ -33,7 +33,7 @@ function ModalFunctions({ onClose, functions }) {
         (func) => func.id !== functionToDelete.id
       );
       await deleteFunction(functionToDelete.id);
-      setEquipe({ ...equipe, roles: newFunctions });
+      setTeam({ ...team, roles: newFunctions });
       toast.success("Função removida com sucesso!");
       onClose();
     } catch (error) {

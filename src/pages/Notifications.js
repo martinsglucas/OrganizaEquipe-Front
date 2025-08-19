@@ -17,7 +17,7 @@ function Notifications() {
   const [orgInvitations, setOrgInvitations] = useState([]);
   const [teamInvitations, setTeamInvitations] = useState([]);
   const { organization } = useOrganization();
-  const { equipe } = useTeam();
+  const { team } = useTeam();
   const { user } = useAuth();
 
   const fetchInvitations = useCallback(async () => {
@@ -46,7 +46,7 @@ function Notifications() {
 
   useEffect(() => {
     fetchInvitations();
-  }, [fetchInvitations, organization, equipe]);
+  }, [fetchInvitations, organization, team]);
 
   const acceptTeamInvitation = async (invite) => {
     try {

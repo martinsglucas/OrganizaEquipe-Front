@@ -13,11 +13,11 @@
   height: 70vh;
 }
 
-.aviso {
+.warning {
   text-align: center;
 }
 
-.equipes {
+.teams {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -25,7 +25,7 @@
   margin-bottom: 1em;
 }
 
-.equipe {
+.team {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,42 +56,3 @@
 .add span {
   font-size: 3em;
 }
-/* .equipe {
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 0.5s;
-  border-radius: 1em;
-  color: #000;
-  font-size: 1em;
-  margin: 0.5em;
-} */
-
-/* .add {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 10em;
-  height: 3em;
-  border: solid 1px #333;
-  border-radius: 20px;
-  margin: 1em;
-  justify-content: center;
-} */
-
-/* .select {
-  display: flex;
-  align-items: center;
-  height: 3em;
-  border: solid 1px #333;
-  border-radius: 20px;
-  justify-content: center;
-}
-
-.select:focus {
-  outline: none;
-}
-
-.select option {
-  padding: 40px;
-  background-color: #333;
-} */

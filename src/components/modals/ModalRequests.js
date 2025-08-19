@@ -8,14 +8,14 @@ import { toast } from "react-toastify";
 import { addMember } from "../../api/services/teamService";
 
 function ModalRequests({ onClose }) {
-  const { equipe, setEquipe } = useTeam();
+  const { team, setTeam } = useTeam();
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const fetchRequests = async () => {
-      if (equipe?.code_access) {
+      if (team?.code_access) {
         try {
-          const response = await getRequests(equipe.code_access);
+          const response = await getRequests(team.code_access);
           setRequests(response);
         } catch (error) {
           console.error("Erro ao buscar solicitações:", error);
@@ -24,7 +24,7 @@ function ModalRequests({ onClose }) {
     };
 
     fetchRequests();
-  }, [equipe]);
+  }, [team]);
 
   const refuseRequest = async (id) => {
     try {
@@ -39,8 +39,8 @@ function ModalRequests({ onClose }) {
 
   const acceptRequest = async (request) => {
     try {
-      await addMember(equipe.id, { user_id: request.user.id });
-      setEquipe({ ...equipe, members: [...equipe.members, request.user] });
+      await addMember(team.id, { user_id: request.user.id });
+      setTeam({ ...team, members: [...team.members, request.user] });
       await deleteRequest(request.id);
       const newRequests = requests.filter((r) => r.id !== request.id);
       setRequests(newRequests);

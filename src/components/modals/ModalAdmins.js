@@ -6,15 +6,15 @@ import Modal from "./Modal";
 import { updateTeam } from "../../api/services/teamService";
 import { toast } from "react-toastify";
 function ModalAdmins({ isOpen, onClose }) {
-  const { equipe, setEquipe } = useTeam();
-  const membros = equipe?.members || [];
-  const [administradores, setAdministradores] = useState(equipe?.admins || []);
+  const { team, setTeam } = useTeam();
+  const membros = team?.members || [];
+  const [administradores, setAdministradores] = useState(team?.admins || []);
   const [disabled, setDisabled] = useState(true);
 
 
   useEffect(() => {
     const administradoresIds = administradores.map((admin) => admin.id);
-    const equipeAdministradoresIds = (equipe?.admins || []).map(
+    const equipeAdministradoresIds = (team?.admins || []).map(
       (admin) => admin.id
     );
 
@@ -30,19 +30,19 @@ function ModalAdmins({ isOpen, onClose }) {
       toast.warn("A equipe deve ter ao menos um administrador!")
     }
 
-  }, [administradores, equipe?.admins]);
+  }, [administradores, team?.admins]);
 
 
   const updateAdministradores = async () => {
     try {
       const administradoresIds = administradores.map((admin) => admin.id);
-      await updateTeam(equipe.id, { admins: administradoresIds });
+      await updateTeam(team.id, { admins: administradoresIds });
       toast.success("Administradores atualizados com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar administradores:", error);
       toast.error("Erro ao atualizar administradores");
     } finally {
-      setEquipe({ ...equipe, admins: administradores });
+      setTeam({ ...team, admins: administradores });
       onClose();
     }
   }

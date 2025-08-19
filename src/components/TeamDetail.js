@@ -29,16 +29,16 @@ function TeamDetail() {
   const [showModalFuncoes, setShowModalFuncoes] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
-  const { equipe, setEquipe, administrador, teams, setTeams } = useTeam();
-  const membros = equipe.members.map((membro) => ({
+  const { team, setTeam, admin, teams, setTeams } = useTeam();
+  const membros = team.members.map((membro) => ({
     id: membro.id,
     content: membro.first_name,
   }));
-  const managers = equipe.admins.map((admin) => ({
+  const managers = team.admins.map((admin) => ({
     id: admin.id,
     content: admin.first_name,
   }));
-  const functions = equipe.roles.map((funcao) => ({
+  const functions = team.roles.map((funcao) => ({
     id: funcao.id,
     content: funcao.name,
   }));
@@ -58,16 +58,16 @@ function TeamDetail() {
   };
 
   const handleSwapTeam = async (id) => {
-    const equipe = await getTeam(id);
-    setEquipe(equipe);
+    const team = await getTeam(id);
+    setTeam(team);
     setShowModalSwap(false);
   };
 
   const handleDeleteTeam = async () => {
     try {
-      await deleteTeam(equipe.id);
-      setEquipe(null);
-      setTeams(teams.filter((e) => e.id !== equipe.id));
+      await deleteTeam(team.id);
+      setTeam(null);
+      setTeams(teams.filter((e) => e.id !== team.id));
       setShowModalDelete(false);
       toast.success("Equipe excluída com sucesso!");
     } catch (error) {
@@ -77,12 +77,12 @@ function TeamDetail() {
   };
 
   const handleEditName = () => {
-    if (administrador) {
+    if (admin) {
       setShowModalEditName(true);
     }
   }
 
-  if (!equipe || Object.keys(equipe).length === 0) {
+  if (!team || Object.keys(team).length === 0) {
     return <h3>Selecione uma equipe</h3>;
   }
 
@@ -97,30 +97,30 @@ function TeamDetail() {
           >
             <div className={styles.description}>
               <MdTitle className={styles.itemTitle} />
-              <b>{equipe.name}</b>
+              <b>{team.name}</b>
             </div>
-            {administrador && (
+            {admin && (
               <IoIosArrowForward className={styles.openButton} />
             )}
           </button>
           <div className={styles.item}>
             <div className={styles.description}>
               <IoMdKey className={styles.itemTitle} />
-              <b>Código:</b>&nbsp;{equipe.code_access}
+              <b>Código:</b>&nbsp;{team.code_access}
             </div>
           </div>
           <Accordion
             title={"Administradores"}
             icon={<RiAdminFill />}
             content={managers}
-            edit={administrador}
+            edit={admin}
             onEdit={() => setShowModalAdministradores(true)}
           />
           <Accordion
             title={"Membros"}
             icon={<RiTeamFill />}
             content={membros}
-            edit={administrador}
+            edit={admin}
             onEdit={() => {
               setShowModalMembros(true);
             }}
@@ -129,12 +129,12 @@ function TeamDetail() {
             title={"Funções"}
             icon={<BsPersonFillGear />}
             content={functions}
-            edit={administrador}
+            edit={admin}
             onEdit={() => {
               setShowModalFuncoes(true);
             }}
           />
-          {administrador && (
+          {admin && (
             <button
               className={styles.item}
               onClick={() => setShowModalRequests(true)}
@@ -156,7 +156,7 @@ function TeamDetail() {
           </button>
         </div>
         <br></br>
-        {administrador && (
+        {admin && (
           <div className={styles.section}>
             <button
               className={styles.button}
@@ -180,13 +180,13 @@ function TeamDetail() {
       {showModalMembros && (
         <ModalMembers
           onClose={() => setShowModalMembros(false)}
-          members={equipe.members}
+          members={team.members}
         />
       )}
       {showModalFuncoes && (
         <ModalFunctions
           onClose={() => setShowModalFuncoes(false)}
-          functions={equipe.roles}
+          functions={team.roles}
         />
       )}
       {showModalRequests && (
@@ -195,8 +195,8 @@ function TeamDetail() {
       {showModalSwap && (
         <ModalSwapTeam
           closeModal={() => setShowModalSwap(false)}
-          handleSwapTeam={(equipe) => {
-            handleSwapTeam(equipe.id);
+          handleSwapTeam={(team) => {
+            handleSwapTeam(team.id);
           }}
           equipes={teams}
         />
@@ -204,7 +204,7 @@ function TeamDetail() {
       {showModalDelete && (
         <ModalConfirmation
           title={"Excluir equipe"}
-          message={`Tem certeza que deseja remover a equipe ${equipe.name}?`}
+          message={`Tem certeza que deseja remover a equipe ${team.name}?`}
           onConfirm={() => handleDeleteTeam()}
           onClose={() => setShowModalDelete(false)}
         />

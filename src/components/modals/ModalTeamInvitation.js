@@ -10,12 +10,12 @@ import { toast } from "react-toastify";
 function ModalTeamInvitation({onClose}) {
 
   const [email, setEmail] = useState("");
-  const { equipe } = useTeam();
+  const { team } = useTeam();
   const { user } = useAuth();
 
   const invite = async () => {
     try {
-      await createTeamInvitation({recipient_email: email, sender_name: user.first_name, team: equipe.id})
+      await createTeamInvitation({recipient_email: email, sender_name: user.first_name, team: team.id})
       toast.success("Convite enviado com sucesso!");
       onClose();
     } catch (error) {

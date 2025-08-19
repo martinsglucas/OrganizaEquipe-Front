@@ -13,7 +13,7 @@ function ModalMembers({ onClose, members}) {
   const [showInvitation, setShowInvitation] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState(null);
 
-  const { equipe, setEquipe } = useTeam();
+  const { team, setEquipe } = useTeam();
 
   const handleDeleteMember = (member) => {
     setShowConfirmation(true);
@@ -25,14 +25,14 @@ function ModalMembers({ onClose, members}) {
       const newMembers = members.filter(
         (member) => member.id !== memberToDelete.id
       );
-      await removeMember(equipe.id, { user_id: memberToDelete.id });
-      if (equipe.admins.some((admin) => admin.id === memberToDelete.id)) {
-        const newAdmins = equipe.admins.filter(
+      await removeMember(team.id, { user_id: memberToDelete.id });
+      if (team.admins.some((admin) => admin.id === memberToDelete.id)) {
+        const newAdmins = team.admins.filter(
           (admin) => admin.id !== memberToDelete.id
         );
-        setEquipe({ ...equipe, admins: newAdmins, members: newMembers });
+        setEquipe({ ...team, admins: newAdmins, members: newMembers });
       } else {
-        setEquipe({ ...equipe, members: newMembers });
+        setEquipe({ ...team, members: newMembers });
       }
       toast.success("Membro removido com sucesso!");
       onClose();
@@ -61,7 +61,7 @@ function ModalMembers({ onClose, members}) {
       {showConfirmation && (
         <ModalConfirmation
           title={"Excluir membro"}
-          message={`Tem certeza que deseja remover ${memberToDelete.first_name}? ${equipe.admins.some(
+          message={`Tem certeza que deseja remover ${memberToDelete.first_name}? ${team.admins.some(
             (admin) => admin.id === memberToDelete.id
           ) ? "Ele(a) é um administrador e perderá todas as permissões." : ""}`}
           onConfirm={() => deleteMember()}

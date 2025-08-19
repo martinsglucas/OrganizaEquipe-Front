@@ -24,10 +24,9 @@ function OrganizationDetail() {
   const [showModalAdministradores, setShowModalAdministradores] =
     useState(false);
   const [showModalMembros, setShowModalMembros] = useState(false);
-  // const [showModalFuncoes, setShowModalFuncoes] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
-  const { setEquipe } = useTeam();
+  const { setTeam } = useTeam();
   const { organization, setOrganization, administrador } = useOrganization();
   const membros = organization.members.map((membro) => ({
     id: membro.id,
@@ -52,7 +51,7 @@ function OrganizationDetail() {
     try {
       await deleteOrganization(organization.id);
       setOrganization(null);
-      setEquipe(null);
+      setTeam(null);
       setShowModalDelete(false);
       toast.success("Organização excluída com sucesso!");
     } catch (error) {

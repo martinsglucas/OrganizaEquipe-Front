@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 
 function ModalEditNameTeam({onClose}) {
 
-  const {equipe, setEquipe} = useTeam();
-  const [name, setName] = useState(equipe.name);
+  const {team, setTeam} = useTeam();
+  const [name, setName] = useState(team.name);
 
   const handleOnChange = (e) => {
     setName(e.target.value);
@@ -18,8 +18,8 @@ function ModalEditNameTeam({onClose}) {
   const updateName = async () => {
     try {
       if (name){
-        await updateTeam(equipe.id, {name});
-        setEquipe({...equipe, name});
+        await updateTeam(team.id, {name});
+        setTeam({...team, name});
         toast.success("Nome alterado com sucesso!");
         onClose();
       } else {

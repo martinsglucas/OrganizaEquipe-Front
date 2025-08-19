@@ -15,7 +15,7 @@ function Sidebar({ active }) {
   
   const closeSidebar = () => active(false);
   
-  const { setEquipe } = useTeam();
+  const { setTeam } = useTeam();
   const { setOrganization } = useOrganization();
   const [hasNotifications, setHasNotifications] = useState(false);
   
@@ -35,7 +35,7 @@ function Sidebar({ active }) {
   const logout = () => {
     logoutUser();
     setUser(null);
-    setEquipe(null);
+    setTeam(null);
     setOrganization(null);
     closeSidebar();
   };

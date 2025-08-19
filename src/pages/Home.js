@@ -9,7 +9,7 @@ import ModalCreateTeam from "../components/modals/ModalCreateTeam";
 function Home() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const { setEquipe, teams, setTeams } = useTeam();
+  const { setTeam, teams, setTeams } = useTeam();
 
   const getEquipes = async () => {
     try {
@@ -26,7 +26,7 @@ function Home() {
 
   const handleEquipeClick = async (id) => {
     const equipe = await getTeam(id);
-    setEquipe(equipe);
+    setTeam(equipe);
     navigate("/equipe");
   };
 

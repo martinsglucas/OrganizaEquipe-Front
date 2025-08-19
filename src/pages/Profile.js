@@ -9,7 +9,7 @@ import { useOrganization } from "../context/OrganizationContext";
 
 function Profile() {
   const [edit, setEdit] = useState(false);
-  const { setEquipe } = useTeam()
+  const { setTeam } = useTeam()
   const { setOrganization } = useOrganization();
 
   const { setUser } = useAuth();
@@ -19,7 +19,7 @@ function Profile() {
   const logout = () => {
     logoutUser();
     setUser(null);
-    setEquipe(null);
+    setTeam(null);
     setOrganization(null);
     navigate("/login");
   };
