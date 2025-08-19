@@ -4,9 +4,11 @@ export const getTeams = async (userOnly = false, codeAccess = null) => {
   try {
     let queryParam = userOnly ? "?userOnly=true" : "";
     if (codeAccess) {
-      queryParam += queryParam ? `&codeAccess=${codeAccess}` : `?codeAccess=${codeAccess}`;
+      queryParam += queryParam
+        ? `&codeAccess=${codeAccess}`
+        : `?codeAccess=${codeAccess}`;
     }
-    const response = await apiClient.get(`/equipes${queryParam}`);
+    const response = await apiClient.get(`/teams${queryParam}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar equipes:", error);
@@ -16,7 +18,7 @@ export const getTeams = async (userOnly = false, codeAccess = null) => {
 
 export const getTeam = async (id) => {
   try {
-    const response = await apiClient.get(`equipes/${id}/`);
+    const response = await apiClient.get(`teams/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar equipe:", error);
@@ -26,7 +28,7 @@ export const getTeam = async (id) => {
 
 export const createTeam = async (teamData) => {
   try {
-    const response = await apiClient.post("equipes/", teamData);
+    const response = await apiClient.post("teams/", teamData);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar equipe:", error);
@@ -36,7 +38,7 @@ export const createTeam = async (teamData) => {
 
 export const updateTeam = async (id, teamData) => {
   try {
-    const response = await apiClient.patch(`equipes/${id}/`, teamData);
+    const response = await apiClient.patch(`teams/${id}/`, teamData);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar equipe:", error);
@@ -46,7 +48,7 @@ export const updateTeam = async (id, teamData) => {
 
 export const deleteTeam = async (id) => {
   try {
-    const response = await apiClient.delete(`equipes/${id}/`);
+    const response = await apiClient.delete(`teams/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar equipe:", error);
@@ -57,7 +59,7 @@ export const deleteTeam = async (id) => {
 export const addMember = async (id, memberId) => {
   try {
     const response = await apiClient.post(
-      `equipes/${id}/add_member/`,
+      `teams/${id}/add_member/`,
       memberId
     );
     return response.data;
@@ -70,7 +72,7 @@ export const addMember = async (id, memberId) => {
 export const removeMember = async (id, memberId) => {
   try {
     const response = await apiClient.post(
-      `equipes/${id}/remove_member/`,
+      `teams/${id}/remove_member/`,
       memberId
     );
     return response.data;
