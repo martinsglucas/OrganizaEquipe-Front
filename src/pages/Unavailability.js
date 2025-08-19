@@ -1,26 +1,26 @@
-import styles from "./Indisponibilidade.module.css";
-import { AiFillPlusCircle } from "react-icons/ai";
+import styles from "./Unavailability.module.css";
+import { AiOutlinePlus } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import Calendar from "../components/Calendar";
 import ModalCreateUnavailability from "../components/modals/ModalCreateUnavailability";
 import { getUnavailabilities } from "../api/services/unavailabilityService";
-import IndisponibilidadeDetalhe from "../components/IndisponibilidadeDetalhe";
+import UnavailabilityDetail from "../components/UnavailabilityDetail";
 import { toast } from "react-toastify";
 
-function Indisponibilidade() {
+function Unavailability() {
   const [value, setValue] = useState(dayjs());
   const [showModal, setShowModal] = useState(false);
-  const [indisponibilidades, setIndisponibilidades] = useState([]);
+  const [unavailabilities, setUnavailabilities] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(dayjs(value).month());
 
-  const getIndisponibilidades = async (date) => {
+  const getUnavailabilities = async (date) => {
     try {
       const response = await getUnavailabilities(
         true,
         dayjs(date).format("YYYY-MM-DD")
       );
-      setIndisponibilidades(response);
+      setUnavailabilities(response);
     } catch (error) {
       console.error("Erro ao buscar indisponibilidades:", error);
       toast.error("Erro ao buscar indisponibilidades");
@@ -31,7 +31,7 @@ function Indisponibilidade() {
     const newMonth = dayjs(value).month();
     if (newMonth !== currentMonth) {
       setCurrentMonth(newMonth);
-      getIndisponibilidades(value);
+      getUnavailabilities(value);
     }
   }, [value, currentMonth]);
 
@@ -41,22 +41,22 @@ function Indisponibilidade() {
 
   return (
     <div className={styles.container}>
-      <AiFillPlusCircle
+      <AiOutlinePlus
         className={styles.add}
         onClick={() => setShowModal(true)}
       />
       <Calendar
         onChange={handleDateChange}
-        refreshData={getIndisponibilidades}
-        data={indisponibilidades}
+        refreshData={getUnavailabilities}
+        data={unavailabilities}
         value={value}
       />
       {value && (
-        <div className={styles.indisponibilidades}>
-          <IndisponibilidadeDetalhe
-            indisponibilidades={indisponibilidades}
-            setIndisponibilidades={setIndisponibilidades}
-            dia={value}
+        <div className={styles.unavailabilities}>
+          <UnavailabilityDetail
+            unavailabilities={unavailabilities}
+            setUnavailabilities={setUnavailabilities}
+            day={value}
           />
         </div>
       )}
@@ -64,12 +64,12 @@ function Indisponibilidade() {
         <ModalCreateUnavailability
           onClose={() => setShowModal(false)}
           day={value}
-          unavailabilities={indisponibilidades}
-          setUnavailabilities={setIndisponibilidades}
+          unavailabilities={unavailabilities}
+          setUnavailabilities={setUnavailabilities}
         />
       )}
     </div>
   );
 }
 
-export default Indisponibilidade;
+export default Unavailability;

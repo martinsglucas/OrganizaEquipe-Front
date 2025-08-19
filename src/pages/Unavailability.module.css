@@ -6,14 +6,28 @@
   overflow-y: auto;
 }
 
-.add {
+/* .add {
   position: fixed;
   right: 0.2em;
   bottom: 2em;
   font-size: 4em;
   margin: 0;
   cursor: pointer;
+} */
+
+.add {
+  position: fixed;
+  right: 0.3em;
+  bottom: 3em;
+  font-size: 2.5em;
+  padding: 0.2em;
+  background:#000;
+  color: #fff;
+  border-radius: 50%;
+  margin: 0;
+  cursor: pointer;
 }
-.indisponibilidades {
+
+.unavailabilities {
   width: 100%;
 }
