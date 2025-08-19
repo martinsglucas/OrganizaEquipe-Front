@@ -7,17 +7,19 @@ import { createRequest } from "../../api/services/requestService";
 import { getTeams } from "../../api/services/teamService";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { useOrganization } from "../../context/OrganizationContext";
 
 function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
   const [nomeEquipe, setNomeEquipe] = useState("");
   const [codigoEquipe, setCodigoEquipe] = useState("");
   const [equipeToJoin, setEquipeToJoin] = useState("");
+  const { organization, administrador } = useOrganization();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { user } = useAuth();
 
   function handleCreate(e) {
     e.preventDefault();
-    handleCreateTeam(nomeEquipe);
+    handleCreateTeam(nomeEquipe, organization.id);
   }
 
   const confirm = async () => {
@@ -61,6 +63,7 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
       <button className={styles.button_submit} onClick={confirm}>
         Enviar solicitação
       </button>
+      {administrador && <>
       <h2>OU</h2>
       <h1 style={{ marginTop: 0 }}>Criar equipe</h1>
       <Input
@@ -74,6 +77,7 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
       <button className={styles.button_submit} onClick={handleCreate}>
         Criar
       </button>
+      </>}
       {showConfirmation && (
         <ModalConfirmation
           title={"Enviar solicitação"}
