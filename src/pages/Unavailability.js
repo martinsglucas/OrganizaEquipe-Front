@@ -14,7 +14,7 @@ function Unavailability() {
   const [unavailabilities, setUnavailabilities] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(dayjs(value).month());
 
-  const getUnavailabilities = async (date) => {
+  const getUnavailability = async (date) => {
     try {
       const response = await getUnavailabilities(
         true,
@@ -31,7 +31,7 @@ function Unavailability() {
     const newMonth = dayjs(value).month();
     if (newMonth !== currentMonth) {
       setCurrentMonth(newMonth);
-      getUnavailabilities(value);
+      getUnavailability(value);
     }
   }, [value, currentMonth]);
 
@@ -47,7 +47,7 @@ function Unavailability() {
       />
       <Calendar
         onChange={handleDateChange}
-        refreshData={getUnavailabilities}
+        refreshData={getUnavailability}
         data={unavailabilities}
         value={value}
       />
