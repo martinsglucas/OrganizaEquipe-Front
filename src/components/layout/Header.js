@@ -2,11 +2,13 @@ import styles from "./Header.module.css";
 import { FaBars } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { useAuth } from "../../context/AuthContext";
 
 function Header({ sidebar, setSitebar }) {
   const showSidebar = () => setSitebar(!sidebar);
 
   const location = useLocation();
+  const { user } = useAuth();
 
   const handleTitle = () => {
     switch (location.pathname) {
@@ -31,10 +33,11 @@ function Header({ sidebar, setSitebar }) {
 
   const title = handleTitle();
 
+
   return (
     <div className={styles.container}>
       <h1 className={styles.nome}>{title}</h1>
-      <FaBars className={styles.svg} onClick={showSidebar} />
+      {user && <FaBars className={styles.svg} onClick={showSidebar} />}
       {sidebar && <Sidebar active={setSitebar} />}
     </div>
   );
