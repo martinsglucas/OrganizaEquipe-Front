@@ -82,7 +82,7 @@ function ModalFunctions({ onClose, functions }) {
       )}
       {showCreateFunction && (
         <ModalCreateOrEditFunction
-          title={"Criar função"}
+          title={functionToEdit ? "Editar função" : "Criar função"}
           func={functionToEdit}
           onClose={() => {
             setShowCreateFunction(false);
