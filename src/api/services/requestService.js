@@ -4,7 +4,7 @@ export const getRequests = async (codeAccess = null) => {
   try {
     let queryParam = codeAccess ? `?codeAccess=${codeAccess}` : ""
 
-    const response = await apiClient.get(`solicitacoes${queryParam}`);
+    const response = await apiClient.get(`requests${queryParam}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar solicitações:", error);
@@ -15,7 +15,7 @@ export const getRequests = async (codeAccess = null) => {
 export const createRequest = async (requestData) => {
 
   try {
-    const response = await apiClient.post("solicitacoes/", requestData);
+    const response = await apiClient.post("requests/", requestData);
     return response.data;
 
   } catch (error) {
@@ -27,7 +27,7 @@ export const createRequest = async (requestData) => {
 
 export const deleteRequest = async (id) => {
   try {
-    const response = await apiClient.delete(`solicitacoes/${id}/`);
+    const response = await apiClient.delete(`requests/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar solicitaçao:", error);
