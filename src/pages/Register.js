@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../api/services/userService";
 import FormUser from "../components/FormUser";
-import styles from "./Cadastro.module.css";
+import styles from "./Register.module.css";
 import LinkButton from "../components/LinkButton";
 import { toast } from "react-toastify";
 
-function Cadastro() {
+function Register() {
   const navigate = useNavigate();
   const handleCadastro = async (first_name, email, password) => {
     try {
@@ -32,4 +32,4 @@ function Cadastro() {
   );
 }
 
-export default Cadastro;
+export default Register;
