@@ -41,10 +41,10 @@ function Calendar({ onChange, refreshData, data, value }) {
   }
 
   const fetchHighlightedDays = () => {
-    const dias = data.map((indisponibilidade) =>
-      dayjs(indisponibilidade.data_inicio).date()
+    const days = data.map((unavailability) =>
+      dayjs(unavailability.start_date).date()
     );
-    setHighlightedDays(dias);
+    setHighlightedDays(days);
     setIsLoading(false);
   };
 
