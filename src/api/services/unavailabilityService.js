@@ -6,7 +6,7 @@ export const getUnavailabilities = async (userOnly = false, date) => {
     if (date) {
       queryParam += queryParam ? `&date=${date}` : `?date=${date}`;
     }
-    const response = await apiClient.get(`indisponibilidades${queryParam}`);
+    const response = await apiClient.get(`unavailability${queryParam}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar indisponibilidades:", error);
@@ -16,7 +16,7 @@ export const getUnavailabilities = async (userOnly = false, date) => {
 
 export const createUnavailability = async (data) => {
   try {
-    const response = await apiClient.post("indisponibilidades/", data);
+    const response = await apiClient.post("unavailability/", data);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar indisponibilidade:", error);
@@ -26,7 +26,7 @@ export const createUnavailability = async (data) => {
 
 export const updateUnavailability = async (id, data) => {
   try {
-    const response = await apiClient.patch(`indisponibilidades/${id}/`, data);
+    const response = await apiClient.patch(`unavailability/${id}/`, data);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar indisponibilidade:", error);
@@ -36,7 +36,7 @@ export const updateUnavailability = async (id, data) => {
 
 export const deleteUnavailability = async (id) => {
   try {
-    const response = await apiClient.delete(`indisponibilidades/${id}/`);
+    const response = await apiClient.delete(`unavailability/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar indisponibilidade:", error);
