@@ -1,0 +1,32 @@
+.request {
+  display: flex;
+  align-items: center;
+  /* width: 100%; */
+  min-width: 10em;
+  justify-content: space-between;
+  border: 1px solid #333;
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  margin: 0.5em 0;
+  min-width: 13em;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.approve {
+  color: white;
+  font-size: 25px;
+  /* background-color: black; */
+  background-color: #4CAF50;
+  border-radius: 20px;
+  /* margin-left: .5em; */
+}
+
+.cancel {
+  margin-right: .3em;
+  font-size: 30px;
+  color: #f44336;
+}
