@@ -1,0 +1,168 @@
+.scheduleDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 110px;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 1em;
+  /* width: 200px; */
+  /* max-width: 400px; */
+}
+
+.infoSelected {
+  color: #333;
+  background-color: #fff;
+  margin-right: .5em;
+  padding: 2px 7px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.infoNotSelected {
+  color: #fff;
+  background-color: #333;
+  margin-right: .5em;
+  padding: 2px 7px;
+  border-radius: 20px;
+  /* transition: background-color 0.3s ease; */
+}
+
+.membersSelected {
+  color: #333;
+  background-color: #fff;
+  padding: 2px 7px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.membersNotSelected {
+  color: #fff;
+  background-color: #333;
+  padding: 2px 7px;
+  border-radius: 20px;
+  /* transition: background-color 0.3s ease; */
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  /* width: 100%; */
+}
+
+.icon {
+  margin-right: .5em;
+}
+
+.confirm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 10em;
+  margin: 1.5em auto 0 auto;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  color: #ff0000;
+  font-weight: bold;
+  margin: 1em auto;
+  /* margin-top: 1em; */
+}
+
+.iconConfirm {
+  margin-right: .5em;
+  color: #ff0000;
+}
+
+.participation {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 90%;
+}
+
+.participation p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.participation span {
+  /* margin-left: 10px; */
+  color: #555;
+}
+
+.iconUser {
+  margin-right: .5em;
+  color: #333;
+  font-size: 2em;
+}
+
+.participationDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.confirmed {
+  display: flex;
+  align-items: center;
+  /* color: #28a745; */
+}
+
+.confirmed span {
+  color: #000;
+}
+
+.edit {
+  display: flex;
+  width: 13em;
+  justify-content: space-around;
+}
+
+.button_edit {
+  display: flex;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #333;
+  border-radius: 1em;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 1em;
+}
+
+.button_delete {
+  display: flex;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  transition: 0.5s;
+  background-color: #ff0000;
+  border-radius: 1em;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 1em;
+}
