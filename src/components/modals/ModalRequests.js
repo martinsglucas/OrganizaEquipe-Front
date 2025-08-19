@@ -1,21 +1,21 @@
 import styles from "./ModalRequests.module.css";
 import Modal from "./Modal";
 import { useState, useEffect } from "react";
-import { useEquipe } from "../../context/EquipeContext";
+import { useTeam } from "../../context/TeamContext";
 import { deleteRequest, getRequests } from "../../api/services/requestService";
 import { MdCancel, MdDone } from "react-icons/md";
 import { toast } from "react-toastify";
 import { addMember } from "../../api/services/teamService";
 
 function ModalRequests({ onClose }) {
-  const { equipe, setEquipe } = useEquipe();
+  const { equipe, setEquipe } = useTeam();
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const fetchRequests = async () => {
-      if (equipe?.codigo_de_acesso) {
+      if (equipe?.code_access) {
         try {
-          const response = await getRequests(equipe.codigo_de_acesso);
+          const response = await getRequests(equipe.code_access);
           setRequests(response);
         } catch (error) {
           console.error("Erro ao buscar solicitações:", error);
@@ -39,8 +39,8 @@ function ModalRequests({ onClose }) {
 
   const acceptRequest = async (request) => {
     try {
-      await addMember(equipe.id, { user_id: request.usuario.id });
-      setEquipe({ ...equipe, membros: [...equipe.membros, request.usuario] });
+      await addMember(equipe.id, { user_id: request.user.id });
+      setEquipe({ ...equipe, members: [...equipe.members, request.user] });
       await deleteRequest(request.id);
       const newRequests = requests.filter((r) => r.id !== request.id);
       setRequests(newRequests);
@@ -61,7 +61,7 @@ function ModalRequests({ onClose }) {
     <Modal isOpen={true} onClose={onClose} title={"Solicitações"}>
       {requests.map((request) => (
         <div key={request.id} className={styles.request}>
-          <span>{request.usuario.first_name}</span>
+          <span>{request.user.first_name}</span>
           <div className={styles.buttons}>
             <MdCancel
               className={styles.cancel}

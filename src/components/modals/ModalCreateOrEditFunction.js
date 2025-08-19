@@ -3,18 +3,18 @@ import { useState } from "react";
 import Input from "../form/Input";
 import Modal from "./Modal";
 import { createFunction, updateFunction } from "../../api/services/functionService";
-import { useEquipe } from "../../context/EquipeContext";
+import { useTeam } from "../../context/TeamContext";
 import { toast } from "react-toastify";
 
 function ModalCreateOrEditFunction({ title, func, onClose }) {
-  const [nome, setNome] = useState(func ? func.nome : "");
-  const { equipe, setEquipe } = useEquipe();
+  const [name, setName] = useState(func ? func.name : "");
+  const { equipe, setEquipe } = useTeam();
 
   const handleCreateFunction = async () => {
     try {
-      if (nome){
-        const newFunction = await createFunction({ equipe: equipe.id, nome });
-        setEquipe({ ...equipe, funcoes: [...equipe.funcoes, newFunction] });
+      if (name){
+        const newFunction = await createFunction({ team: equipe.id, name });
+        setEquipe({ ...equipe, roles: [...equipe.roles, newFunction] });
         toast.success("Função criada com sucesso!");
         onClose();
       } else {
@@ -28,11 +28,11 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
 
   const handleEditFunction = async () => {
     try {
-      if (nome){
-        const updatedFunction = await updateFunction(func.id, {nome});
+      if (name){
+        const updatedFunction = await updateFunction(func.id, {name});
         setEquipe({
           ...equipe,
-          funcoes: equipe.funcoes.map((f) =>
+          roles: equipe.roles.map((f) =>
             f.id === func.id ? updatedFunction : f
           ),
         });
@@ -53,9 +53,9 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
       <Input
         text="Nome"
         name={"nome"}
-        value={nome}
+        value={name}
         type={"text"}
-        handleOnChange={(e) => setNome(e.target.value)}
+        handleOnChange={(e) => setName(e.target.value)}
         placeholder={"Digite o nome da função"}
       />
       {func ? (
