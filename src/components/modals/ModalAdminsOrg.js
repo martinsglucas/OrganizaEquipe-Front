@@ -28,7 +28,7 @@ function ModalAdminsOrg({ isOpen, onClose }) {
     const withoutManager = administradoresIds.length === 0;
     if (withoutManager){
       setDisabled(withoutManager);
-      toast.warn("A equipe deve ter ao menos um administrador!")
+      toast.warn("A organização deve ter ao menos um administrador!")
     }
 
   }, [administradores, organization?.admins]);
