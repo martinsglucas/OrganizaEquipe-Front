@@ -2,7 +2,7 @@ import apiClient from "../apiClient";
 
 export const getUsers = async () => {
   try {
-    const response = await apiClient.get("/users");
+    const response = await apiClient.get("users");
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar usuários:", error);
@@ -12,7 +12,7 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
   try {
-    const response = await apiClient.get(`usuarios/${id}/`);
+    const response = await apiClient.get(`users/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar usuário:", error);
@@ -22,7 +22,7 @@ export const getUser = async (id) => {
 
 export const createUser = async (userData) => {
   try {
-    const response = await apiClient.post("usuarios/", userData);
+    const response = await apiClient.post("users/", userData);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar usuário:", error);
@@ -32,8 +32,7 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (id, userData) => {
   try {
-    // const response = await apiClient.put(`usuarios/${id}/`, userData);
-    const response = await apiClient.patch(`usuarios/${id}/`, userData);
+    const response = await apiClient.patch(`users/${id}/`, userData);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar usuário:", error);
@@ -43,7 +42,7 @@ export const updateUser = async (id, userData) => {
 
 export const deleteUser = async (id) => {
   try {
-    const response = await apiClient.delete(`usuarios/${id}/`);
+    const response = await apiClient.delete(`users/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar usuário:", error);
