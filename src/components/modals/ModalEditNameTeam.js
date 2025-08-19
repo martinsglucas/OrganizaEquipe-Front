@@ -1,5 +1,5 @@
 import styles from "./ModalEditNameTeam.module.css"
-import { useEquipe } from "../../context/EquipeContext";
+import { useTeam } from "../../context/TeamContext";
 import { useState } from "react";
 import { updateTeam } from "../../api/services/teamService";
 import Modal from "./Modal"
@@ -8,18 +8,18 @@ import { toast } from "react-toastify";
 
 function ModalEditNameTeam({onClose}) {
 
-  const {equipe, setEquipe} = useEquipe();
-  const [nome, setNome] = useState(equipe.nome);
+  const {equipe, setEquipe} = useTeam();
+  const [name, setName] = useState(equipe.name);
 
   const handleOnChange = (e) => {
-    setNome(e.target.value);
+    setName(e.target.value);
   }
 
   const updateName = async () => {
     try {
-      if (nome){
-        await updateTeam(equipe.id, {nome});
-        setEquipe({...equipe, nome});
+      if (name){
+        await updateTeam(equipe.id, {name});
+        setEquipe({...equipe, name});
         toast.success("Nome alterado com sucesso!");
         onClose();
       } else {
@@ -37,7 +37,7 @@ function ModalEditNameTeam({onClose}) {
         name={"nome"}
         // text={"Nome"}
         type={"text"}
-        value={nome}
+        value={name}
         handleOnChange={handleOnChange}
         placeholder={"Digite o nome da equipe"}
       />
