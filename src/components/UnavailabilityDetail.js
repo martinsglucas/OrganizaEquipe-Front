@@ -1,4 +1,4 @@
-import styles from "./IndisponibilidadeDetalhe.module.css";
+import styles from "./UnavailabilityDetail.module.css";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { deleteUnavailability } from "../api/services/unavailabilityService";
 import dayjs from "dayjs";
@@ -8,25 +8,25 @@ import { useState } from "react";
 import ModalConfirmation from "./modals/ModalConfirmation";
 dayjs.locale("pt-br");
 
-function IndisponibilidadeDetalhe({
-  dia,
-  indisponibilidades,
-  setIndisponibilidades,
+function UnavailabilityDetail({
+  day,
+  unavailabilities,
+  setUnavailabilities,
 }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [unavailabilityToRemove, setUnavailabilityToRemove] = useState(null);
-  const indisponibilidadesFiltradas = indisponibilidades.filter(
-    (indisponibilidade) =>
-      dayjs(indisponibilidade.data_inicio).isSame(dayjs(dia), "day")
+  const filteredUnavailabilities = unavailabilities.filter(
+    (unavailability) =>
+      dayjs(unavailability.start_date).isSame(dayjs(day), "day")
   );
 
-  const deleteIndisponibilidade = async () => {
+  const removeUnavailability = async () => {
     try {
-      const newIndisponibilidades = indisponibilidades.filter(
+      const newUnavailabilities = unavailabilities.filter(
         (ind) => ind.id !== unavailabilityToRemove.id
       );
       await deleteUnavailability(unavailabilityToRemove.id);
-      setIndisponibilidades(newIndisponibilidades);
+      setUnavailabilities(newUnavailabilities);
       setShowConfirmation(false);
       toast.success("Indisponibilidade deletada com sucesso!");
     } catch (error) {
@@ -42,23 +42,19 @@ function IndisponibilidadeDetalhe({
 
   return (
     <div className={styles.container}>
-      <span className={styles.dia}>
-        {dayjs(dia).format("dddd, D [de] MMMM")}
+      <span className={styles.day}>
+        {dayjs(day).format("dddd, D [de] MMMM")}
       </span>
-      <div className={styles.indisponibilidades}>
-        {indisponibilidades.length > 0 ? (
-          indisponibilidadesFiltradas.map((indisponibilidade) => (
-            <div
-              className={styles.indisponibilidade}
-              key={indisponibilidade.id}
-            >
-              <span className={styles.descricao}>
-                {indisponibilidade.descricao}
-              </span>
+      <div className={styles.unavailabilities}>
+        {unavailabilities.length > 0 ? (
+          filteredUnavailabilities.map((indisponibilidade) => (
+            <div className={styles.unavailability} key={indisponibilidade.id}>
               <div className={styles.info}>
+                <span className={styles.description}>
+                  {indisponibilidade.description}
+                </span>
                 <span>
-                  Data Inicial:{" "}
-                  {dayjs(indisponibilidade.data_inicio).format("DD/MM/YYYY")}
+                  {dayjs(indisponibilidade.start_date).format("DD/MM/YYYY")}
                 </span>
                 <span>
                   {indisponibilidade.data_fim
@@ -68,12 +64,12 @@ function IndisponibilidadeDetalhe({
                     : ""}
                 </span>
               </div>
+              <FaTrash
+                className={styles.delete}
+                onClick={() => confirm(indisponibilidade)}
+              />
               <div className={styles.buttons}>
-                <FaPencilAlt className={styles.edit} onClick={() => {}} />
-                <FaTrash
-                  className={styles.delete}
-                  onClick={() => confirm(indisponibilidade)}
-                />
+                {/* <FaPencilAlt className={styles.edit} onClick={() => {}} /> */}
               </div>
             </div>
           ))
@@ -86,11 +82,11 @@ function IndisponibilidadeDetalhe({
           title={"Remover Indisponibilidade"}
           message={"Tem certeza que deseja remover essa indisponibilidade?"}
           onClose={() => setShowConfirmation(false)}
-          onConfirm={deleteIndisponibilidade}
+          onConfirm={removeUnavailability}
         />
       )}
     </div>
   );
 }
 
-export default IndisponibilidadeDetalhe;
+export default UnavailabilityDetail;

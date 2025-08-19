@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
 }
-.dia {
+.day {
   font-weight: bold;
   padding: 10px;
   background-color: #333;
@@ -13,7 +13,7 @@
   /* margin-top: -2em; */
   margin-bottom: 1em;
 }
-.indisponibilidades {
+.unavailabilities {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,33 +23,36 @@
   /* border-radius: 20px; */
   /* padding: 0 20px; */
   width: 90%;
-  height: 10em;
+  /* height: 10em; */
 }
-.indisponibilidade {
+.unavailability {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   border-radius: 20px;
-  background-color: #797979;
+  background-color: #333;
+  padding: 10px;
   width: 100%;
-  height: 5em;
+  /* height: 5em; */
 }
-.descricao {
+.description {
   font-weight: bold;
+  font-size: 1.1em;
 }
 .info {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  align-items: center;
+  margin-left: 1em;
+  /* width: 100%; */
+  align-items: flex-start;
   /* margin-left: 2em; */
 }
 .buttons {
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  /* width: 50%; */
 }
 .delete {
+  margin-left: auto;
+  margin-right: 1em;
   color: #c42d2d;
 }

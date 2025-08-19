@@ -31,7 +31,7 @@ function ModalCreateUnavailability({
 
   const handleSubmit = async () => {
     try {
-      const unavailability = await createUnavailability({ descricao: reason, data_inicio: date });
+      const unavailability = await createUnavailability({ description: reason, start_date: date });
       setUnavailabilities([...unavailabilities, unavailability])
       onClose();
       toast.success("Indisponibilidade criada com sucesso!");
