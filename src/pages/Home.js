@@ -1,21 +1,20 @@
 import styles from "./Home.module.css";
 import { useEffect, useState } from "react";
 import { getTeams, getTeam, createTeam } from "../api/services/teamService";
-import EquipeCard from "../components/EquipeCard";
+import TeamCard from "../components/TeamCard";
 import { useNavigate } from "react-router-dom";
-import { useEquipe } from "../context/EquipeContext";
+import { useTeam } from "../context/TeamContext";
 import ModalCreateTeam from "../components/modals/ModalCreateTeam";
 
 function Home() {
-  const [equipes, setEquipes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const { setEquipe } = useEquipe();
+  const { setEquipe, teams, setTeams } = useTeam();
 
   const getEquipes = async () => {
     try {
       const equipes = await getTeams(true);
-      setEquipes(equipes);
+      setTeams(equipes);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
     }
@@ -31,9 +30,9 @@ function Home() {
     navigate("/equipe");
   };
 
-  const addEquipe = async (nome) => {
-    const equipe = await createTeam({ nome });
-    setEquipes([...equipes, equipe]);
+  const addEquipe = async (name, organization) => {
+    const equipe = await createTeam({ name, organization });
+    setTeams([...teams, equipe]);
     setShowModal(false);
   };
 
@@ -43,8 +42,8 @@ function Home() {
         <h2>Minhas Equipes</h2>
 
         <div className={styles.equipes}>
-          {equipes.map((equipe) => (
-            <EquipeCard
+          {teams.map((equipe) => (
+            <TeamCard
               key={equipe.id}
               equipe={equipe}
               handleOnClick={() => {
