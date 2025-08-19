@@ -26,7 +26,18 @@ function ModalAddParticipation({ title, team, participation, participations, set
   const roles = team.roles;
 
   const addParticipation = () => {
-    setParticipations([...participations, {roles: selectedRoles, user: team.members.find((m) => m.id === parseInt(selectedMember))}])
+    if (participation) {
+      const newParticipations = participations.filter((p) => p.user.id !== participation.user.id);
+      setParticipations([
+        ...newParticipations,
+        {
+          roles: selectedRoles,
+          user: team.members.find((m) => m.id === parseInt(selectedMember)),
+        },
+      ]);
+    } else {
+      setParticipations([...participations, {roles: selectedRoles, user: team.members.find((m) => m.id === parseInt(selectedMember))}])
+    }
     onClose();
   }
 
