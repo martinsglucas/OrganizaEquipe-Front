@@ -2,7 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10em;
+  /* width: 10em; */
+  padding: 10px;
+  min-width: 10em;
   height: 3em;
   background-color: #333;
   border: solid 1px #333;
