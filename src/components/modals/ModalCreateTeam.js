@@ -23,7 +23,7 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
   const confirm = async () => {
     try {
       const response = await getTeams(false, codigoEquipe);
-      setEquipeToJoin(response[0].nome);
+      setEquipeToJoin(response[0].name);
       setShowConfirmation(true);
     } catch (error) {
       toast.error("Erro ao buscar equipe!");
@@ -33,8 +33,8 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
   const join = async () => {
     try {
       await createRequest({
-        usuario: user.id,
-        codigo_equipe: codigoEquipe,
+        user: user.id,
+        code: codigoEquipe,
       });
       toast.success("Solicitação enviada com sucesso!");
       closeModal();
