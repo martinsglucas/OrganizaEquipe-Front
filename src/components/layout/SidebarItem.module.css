@@ -18,3 +18,16 @@
 .container:hover {
   background-color: #757575;
 }
+
+.highlight {
+  animation: blinkText 1s infinite;
+}
+
+@keyframes blinkText {
+  0%, 100% {
+    color: red;
+  }
+  50% {
+    color: transparent;
+  }
+}
