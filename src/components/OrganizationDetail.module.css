@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 110px;
+}
+
+.nome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+}
+
+.icon {
+  font-size: 2.5em;
+  cursor: pointer;
+}
+
+.section {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 400px;
+  width: 100%;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #f7f7f7;
+  border: none;
+  border-bottom: 1.5px solid #ddd;
+  text-align: left;
+  padding: 12px;
+  font-size: 16px;
+  /* font-weight: bold; */
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: #f7f7f7;
+  text-align: center;
+  padding: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button span{
+  margin-left: .5em;
+}
+
+.description {
+  display: flex;
+  align-items: center;
+}
+
+.openButton {
+  font-size: 20px;
+}
+
+.itemTitle {
+  margin-right: .5em;
+  font-size: 20px;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
