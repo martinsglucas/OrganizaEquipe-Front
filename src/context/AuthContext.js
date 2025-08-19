@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
       if (!isValid) {
         console.log("Token expirado! Fazendo logout...");
         logoutUser();
+        setUser(null);
       } else {
         const storedUser = sessionStorage.getItem("user");
         setUser(storedUser ? JSON.parse(storedUser) : null);
