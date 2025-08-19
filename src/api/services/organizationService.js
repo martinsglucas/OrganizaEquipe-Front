@@ -2,8 +2,8 @@ import apiClient from "../apiClient";
 
 export const getOrganizations = async (userOnly = false) => {
   try {
-    const queryParam = userOnly ? "?userOnly=true" : "";
-    const response = await apiClient.get(`/organizacoes${queryParam}`);
+    let queryParam = userOnly ? "?userOnly=true" : "";
+    const response = await apiClient.get(`/organizations${queryParam}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar organizações:", error);
@@ -13,7 +13,7 @@ export const getOrganizations = async (userOnly = false) => {
 
 export const getOrganization = async (id) => {
   try {
-    const response = await apiClient.get(`/organizacoes/${id}/`);
+    const response = await apiClient.get(`/organizations/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar organização:", error);
@@ -23,7 +23,7 @@ export const getOrganization = async (id) => {
 
 export const createOrganization = async (organizationData) => {
   try {
-    const response = await apiClient.post("/organizacoes/", organizationData);
+    const response = await apiClient.post("/organizations/", organizationData);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar organização:", error);
@@ -33,7 +33,7 @@ export const createOrganization = async (organizationData) => {
 
 export const updateOrganization = async (id, organizationData) => {
   try {
-    const response = await apiClient.patch(`/organizacoes/${id}/`, organizationData);
+    const response = await apiClient.patch(`/organizations/${id}/`, organizationData);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar organização:", error);
@@ -43,7 +43,7 @@ export const updateOrganization = async (id, organizationData) => {
 
 export const deleteOrganization = async (id) => {
   try {
-    const response = await apiClient.delete(`/organizacoes/${id}/`);
+    const response = await apiClient.delete(`/organizations/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar organização:", error);
