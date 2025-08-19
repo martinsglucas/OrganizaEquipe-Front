@@ -1,15 +1,26 @@
-.container {
+/* .container {
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
+} */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px #333;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 1em;
+  width: 15em; /* igual ao Input */
+  position: relative; /* para a seta */
 }
 
 .container label {
-  margin-bottom: 0.6em;
+  margin-bottom: 0.3em;
   font-weight: bold;
 }
 
-.container select {
+/* .container select {
   display: flex;
   align-items: center;
   width: 14em;
@@ -17,13 +28,36 @@
   border: solid 1px #333;
   border-radius: 20px;
   justify-content: center;
+} */
+
+.container select {
+  border: none;
+  width: 100%;
+  font-size: 0.8em;
+  background: transparent;
+  padding: 0.4em 1.8em 0.4em 0; /* espaço à direita para seta */
+  /* -webkit-appearance: none; */
+  /* -moz-appearance: none; */
+  /* appearance: none; */
+  cursor: pointer;
 }
 
 .container select:focus {
   outline: none;
 }
 
+/* .container::after {
+  content: "▾";
+  position: absolute;
+  right: 12px;
+  top: calc(50% + 0.5em);
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.9em;
+  color: #333;
+} */
+
 .container option {
   width: 100%;
-  font-size: 0.7em;
+  font-size: 1em;
 }
