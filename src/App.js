@@ -13,7 +13,7 @@ import Organization from "./pages/Organization";
 import Footer from "./components/layout/Footer";
 import Container from "./components/layout/Container";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
-import { EquipeProvider } from "./context/TeamContext";
+import { TeamProvider } from "./context/TeamContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,7 +26,7 @@ function App() {
   return (
     <AuthProvider>
       <OrganizationProvider>
-        <EquipeProvider>
+        <TeamProvider>
           <Router>
             <Header sidebar={sidebar} setSitebar={setSidebar} />
             <Container customClass="min_height">
@@ -106,7 +106,7 @@ function App() {
               // theme="dark"
             />
           </Router>
-        </EquipeProvider>
+        </TeamProvider>
       </OrganizationProvider>
     </AuthProvider>
   );
