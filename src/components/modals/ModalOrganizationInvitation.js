@@ -25,7 +25,7 @@ function ModalOrganizationInvitation({ onClose }) {
       if (error.response) {
         const errorMessage =
           error.response.data?.recipient_email?.[0] ||
-          error.response.data?.team?.[0] ||
+          error.response.data?.organization?.[0] ||
           error.response.data?.user?.[0] ||
           "Erro ao enviar convite";
         if (errorMessage.includes("já faz parte dessa organização")) {
