@@ -56,8 +56,6 @@ export const deleteSchedule = async (id) => {
   }
 };
 
-// export const getScheduleUsers = async (scheduleId) => {
-
 export const confirmScheduleParticipation = async (participationId, confirmData) => {
   try {
     const response = await apiClient.patch(
