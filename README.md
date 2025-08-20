@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+## **OrganizaEquipe - Gerenciamento de Equipes e Escalas**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### **Propósito** 
 
-## Available Scripts
+O OrganizaEquipe é uma aplicação web focada em simplificar o gerenciamento de equipes e a criação de escalas de trabalho ou eventos.
 
-In the project directory, you can run:
+A plataforma permite que usuários criem ou ingressem em organizações e equipes, gerenciem membros e funções, e organizem escalas de forma intuitiva, considerando a disponibilidade de cada membro.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### **Funcionalidades Principais**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* **Autenticação de Usuário:** O sistema conta com um fluxo de autenticação completo, permitindo que novos usuários se cadastrem e que usuários existentes façam login.
+* **Gerenciamento de Organizações:**
+    * Os usuários podem criar ou entrar em organizações existentes por meio de um código de acesso.
+    * É possível gerenciar os administradores e membros da organização, além de enviar convites para novos membros.
+* **Gerenciamento de Equipes:**
+    * Similar às organizações, os usuários podem criar ou ingressar em equipes.
+    * As equipes possuem gerenciamento de membros, administradores e funções específicas (cargos).
+* **Gerenciamento de Escalas:**
+    * Os administradores de uma equipe podem criar, editar e excluir escalas para a equipe.
+    * As escalas são criadas com base em um título, data, hora e os participantes designados.
+    * Os membros das escalas podem confirmar ou cancelar sua participação.
+* **Controle de Indisponibilidade:** Os usuários podem registrar datas e motivos de sua indisponibilidade, o que é útil para a criação de escalas.
+* **Notificações e Solicitações:** O sistema lida com convites e solicitações de ingresso em organizações e equipes, permitindo que administradores aceitem ou recusem pedidos de novos membros.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **Estrutura e Tecnologias**
 
-### `npm run build`
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* **Frontend:**
+    * React.js
+    * HTML, CSS Modules
+    * React Router DOM para navegação
+    * Axios para comunicação com a API
+    * Bibliotecas de ícones (React Icons)
+    * `react-toastify` para notificações
+    * Context API para gerenciamento de estado
+    * `dayjs` para manipulação de datas
+* **Backend:**
+    * API construída com Python Django, com a URL base `https://organizaequipe-api.onrender.com/api/`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### **Como Executar o Projeto**
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1.  **Pré-requisitos:** Certifique-se de ter o Node.js e o npm instalados em sua máquina.
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+3.  **Inicie a aplicação:**
+    ```bash
+    npm start
+    ```
+4.  A aplicação será executada em [http://localhost:3000](http://localhost:3000) por padrão.
