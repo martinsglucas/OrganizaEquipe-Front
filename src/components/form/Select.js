@@ -19,7 +19,7 @@ function Select({ text, name, options, disabledOptions = [], handleOnChange, val
         ))}
 
         {disabledOptions.map((option) => (
-          <option value={option.id} key={option.id}>
+          <option value={option.id} key={option.id} disabled>
             {option.name}
           </option>
         ))}
