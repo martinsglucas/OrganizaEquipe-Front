@@ -5,8 +5,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useOrganization } from "../context/OrganizationContext";
 import { useTeam } from "../context/TeamContext";
 import { useAuth } from "../context/AuthContext";
-import { getOrganization } from "../api/services/organizationService";
-import { getTeam } from "../api/services/teamService";
 import { MdCancel, MdDone } from "react-icons/md";
 import { addMember as addTeamMember } from "../api/services/teamService";
 import { addMember as addOrgMember } from "../api/services/organizationService";
@@ -25,19 +23,9 @@ function Notifications() {
 
     try {
       const orgInvites = await getOrganizationInvitations(user.email);
-      await Promise.all(
-        orgInvites.map(async (invite) => {
-          invite.organization = await getOrganization(invite.organization)
-        })
-      );
       setOrgInvitations(orgInvites);
 
       const teamInvites = await getTeamInvitations(user.email);
-      await Promise.all(
-        teamInvites.map(async (invite) => {
-          invite.team = await getTeam(invite.team)
-        })
-      );
       setTeamInvitations(teamInvites);
     } catch (error) {
       console.error("Erro ao buscar convites:", error);
