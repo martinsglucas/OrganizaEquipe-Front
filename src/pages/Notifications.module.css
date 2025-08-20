@@ -9,19 +9,20 @@ h2 {
 .invitation {
   display: flex;
   align-items: center;
-  /* width: 100%; */
-  min-width: 10em;
   justify-content: space-between;
   border: 1px solid #333;
   padding: 0.5em 1em;
   border-radius: 1em;
   margin: 0.5em 0;
-  min-width: 13em;
+  min-width: 19em;
 }
 
-/* .invitation p, .team-invitation p {
-  margin: 5px 0;
-} */
+.invitationMessage {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 80%;
+}
 
 .buttons {
   display: flex;

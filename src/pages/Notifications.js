@@ -96,10 +96,8 @@ function Notifications() {
         <>
           {orgInvitations.map((invite) => (
             <div key={invite.id} className={styles.invitation}>
-              <span>
-                Convite para ingressar na organização{" "}
-                <b>{invite.organization.name}</b>
-                <br></br>
+              <span className={styles.invitationMessage}>
+                <span>Convite para ingressar na organização <b>{invite.organization.name}</b></span>
                 <i>por {invite.sender_name}</i>
                 {/* Convite de {invite.sender_name}: ingressar na organização {invite.organization} */}
               </span>
@@ -121,10 +119,8 @@ function Notifications() {
         <>
           {teamInvitations.map((invite) => (
             <div key={invite.id} className={styles.invitation}>
-              <span>
-                Convite para ingressar na equipe{" "}
-                <b>{invite.team.name}</b>
-                <br></br>
+              <span className={styles.invitationMessage}>
+                <span>Convite para ingressar na equipe <b>{invite.team.name}</b></span>
                 <i>por {invite.sender_name}</i>
                 {/* Convite de {invite.sender_name}: ingressar na equipe {invite.team} */}
               </span>
