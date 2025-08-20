@@ -81,3 +81,16 @@ export const removeMember = async (id, memberId) => {
     throw error;
   }
 };
+
+export const getAvailableMembers = async (id, date) => {
+  try {
+    const response = await apiClient.post(
+      `teams/${id}/get_available_members/`,
+      date
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar membros disponíveis:", error);
+    throw error;
+  }
+}
