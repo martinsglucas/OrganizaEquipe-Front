@@ -5,11 +5,13 @@ import TeamCard from "../components/TeamCard";
 import { useNavigate } from "react-router-dom";
 import { useTeam } from "../context/TeamContext";
 import ModalCreateTeam from "../components/modals/ModalCreateTeam";
+import { useOrganization } from "../context/OrganizationContext";
 
 function Home() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { setTeam, teams, setTeams } = useTeam();
+  const { organization } = useOrganization();
 
   const fetchTeams = async () => {
     try {
@@ -35,6 +37,17 @@ function Home() {
     setTeams([...teams, team]);
     setShowModal(false);
   };
+
+  if (!organization) {
+    return (
+      <div className={`${styles.container} ${styles.center}`}>
+        <h2 className={styles.warning}>
+          Você ainda não faz parte de uma organização. <br></br> Crie ou
+          ingresse em uma
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

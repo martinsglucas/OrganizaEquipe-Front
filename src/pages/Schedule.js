@@ -7,11 +7,13 @@ import { useTeam } from "../context/TeamContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ModalCreateSchedule from "../components/modals/ModalCreateSchedule";
+import { useOrganization } from "../context/OrganizationContext";
 
 function Schedule() {
 
   const { user } = useAuth();
   const {teams } = useTeam();
+  const { organization } = useOrganization();
   const [schedules, setSchedules] = useState([]);
   const [pastSchedules, setPastSchedules] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +41,14 @@ function Schedule() {
     const remainingSchedules = schedules.filter((s) => s.id !== schedule.id);
     setSchedules(remainingSchedules);
   }
+
+  if (!organization) {
+      return (
+        <div className={`${styles.container} ${styles.center}`}>
+          <h2 className={styles.warning}>Você ainda não faz parte de uma organização. <br></br> Crie ou ingresse em uma</h2>
+        </div>
+      );
+    }
 
   return (
     <div className={styles.container}>
@@ -71,7 +81,7 @@ function Schedule() {
       )}
       {isLoading ? (
         <div>Carregando...</div>
-      ) : (
+      ) : schedules.length > 0 ? (
         schedules.map((schedule) => (
           <ScheduleCard
             key={schedule.id}
@@ -79,6 +89,8 @@ function Schedule() {
             onDelete={(sched) => onDelete(sched)}
           />
         ))
+      ) : (
+        <h3>Sem escalas</h3>
       )}
       {showModal && (
         <ModalCreateSchedule

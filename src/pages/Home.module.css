@@ -5,6 +5,18 @@
   width: 100%;
 }
 
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.warning {
+  text-align: center;
+}
+
 .container_teams {
   display: flex;
   flex-direction: column;
