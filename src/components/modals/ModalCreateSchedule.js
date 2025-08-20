@@ -259,7 +259,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       {showModal && (
         <ModalAddParticipation
           title="Nova Participação"
-          team={scheduleTeam}
+          schedule={{team: scheduleTeam, date: date}}
           participations={participations}
           setParticipations={setParticipations}
           onClose={() => setShowModal(false)}

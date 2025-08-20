@@ -4,8 +4,9 @@ import { useState } from "react";
 import Select from "../form/Select";
 import SelectCheckbox from "../form/SelectCheckbox";
 
-function ModalAddParticipation({ title, team, participation, participations, setParticipations, onClose }) {
+function ModalAddParticipation({ title, schedule, participation, participations, setParticipations, onClose }) {
 
+  const team = schedule.team;
   const [selectedMember, setSelectedMember] = useState(participation?.user.id || "");
   const [selectedRoles, setSelectedRoles] = useState(participation?.roles || []);
 
