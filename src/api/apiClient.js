@@ -3,8 +3,8 @@ import { logoutUser } from "./services/userService";
 import { toast } from "react-toastify";
 
 const apiClient = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
-  timeout: 5000,
+  baseURL: "https://organizaequipe-api.onrender.com/api/",
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
