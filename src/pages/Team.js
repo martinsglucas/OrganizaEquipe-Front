@@ -12,19 +12,19 @@ function Team() {
   const { organization } = useOrganization();
   const [showModal, setShowModal] = useState(false);
 
-  const getEquipes = useCallback(async () => {
+  const fetchTeams = useCallback(async () => {
     try {
-      const equipes = await getTeams(true);
-      setTeams(equipes);
+      const teams = await getTeams(true);
+      setTeams(teams);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
     }
   }, [setTeams]);
 
-  const getEquipe = async () => {
+  const fetchTeam = async () => {
     try {
-      const team = await getTeam(team.id);
-      setTeam(team);
+      const teamFetched = await getTeam(team.id);
+      setTeam(teamFetched);
     } catch (error) {
       console.error("Erro ao buscar equipe:", error);
     }
@@ -32,9 +32,9 @@ function Team() {
 
   useEffect(() => {
     if (!team){
-      getEquipes();
+      fetchTeams();
     } else {
-      getEquipe();
+      fetchTeam();
     }
   }, []);
 
@@ -44,7 +44,7 @@ function Team() {
     setTeam(team);
   };
 
-  const addEquipe = async (name, organization) => {
+  const addTeam = async (name, organization) => {
     const team = await createTeam({ name, organization });
     setTeams([...teams, team]);
     setShowModal(false);
@@ -79,7 +79,7 @@ function Team() {
         {showModal && (
           <ModalCreateTeam
             closeModal={() => setShowModal(false)}
-            handleCreateTeam={addEquipe}
+            handleCreateTeam={addTeam}
           />
         )}
       </div>

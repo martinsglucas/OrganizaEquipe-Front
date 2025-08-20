@@ -5,18 +5,14 @@
   width: 100%;
 }
 
-.container_equipes {
+.container_teams {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-.container_equipes h2 {
-  /* margin-left: 1em; */
-}
-
-.equipes {
+.teams {
   display: flex;
   /* flex-wrap: wrap; */
   justify-content: flex-start;
@@ -26,7 +22,7 @@
   white-space: nowrap;
 }
 
-.equipes > * {
+.teams > * {
   flex: 0 0 auto;
 }
 

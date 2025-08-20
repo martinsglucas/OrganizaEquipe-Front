@@ -23,37 +23,37 @@ import { IoIosArrowForward } from "react-icons/io";
 function TeamDetail() {
   const [showModalEditName, setShowModalEditName] = useState(false);
   const [showModalSwap, setShowModalSwap] = useState(false);
-  const [showModalAdministradores, setShowModalAdministradores] =
+  const [showModalAdmins, setShowModalAdmins] =
     useState(false);
-  const [showModalMembros, setShowModalMembros] = useState(false);
-  const [showModalFuncoes, setShowModalFuncoes] = useState(false);
+  const [showModalMembers, setShowModalMembers] = useState(false);
+  const [showModalFunctions, setShowModalFunctions] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
   const { team, setTeam, admin, teams, setTeams } = useTeam();
-  const membros = team.members.map((membro) => ({
-    id: membro.id,
-    content: membro.first_name,
+  const members = team.members.map((member) => ({
+    id: member.id,
+    content: member.first_name,
   }));
-  const managers = team.admins.map((admin) => ({
+  const admins = team.admins.map((admin) => ({
     id: admin.id,
     content: admin.first_name,
   }));
-  const functions = team.roles.map((funcao) => ({
-    id: funcao.id,
-    content: funcao.name,
+  const functions = team.roles.map((func) => ({
+    id: func.id,
+    content: func.name,
   }));
 
-  const getEquipes = async () => {
+  const fetchTeams = async () => {
     try {
-      const equipes = await getTeams(true);
-      setTeams(equipes);
+      const teams = await getTeams(true);
+      setTeams(teams);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
     }
   };
 
   const handleSwapModal = () => {
-    getEquipes();
+    fetchTeams();
     setShowModalSwap(true);
   };
 
@@ -112,17 +112,17 @@ function TeamDetail() {
           <Accordion
             title={"Administradores"}
             icon={<RiAdminFill />}
-            content={managers}
+            content={admins}
             edit={admin}
-            onEdit={() => setShowModalAdministradores(true)}
+            onEdit={() => setShowModalAdmins(true)}
           />
           <Accordion
             title={"Membros"}
             icon={<RiTeamFill />}
-            content={membros}
+            content={members}
             edit={admin}
             onEdit={() => {
-              setShowModalMembros(true);
+              setShowModalMembers(true);
             }}
           />
           <Accordion
@@ -131,7 +131,7 @@ function TeamDetail() {
             content={functions}
             edit={admin}
             onEdit={() => {
-              setShowModalFuncoes(true);
+              setShowModalFunctions(true);
             }}
           />
           {admin && (
@@ -171,21 +171,21 @@ function TeamDetail() {
       {showModalEditName && (
         <ModalEditNameTeam onClose={() => setShowModalEditName(false)} />
       )}
-      {showModalAdministradores && (
+      {showModalAdmins && (
         <ModalAdmins
-          isOpen={showModalAdministradores}
-          onClose={() => setShowModalAdministradores(false)}
+          isOpen={showModalAdmins}
+          onClose={() => setShowModalAdmins(false)}
         />
       )}
-      {showModalMembros && (
+      {showModalMembers && (
         <ModalMembers
-          onClose={() => setShowModalMembros(false)}
+          onClose={() => setShowModalMembers(false)}
           members={team.members}
         />
       )}
-      {showModalFuncoes && (
+      {showModalFunctions && (
         <ModalFunctions
-          onClose={() => setShowModalFuncoes(false)}
+          onClose={() => setShowModalFunctions(false)}
           functions={team.roles}
         />
       )}
@@ -198,7 +198,7 @@ function TeamDetail() {
           handleSwapTeam={(team) => {
             handleSwapTeam(team.id);
           }}
-          equipes={teams}
+          teams={teams}
         />
       )}
       {showModalDelete && (

@@ -8,36 +8,36 @@ import { useOrganization } from "../../context/OrganizationContext";
 
 function ModalAdminsOrg({ isOpen, onClose }) {
   const { organization, setOrganization } = useOrganization();
-  const membros = organization?.members || [];
-  const [administradores, setAdministradores] = useState(organization?.admins || []);
+  const members = organization?.members || [];
+  const [admins, setAdmins] = useState(organization?.admins || []);
   const [disabled, setDisabled] = useState(true);
 
 
   useEffect(() => {
-    const administradoresIds = administradores.map((admin) => admin.id);
-    const orgAdministradoresIds = (organization?.admins || []).map(
+    const adminsIds = admins.map((admin) => admin.id);
+    const orgAdminsIds = (organization?.admins || []).map(
       (admin) => admin.id
     );
 
-    const idsSaoIguais =
-      administradoresIds.length === orgAdministradoresIds.length &&
-      administradoresIds.every((id) => orgAdministradoresIds.includes(id));
+    const equalIds =
+      adminsIds.length === orgAdminsIds.length &&
+      adminsIds.every((id) => orgAdminsIds.includes(id));
 
-    setDisabled(idsSaoIguais);
+    setDisabled(equalIds);
 
-    const withoutManager = administradoresIds.length === 0;
-    if (withoutManager){
-      setDisabled(withoutManager);
+    const withoutAdmin = adminsIds.length === 0;
+    if (withoutAdmin){
+      setDisabled(withoutAdmin);
       toast.warn("A organização deve ter ao menos um administrador!")
     }
 
-  }, [administradores, organization?.admins]);
+  }, [admins, organization?.admins]);
 
 
-  const updateAdministradores = async () => {
+  const updateAdmins = async () => {
     try {
-      const administradoresIds = administradores.map((admin) => admin.id);
-      await updateOrganization(organization.id, { admins: administradoresIds });
+      const adminsIds = admins.map((admin) => admin.id);
+      await updateOrganization(organization.id, { admins: adminsIds });
       toast.success("Administradores atualizados com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar administradores:", error);
@@ -45,35 +45,35 @@ function ModalAdminsOrg({ isOpen, onClose }) {
     } finally {
       setOrganization((prev) => ({
         ...prev,
-        admins: administradores,
+        admins: admins,
       }));
       onClose();
     }
   }
 
-  const handleAdministradoresChange = (selectedIds) => {
-    const novosAdministradores = membros.filter((membro) =>
-      selectedIds.includes(membro.id)
+  const handleAdminsChange = (selectedIds) => {
+    const newAdmins = members.filter((member) =>
+      selectedIds.includes(member.id)
     );
 
-    setAdministradores(novosAdministradores);
+    setAdmins(newAdmins);
 
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={"Administradores"}>
       <SelectCheckbox
-        options={membros}
+        options={members}
         info={"first_name"}
-        checked={administradores}
-        handleOnChange={(user) => handleAdministradoresChange(user)}
+        checked={admins}
+        handleOnChange={(user) => handleAdminsChange(user)}
       />
       <button
         disabled={disabled}
         className={`${styles.buttonApply} ${
           disabled ? styles.disabled : ""
         }`}
-        onClick={() => updateAdministradores()}
+        onClick={() => updateAdmins()}
       >
         Aplicar
       </button>

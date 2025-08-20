@@ -34,7 +34,6 @@ const Accordion = ({ title, icon, content, edit, onEdit }) => {
         <div className={styles.edit}>
           {edit && (
             <button className={styles.buttonEdit} onClick={handleEditClick}>
-              {/* <FaPencilAlt /> */}
               Editar
             </button>
           )}

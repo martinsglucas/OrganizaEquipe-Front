@@ -6,7 +6,6 @@ import {
   MdNotificationImportant,
   MdCalendarMonth
 } from "react-icons/md";
-import { RiUserSharedFill } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
 import { useState } from "react";
@@ -48,7 +47,6 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
         }
       }
     } catch (error) {
-      // console.error("Erro ao confirmar participação:", error);
       if (confirmation) {
         toast.error("Erro ao confirmar participação");
       } else {
@@ -95,7 +93,6 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
             <div className={styles.item}>
               <MdCalendarMonth className={styles.icon} />
               <span>
-                {/* {schedule.hour.slice(0, 5)} |{" "} */}
                 {capitalize(
                   date.toLocaleDateString("pt-BR", { weekday: "long" })
                 )}{" "}

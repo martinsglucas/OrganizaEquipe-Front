@@ -5,27 +5,27 @@ import { useState } from "react";
 import { createTeam } from "../../api/services/teamService";
 import { useOrganization } from "../../context/OrganizationContext";
 
-function ModalSwapTeam({ closeModal, handleSwapTeam, equipes }) {
+function ModalSwapTeam({ closeModal, handleSwapTeam, teams }) {
   const [showModal, setShowModal] = useState(false);
   const { organization } = useOrganization();
 
   const handleAddTeam = async (name) => {
-    const equipe = await createTeam({ name, organization: organization.id });
-    handleSwapTeam(equipe);
+    const team = await createTeam({ name, organization: organization.id });
+    handleSwapTeam(team);
     setShowModal(false);
-    equipes.push(equipe);
+    teams.push(team);
   };
 
   return (
     <Modal isOpen={true} onClose={closeModal} title={"Trocar equipe"}>
-      <div className={styles.equipes}>
-        {equipes.map((equipe) => (
+      <div className={styles.teams}>
+        {teams.map((team) => (
           <button
-            key={equipe.id}
-            className={styles.equipe}
-            onClick={() => handleSwapTeam(equipe)}
+            key={team.id}
+            className={styles.team}
+            onClick={() => handleSwapTeam(team)}
           >
-            {equipe.name}
+            {team.name}
           </button>
         ))}
         <button className={styles.add} onClick={() => setShowModal(true)}>

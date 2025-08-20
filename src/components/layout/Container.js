@@ -13,8 +13,8 @@ function Container(props) {
   const { user } = useAuth();
   
     const fillProviders = async () => {
-      const organizacoes = await getOrganizations(true);
-      setOrganization(organizacoes[0]);
+      const organizations = await getOrganizations(true);
+      setOrganization(organizations[0]);
       const teams = await getTeams(true);
       setTeams(teams);
     }

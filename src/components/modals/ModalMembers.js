@@ -13,7 +13,7 @@ function ModalMembers({ onClose, members}) {
   const [showInvitation, setShowInvitation] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState(null);
 
-  const { team, setEquipe } = useTeam();
+  const { team, setTeam } = useTeam();
 
   const handleDeleteMember = (member) => {
     setShowConfirmation(true);
@@ -30,9 +30,9 @@ function ModalMembers({ onClose, members}) {
         const newAdmins = team.admins.filter(
           (admin) => admin.id !== memberToDelete.id
         );
-        setEquipe({ ...team, admins: newAdmins, members: newMembers });
+        setTeam({ ...team, admins: newAdmins, members: newMembers });
       } else {
-        setEquipe({ ...team, members: newMembers });
+        setTeam({ ...team, members: newMembers });
       }
       toast.success("Membro removido com sucesso!");
       onClose();

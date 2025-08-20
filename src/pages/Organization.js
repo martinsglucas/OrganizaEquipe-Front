@@ -10,23 +10,23 @@ function Organization() {
   const { organization, setOrganization } = useOrganization();
   const [showModal, setShowModal] = useState(false);
 
-  const getOrganizacoes = async () => {
+  const getOrgs = async () => {
     try {
-      const organizacoes = await getOrganizations(true);
-      setOrganization(organizacoes[0]);
+      const orgs = await getOrganizations(true);
+      setOrganization(orgs[0]);
     } catch (error) {
       console.error("Erro ao buscar organizações:", error);
     }
   }
 
   useEffect(() => {
-    getOrganizacoes();
+    getOrgs();
   }, []);
 
   if (!organization) {
     return (
       <div className={`${styles.container} ${styles.center}`}>
-        <h2 className={styles.aviso}>
+        <h2 className={styles.warning}>
           Você ainda não faz parte de uma organização. <br></br> Crie ou
           ingresse em uma:
         </h2>

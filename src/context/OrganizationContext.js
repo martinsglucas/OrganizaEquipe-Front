@@ -6,12 +6,12 @@ const OrganizationContext = createContext();
 export const OrganizationProvider = ({ children }) => {
   const [organization, setOrganization] = useState(null);
   const { user } = useAuth();
-  const administrador = organization?.admins.some(
+  const admin = organization?.admins.some(
     (admin) => admin.id === user?.id
   ) || false;
 
   return (
-    <OrganizationContext.Provider value={{ organization, setOrganization, administrador }}>
+    <OrganizationContext.Provider value={{ organization, setOrganization, admin }}>
       {children}
     </OrganizationContext.Provider>
   );

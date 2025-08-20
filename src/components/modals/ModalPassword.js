@@ -2,6 +2,7 @@ import styles from "./ModalPassword.module.css";
 import PasswordInput from "../form/PasswordInput";
 import { useState } from "react";
 import Modal from "./Modal";
+import { toast } from "react-toastify";
 
 function ModalPassword({ closeModal, handlePassword }) {
   const [password, setPassword] = useState("");
@@ -10,22 +11,14 @@ function ModalPassword({ closeModal, handlePassword }) {
   function handleUpdate(e) {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Senhas não conferem");
+      toast.warn("As senhas precisam ser iguais");
       return;
     }
     handlePassword(password);
-    console.log("senha atualizada");
   }
 
   return (
     <Modal isOpen={true} onClose={closeModal} title={"Alterar senha"}>
-        {/* <Input
-          text={"Senha atual"}
-          name={"current_password"}
-          type={"password"}
-          placeholder={"Digite sua senha atual"}
-
-        /> */}
 
         <PasswordInput
           text={"Nova senha"}

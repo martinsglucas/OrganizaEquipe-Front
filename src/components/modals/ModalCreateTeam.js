@@ -10,22 +10,22 @@ import { toast } from "react-toastify";
 import { useOrganization } from "../../context/OrganizationContext";
 
 function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
-  const [nomeEquipe, setNomeEquipe] = useState("");
-  const [codigoEquipe, setCodigoEquipe] = useState("");
-  const [equipeToJoin, setEquipeToJoin] = useState("");
-  const { organization, administrador } = useOrganization();
+  const [teamName, setTeamName] = useState("");
+  const [teamCode, setTeamCode] = useState("");
+  const [teamToJoin, setTeamToJoin] = useState("");
+  const { organization, admin } = useOrganization();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { user } = useAuth();
 
   function handleCreate(e) {
     e.preventDefault();
-    handleCreateTeam(nomeEquipe, organization.id);
+    handleCreateTeam(teamName, organization.id);
   }
 
   const confirm = async () => {
     try {
-      const response = await getTeams(false, codigoEquipe);
-      setEquipeToJoin(response[0].name);
+      const response = await getTeams(false, teamCode);
+      setTeamToJoin(response[0].name);
       setShowConfirmation(true);
     } catch (error) {
       toast.error("Erro ao buscar equipe!");
@@ -36,7 +36,7 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
     try {
       await createRequest({
         user: user.id,
-        code: codigoEquipe,
+        code: teamCode,
       });
       toast.success("Solicitação enviada com sucesso!");
       closeModal();
@@ -54,25 +54,25 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
     >
       <Input
         text={"Código de Acesso"}
-        name={"codigoEquipe"}
+        name={"teamCode"}
         type={"text"}
-        value={codigoEquipe}
+        value={teamCode}
         placeholder={"Digite o código da equipe"}
-        handleOnChange={(e) => setCodigoEquipe(e.target.value)}
+        handleOnChange={(e) => setTeamCode(e.target.value)}
       />
       <button className={styles.button_submit} onClick={confirm}>
         Enviar solicitação
       </button>
-      {administrador && <>
+      {admin && <>
       <h2>OU</h2>
       <h1 style={{ marginTop: 0 }}>Criar equipe</h1>
       <Input
         text={"Nome da Equipe"}
-        name={"nomeEquipe"}
+        name={"teamName"}
         type={"text"}
-        value={nomeEquipe}
+        value={teamName}
         placeholder={"Digite o nome da equipe"}
-        handleOnChange={(e) => setNomeEquipe(e.target.value)}
+        handleOnChange={(e) => setTeamName(e.target.value)}
       />
       <button className={styles.button_submit} onClick={handleCreate}>
         Criar
@@ -81,7 +81,7 @@ function ModalCreateTeam({ closeModal, handleCreateTeam, noMarginTop }) {
       {showConfirmation && (
         <ModalConfirmation
           title={"Enviar solicitação"}
-          message={`Tem certeza que deseja enviar solicitação para a equipe ${equipeToJoin}`}
+          message={`Tem certeza que deseja enviar solicitação para a equipe ${teamToJoin}`}
           onClose={() => setShowConfirmation(false)}
           onConfirm={join}
           noMarginTop={true}

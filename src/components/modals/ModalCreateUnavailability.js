@@ -19,14 +19,9 @@ function ModalCreateUnavailability({
 }) {
   const [reason, setReason] = useState("");
   const [date, setDate] = useState(dayjs(day).format("YYYY-MM-DD"));
-  const [end, setEnd] = useState(dayjs(day).add(1, "day").format("YYYY-MM-DD"));
-  const [period, setPeriod] = useState(false);
 
   const handleDateChange = (newValue) => {
     setDate(newValue);
-  };
-  const handleEndChange = (newValue) => {
-    setEnd(newValue);
   };
 
   const handleSubmit = async () => {
@@ -51,28 +46,8 @@ function ModalCreateUnavailability({
         handleOnChange={(e) => setReason(e.target.value)}
         placeholder={"Digite o motivo"}
       />
-      <Checkbox
-        id={"period"}
-        checked={period}
-        text={"Selecionar periodo"}
-        handleOnChange={() => {
-          setEnd(dayjs(day).add(1, "day").format("YYYY-MM-DD"));
-          setPeriod(!period);
-        }}
-      />
       <DateInput value={date} onChange={handleDateChange} />
-      {period && (
-        <DateInput
-          name={"date"}
-          placeholder={"Data Final"}
-          value={end}
-          onChange={handleEndChange}
-        />
-      )}
       <div className={styles.buttons}>
-        {/* <button className={styles.button_cancel} onClick={onClose}>
-            Cancelar
-          </button> */}
         <button className={styles.button_submit} onClick={handleSubmit}>
           Criar
         </button>

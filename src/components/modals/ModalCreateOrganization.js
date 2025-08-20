@@ -11,7 +11,7 @@ import { useOrganization } from "../../context/OrganizationContext";
 
 function ModalCreateOrganization({ closeModal, noMarginTop }) {
   const [name, setName] = useState("");
-  const [codigoOrg, setCodigoOrg] = useState("");
+  const [orgCode, setOrgCode] = useState("");
   const [organizationToJoin, setOrganizationToJoin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { user } = useAuth();
@@ -34,7 +34,7 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
   };
   const confirm = async () => {
     try {
-      const response = await getOrganizations(false, codigoOrg);
+      const response = await getOrganizations(false, orgCode);
       setOrganizationToJoin(response[0].name);
       setShowConfirmation(true);
     } catch (error) {
@@ -46,7 +46,7 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
     try {
       await createRequest({
         user: user.id,
-        code: codigoOrg,
+        code: orgCode,
       });
       toast.success("Solicitação enviada com sucesso!");
       closeModal();
@@ -64,17 +64,17 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
     >
       <Input
         text={"Código de Acesso"}
-        name={"codigoOrg"}
+        name={"orgCode"}
         type={"text"}
-        value={codigoOrg}
+        value={orgCode}
         placeholder={"Digite o código da organização"}
-        handleOnChange={(e) => setCodigoOrg(e.target.value)}
+        handleOnChange={(e) => setOrgCode(e.target.value)}
       />
       <button className={styles.button_submit} onClick={confirm}>
         Enviar solicitação
       </button>
       <h2>OU</h2>
-      <h1 style={{ marginTop: 0 }}>Criar organização</h1>
+      <h1 className={styles.create_org}>Criar organização</h1>
       <Input
         text={"Nome da Organização"}
         name={"name"}

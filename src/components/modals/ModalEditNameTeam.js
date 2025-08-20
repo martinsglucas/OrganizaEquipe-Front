@@ -34,7 +34,7 @@ function ModalEditNameTeam({onClose}) {
   return (
     <Modal isOpen={true} onClose={onClose} title={"Nome da Equipe"}>
       <Input
-        name={"nome"}
+        name={"name"}
         // text={"Nome"}
         type={"text"}
         value={name}

@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
-  const handleCadastro = async (first_name, email, password) => {
+  
+  const handleRegister = async (first_name, email, password) => {
     try {
       const response = await createUser({
         first_name,
@@ -24,7 +25,7 @@ function Register() {
   return (
     <div className={styles.container}>
       <h1>Cadastro</h1>
-      <FormUser type={"cadastro"} handle={handleCadastro} />
+      <FormUser type={"cadastro"} handle={handleRegister} />
       <p>
         Já possui conta? <LinkButton to={"/login"} text={"Entrar"} />
       </p>

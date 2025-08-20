@@ -52,7 +52,7 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
     <Modal isOpen={true} onClose={onClose} title={title} noMarginTop={true}>
       <Input
         text="Nome"
-        name={"nome"}
+        name={"name"}
         value={name}
         type={"text"}
         handleOnChange={(e) => setName(e.target.value)}

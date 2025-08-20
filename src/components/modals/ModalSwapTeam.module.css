@@ -1,4 +1,4 @@
-.equipes {
+.teams {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -6,7 +6,7 @@
   margin-bottom: 1em;
 }
 
-.equipe {
+.teams {
   display: flex;
   align-items: center;
   justify-content: center;

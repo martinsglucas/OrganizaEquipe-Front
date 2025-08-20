@@ -23,7 +23,7 @@ function UnavailabilityDetail({
   const removeUnavailability = async () => {
     try {
       const newUnavailabilities = unavailabilities.filter(
-        (ind) => ind.id !== unavailabilityToRemove.id
+        (unavailability) => unavailability.id !== unavailabilityToRemove.id
       );
       await deleteUnavailability(unavailabilityToRemove.id);
       setUnavailabilities(newUnavailabilities);
@@ -47,30 +47,20 @@ function UnavailabilityDetail({
       </span>
       <div className={styles.unavailabilities}>
         {unavailabilities.length > 0 ? (
-          filteredUnavailabilities.map((indisponibilidade) => (
-            <div className={styles.unavailability} key={indisponibilidade.id}>
+          filteredUnavailabilities.map((unavailability) => (
+            <div className={styles.unavailability} key={unavailability.id}>
               <div className={styles.info}>
                 <span className={styles.description}>
-                  {indisponibilidade.description}
+                  {unavailability.description}
                 </span>
                 <span>
-                  {dayjs(indisponibilidade.start_date).format("DD/MM/YYYY")}
-                </span>
-                <span>
-                  {indisponibilidade.data_fim
-                    ? `Data Final: ${dayjs(indisponibilidade.data_fim).format(
-                        "DD/MM/YYYY"
-                      )}`
-                    : ""}
+                  {dayjs(unavailability.start_date).format("DD/MM/YYYY")}
                 </span>
               </div>
               <FaTrash
                 className={styles.delete}
-                onClick={() => confirm(indisponibilidade)}
+                onClick={() => confirm(unavailability)}
               />
-              <div className={styles.buttons}>
-                {/* <FaPencilAlt className={styles.edit} onClick={() => {}} /> */}
-              </div>
             </div>
           ))
         ) : (

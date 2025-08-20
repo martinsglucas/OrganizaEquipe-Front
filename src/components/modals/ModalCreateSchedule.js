@@ -158,12 +158,10 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
                 value={titleInput}
                 handleOnChange={(e) => {
                   setTitleInput(e.target.value);
-                  // schedule.title = e.target.value;
                 }}
               />
             </div>
             <div className={styles.item}>
-              {/* <MdCalendarMonth className={styles.icon} /> */}
               <Input
                 text="Data"
                 name="date"
@@ -171,12 +169,10 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
                 value={date}
                 handleOnChange={(e) => {
                   setDate(e.target.value);
-                  // schedule.date = e.target.value;
                 }}
               />
             </div>
             <div className={styles.item}>
-              {/* <MdWatchLater className={styles.icon} /> */}
               <Input
                 text="Hora"
                 name="hour"
@@ -184,12 +180,10 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
                 value={hour}
                 handleOnChange={(e) => {
                   setHour(e.target.value);
-                  // schedule.hour = e.target.value;
                 }}
               />
             </div>
             <div className={styles.item}>
-              {/* <RiTeamFill className={styles.icon} /> */}
               <Select
                 text="Equipe"
                 name="team"
@@ -197,9 +191,6 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
                 value={scheduleTeam.id}
                 handleOnChange={(e) => {
                   searchTeam(e.target.value);
-                  // const selectedTeam = availableTeams.find(team => team.id === parseInt(e.target.value));
-                  // setScheduleTeam(selectedTeam);
-                  // schedule.team = selectedTeam;
                 }}
               />
             </div>

@@ -21,18 +21,18 @@ import { IoIosArrowForward } from "react-icons/io";
 
 function OrganizationDetail() {
   const [showModalEditName, setShowModalEditName] = useState(false);
-  const [showModalAdministradores, setShowModalAdministradores] =
+  const [showModalAdmins, setShowModalAdmins] =
     useState(false);
-  const [showModalMembros, setShowModalMembros] = useState(false);
+  const [showModalMembers, setShowModalMembers] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
   const { setTeam } = useTeam();
-  const { organization, setOrganization, administrador } = useOrganization();
-  const membros = organization.members.map((membro) => ({
-    id: membro.id,
-    content: membro.first_name,
+  const { organization, setOrganization, admin } = useOrganization();
+  const members = organization.members.map((member) => ({
+    id: member.id,
+    content: member.first_name,
   }));
-  const managers = organization.admins.map((admin) => ({
+  const admins = organization.admins.map((admin) => ({
     id: admin.id,
     content: admin.first_name,
   }));
@@ -61,7 +61,7 @@ function OrganizationDetail() {
   };
 
   const handleEditName = () => {
-    if (administrador) {
+    if (admin) {
       setShowModalEditName(true);
     }
   };
@@ -83,7 +83,7 @@ function OrganizationDetail() {
               <MdTitle className={styles.itemTitle} />
               <b>{organization.name}</b>
             </div>
-            {administrador && (
+            {admin && (
               <IoIosArrowForward className={styles.openButton} />
             )}
           </button>
@@ -96,20 +96,20 @@ function OrganizationDetail() {
           <Accordion
             title={"Administradores"}
             icon={<RiAdminFill />}
-            content={managers}
-            edit={administrador}
-            onEdit={() => setShowModalAdministradores(true)}
+            content={admins}
+            edit={admin}
+            onEdit={() => setShowModalAdmins(true)}
           />
           <Accordion
             title={"Membros"}
             icon={<RiTeamFill />}
-            content={membros}
-            edit={administrador}
+            content={members}
+            edit={admin}
             onEdit={() => {
-              setShowModalMembros(true);
+              setShowModalMembers(true);
             }}
           />
-          {administrador && (
+          {admin && (
             <button
               className={styles.item}
               onClick={() => setShowModalRequests(true)}
@@ -125,7 +125,7 @@ function OrganizationDetail() {
         </div>
         <br></br>
         <br></br>
-        {administrador && (
+        {admin && (
           <div className={styles.section}>
             <button
               className={styles.button}
@@ -140,15 +140,15 @@ function OrganizationDetail() {
       {showModalEditName && (
         <ModalEditNameOrganization onClose={() => setShowModalEditName(false)} />
       )}
-      {showModalAdministradores && (
+      {showModalAdmins && (
         <ModalAdminsOrg
-          isOpen={showModalAdministradores}
-          onClose={() => setShowModalAdministradores(false)}
+          isOpen={showModalAdmins}
+          onClose={() => setShowModalAdmins(false)}
         />
       )}
-      {showModalMembros && (
+      {showModalMembers && (
         <ModalMembersOrg
-          onClose={() => setShowModalMembros(false)}
+          onClose={() => setShowModalMembers(false)}
           members={organization.members}
         />
       )}

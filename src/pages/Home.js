@@ -11,43 +11,43 @@ function Home() {
   const navigate = useNavigate();
   const { setTeam, teams, setTeams } = useTeam();
 
-  const getEquipes = async () => {
+  const fetchTeams = async () => {
     try {
-      const equipes = await getTeams(true);
-      setTeams(equipes);
+      const teams = await getTeams(true);
+      setTeams(teams);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
     }
   };
 
   useEffect(() => {
-    getEquipes();
+    fetchTeams();
   }, []);
 
-  const handleEquipeClick = async (id) => {
-    const equipe = await getTeam(id);
-    setTeam(equipe);
+  const handleTeamClick = async (id) => {
+    const teams = await getTeam(id);
+    setTeam(teams);
     navigate("/equipe");
   };
 
-  const addEquipe = async (name, organization) => {
-    const equipe = await createTeam({ name, organization });
-    setTeams([...teams, equipe]);
+  const addTeam = async (name, organization) => {
+    const team = await createTeam({ name, organization });
+    setTeams([...teams, team]);
     setShowModal(false);
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.container_equipes}>
+      <div className={styles.container_teams}>
         <h2>Minhas Equipes</h2>
 
-        <div className={styles.equipes}>
-          {teams.map((equipe) => (
+        <div className={styles.teams}>
+          {teams.map((team) => (
             <TeamCard
-              key={equipe.id}
-              equipe={equipe}
+              key={team.id}
+              team={team}
               handleOnClick={() => {
-                handleEquipeClick(equipe.id);
+                handleTeamClick(team.id);
               }}
             />
           ))}
@@ -59,7 +59,7 @@ function Home() {
       {showModal && (
         <ModalCreateTeam
           closeModal={() => setShowModal(false)}
-          handleCreateTeam={addEquipe}
+          handleCreateTeam={addTeam}
         />
       )}
     </div>

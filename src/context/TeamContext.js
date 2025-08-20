@@ -3,7 +3,7 @@ import { useAuth } from "./AuthContext";
 
 const TeamContext = createContext();
 
-export const EquipeProvider = ({ children }) => {
+export const TeamProvider = ({ children }) => {
   const [team, setTeam] = useState(null);
   const [teams, setTeams] = useState([]);
   const { user } = useAuth();
@@ -21,7 +21,7 @@ export const EquipeProvider = ({ children }) => {
 export const useTeam = () => {
   const context = useContext(TeamContext);
   if (!context) {
-    throw new Error("useTeam must be used within a EquipeProvider");
+    throw new Error("useTeam must be used within a TeamProvider");
   }
   return context;
 };
