@@ -5,6 +5,7 @@ import Select from "../form/Select";
 import SelectCheckbox from "../form/SelectCheckbox";
 import { toast } from "react-toastify";
 import { getAvailableMembers } from "../../api/services/teamService";
+import ModalLoading from "./ModalLoading";
 
 function ModalAddParticipation({ title, schedule, participation, participations, setParticipations, onClose }) {
 
@@ -13,16 +14,20 @@ function ModalAddParticipation({ title, schedule, participation, participations,
   const [selectedRoles, setSelectedRoles] = useState(participation?.roles || []);
   const [availableMembers, setAvailableMembers] = useState([])
   const [unavailableMembers, setUnvailableMembers] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const fetchAvailableMembers = async () => {
     try {
+      setIsLoading(true);
       const members = await getAvailableMembers(team.id, {date: schedule.date});
       console.log(members.available_members);
       setAvailableMembers(members.available_members);
       setUnvailableMembers(members.unavailable_members.map((m) => ({id: m.id, name:`${m.first_name} (Indisponível)`})));
     } catch (error) {
       toast.error("Erro ao buscar membros disponíveis");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -105,9 +110,15 @@ function ModalAddParticipation({ title, schedule, participation, participations,
           />
         </div>
         <div className={styles.item}>
-          <button className={styles.button_submit} onClick={() => addParticipation()}>Adicionar</button>
+          <button
+            className={styles.button_submit}
+            onClick={() => addParticipation()}
+          >
+            Adicionar
+          </button>
         </div>
       </div>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

@@ -3,6 +3,7 @@ import { useTeam } from "../../context/TeamContext";
 import { useState } from "react";
 import { updateTeam } from "../../api/services/teamService";
 import Modal from "./Modal"
+import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
 import { toast } from "react-toastify";
 
@@ -10,6 +11,7 @@ function ModalEditNameTeam({onClose}) {
 
   const {team, setTeam} = useTeam();
   const [name, setName] = useState(team.name);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnChange = (e) => {
     setName(e.target.value);
@@ -18,6 +20,7 @@ function ModalEditNameTeam({onClose}) {
   const updateName = async () => {
     try {
       if (name){
+        setIsLoading(true);
         await updateTeam(team.id, {name});
         setTeam({...team, name});
         toast.success("Nome alterado com sucesso!");
@@ -28,6 +31,8 @@ function ModalEditNameTeam({onClose}) {
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -41,7 +46,10 @@ function ModalEditNameTeam({onClose}) {
         handleOnChange={handleOnChange}
         placeholder={"Digite o nome da equipe"}
       />
-      <button className={styles.btn} onClick={updateName}>Alterar</button>
+      <button className={styles.btn} onClick={updateName}>
+        Alterar
+      </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

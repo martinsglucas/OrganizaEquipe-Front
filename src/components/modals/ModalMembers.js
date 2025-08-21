@@ -7,11 +7,13 @@ import { useTeam } from "../../context/TeamContext";
 import ModalConfirmation from "./ModalConfirmation";
 import { useState } from "react";
 import ModalTeamInvitation from "./ModalTeamInvitation";
+import ModalLoading from "./ModalLoading";
 
 function ModalMembers({ onClose, members}) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { team, setTeam } = useTeam();
 
@@ -25,6 +27,7 @@ function ModalMembers({ onClose, members}) {
       const newMembers = members.filter(
         (member) => member.id !== memberToDelete.id
       );
+      setIsLoading(true);
       await removeMember(team.id, { user_id: memberToDelete.id });
       if (team.admins.some((admin) => admin.id === memberToDelete.id)) {
         const newAdmins = team.admins.filter(
@@ -39,6 +42,8 @@ function ModalMembers({ onClose, members}) {
     } catch (error) {
       console.error(error);
       toast.error("Erro ao remover membro!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,14 +61,20 @@ function ModalMembers({ onClose, members}) {
             />
           </div>
         ))}
-        <button onClick={() => setShowInvitation(true)} className={styles.add}><FaPlus/></button>
+        <button onClick={() => setShowInvitation(true)} className={styles.add}>
+          <FaPlus />
+        </button>
       </div>
       {showConfirmation && (
         <ModalConfirmation
           title={"Excluir membro"}
-          message={`Tem certeza que deseja remover ${memberToDelete.first_name}? ${team.admins.some(
-            (admin) => admin.id === memberToDelete.id
-          ) ? "Ele(a) é um administrador e perderá todas as permissões." : ""}`}
+          message={`Tem certeza que deseja remover ${
+            memberToDelete.first_name
+          }? ${
+            team.admins.some((admin) => admin.id === memberToDelete.id)
+              ? "Ele(a) é um administrador e perderá todas as permissões."
+              : ""
+          }`}
           onConfirm={() => deleteMember()}
           onClose={() => setShowConfirmation(false)}
           noMarginTop={true}
@@ -72,6 +83,7 @@ function ModalMembers({ onClose, members}) {
       {showInvitation && (
         <ModalTeamInvitation onClose={() => setShowInvitation(false)} />
       )}
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

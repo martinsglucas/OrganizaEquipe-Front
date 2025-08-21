@@ -3,6 +3,7 @@ import { useState } from "react";
 import Input from "../form/Input";
 import Modal from "./Modal";
 import ModalConfirmation from "./ModalConfirmation";
+import ModalLoading from "./ModalLoading";
 import { createRequest } from "../../api/services/requestService";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
@@ -12,6 +13,7 @@ import { useOrganization } from "../../context/OrganizationContext";
 function ModalCreateOrganization({ closeModal, noMarginTop }) {
   const [name, setName] = useState("");
   const [orgCode, setOrgCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [organizationToJoin, setOrganizationToJoin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { user } = useAuth();
@@ -19,6 +21,7 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
 
   const handleCreate = async () => {
     try {
+      setIsLoading(true);
       const response = await createOrganization({
         name: name,
         members: [user.id],
@@ -30,6 +33,8 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
       closeModal();
     } catch (error) {
       toast.error("Erro ao criar organização!");
+    } finally {
+      setIsLoading(false);
     }
   };
   const confirm = async () => {
@@ -44,6 +49,7 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
 
   const join = async () => {
     try {
+      setIsLoading(true);
       await createRequest({
         user: user.id,
         code: orgCode,
@@ -52,6 +58,8 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
       closeModal();
     } catch (error) {
       toast.error("Erro ao enviar solicitação!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,6 +103,7 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
           noMarginTop={true}
         />
       )}
+      {isLoading && <ModalLoading isOpen={isLoading}/>}
     </Modal>
   );
 }

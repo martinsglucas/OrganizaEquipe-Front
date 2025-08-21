@@ -6,19 +6,24 @@ import { MdCancel, MdDone } from "react-icons/md";
 import { toast } from "react-toastify";
 import { addMember } from "../../api/services/organizationService";
 import { useOrganization } from "../../context/OrganizationContext";
+import Loading from "../Loading";
 
 function ModalRequestsOrg({ onClose }) {
   const { organization, setOrganization } = useOrganization();
   const [requests, setRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchRequests = async () => {
       if (organization?.code_access) {
         try {
+          setIsLoading(true);
           const response = await getRequests(organization.code_access);
           setRequests(response);
         } catch (error) {
           console.error("Erro ao buscar solicitações:", error);
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -59,6 +64,7 @@ function ModalRequestsOrg({ onClose }) {
 
   return (
     <Modal isOpen={true} onClose={onClose} title={"Solicitações"}>
+      {isLoading && <Loading/>}
       {requests.map((request) => (
         <div key={request.id} className={styles.request}>
           <span>{request.user.first_name}</span>

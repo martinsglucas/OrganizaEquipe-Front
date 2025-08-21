@@ -9,11 +9,13 @@ import { MdCancel, MdDone } from "react-icons/md";
 import { addMember as addTeamMember } from "../api/services/teamService";
 import { addMember as addOrgMember } from "../api/services/organizationService";
 import { toast } from "react-toastify";
+import Loading from "../components/Loading";
 
 function Notifications() {
 
   const [orgInvitations, setOrgInvitations] = useState([]);
   const [teamInvitations, setTeamInvitations] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { organization } = useOrganization();
   const { team } = useTeam();
   const { user } = useAuth();
@@ -22,13 +24,17 @@ function Notifications() {
     if (!user?.email) return;
 
     try {
+      setIsLoading(true);
       const orgInvites = await getOrganizationInvitations(user.email);
       setOrgInvitations(orgInvites);
 
       const teamInvites = await getTeamInvitations(user.email);
       setTeamInvitations(teamInvites);
     } catch (error) {
+      toast.error("Erro ao buscar indisponibilidades!");
       console.error("Erro ao buscar convites:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [user?.email]);
 
@@ -94,25 +100,32 @@ function Notifications() {
     <div className={styles.container}>
       {orgInvitations.length > 0 && (
         <>
-          {orgInvitations.map((invite) => (
-            <div key={invite.id} className={styles.invitation}>
-              <span className={styles.invitationMessage}>
-                <span>Convite para ingressar na organização <b>{invite.organization.name}</b></span>
-                <i>por {invite.sender_name}</i>
-                {/* Convite de {invite.sender_name}: ingressar na organização {invite.organization} */}
-              </span>
-              <div className={styles.buttons}>
-                <MdCancel
-                  className={styles.cancel}
-                  onClick={() => refuseOrgInvitation(invite)}
-                />
-                <MdDone
-                  className={styles.approve}
-                  onClick={() => acceptOrgInvitation(invite)}
-                />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            orgInvitations.map((invite) => (
+              <div key={invite.id} className={styles.invitation}>
+                <span className={styles.invitationMessage}>
+                  <span>
+                    Convite para ingressar na organização{" "}
+                    <b>{invite.organization.name}</b>
+                  </span>
+                  <i>por {invite.sender_name}</i>
+                  {/* Convite de {invite.sender_name}: ingressar na organização {invite.organization} */}
+                </span>
+                <div className={styles.buttons}>
+                  <MdCancel
+                    className={styles.cancel}
+                    onClick={() => refuseOrgInvitation(invite)}
+                  />
+                  <MdDone
+                    className={styles.approve}
+                    onClick={() => acceptOrgInvitation(invite)}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </>
       )}
       {teamInvitations.length > 0 && (
@@ -120,7 +133,9 @@ function Notifications() {
           {teamInvitations.map((invite) => (
             <div key={invite.id} className={styles.invitation}>
               <span className={styles.invitationMessage}>
-                <span>Convite para ingressar na equipe <b>{invite.team.name}</b></span>
+                <span>
+                  Convite para ingressar na equipe <b>{invite.team.name}</b>
+                </span>
                 <i>por {invite.sender_name}</i>
                 {/* Convite de {invite.sender_name}: ingressar na equipe {invite.team} */}
               </span>

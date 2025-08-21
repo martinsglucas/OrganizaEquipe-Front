@@ -4,6 +4,7 @@ import { FaTrash, FaPlus } from "react-icons/fa";
 import { removeMember } from "../../api/services/organizationService";
 import { toast } from "react-toastify";
 import ModalConfirmation from "./ModalConfirmation";
+import ModalLoading from "./ModalLoading";
 import { useState } from "react";
 import ModalOrganizationInvitation from "./ModalOrganizationInvitation";
 import { useOrganization } from "../../context/OrganizationContext";
@@ -12,6 +13,7 @@ function ModalMembersOrg({ onClose, members}) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { organization, setOrganization } = useOrganization();
 
@@ -25,6 +27,7 @@ function ModalMembersOrg({ onClose, members}) {
       const newMembers = members.filter(
         (member) => member.id !== memberToDelete.id
       );
+      setIsLoading(true);
       await removeMember(organization.id, { user_id: memberToDelete.id });
       if (organization.admins.some((admin) => admin.id === memberToDelete.id)) {
         const newAdmins = organization.admins.filter(
@@ -39,6 +42,8 @@ function ModalMembersOrg({ onClose, members}) {
     } catch (error) {
       console.error(error);
       toast.error("Erro ao remover membro!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,6 +83,7 @@ function ModalMembersOrg({ onClose, members}) {
       {showInvitation && (
         <ModalOrganizationInvitation onClose={() => setShowInvitation(false)} />
       )}
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

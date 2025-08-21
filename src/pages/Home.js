@@ -6,19 +6,24 @@ import { useNavigate } from "react-router-dom";
 import { useTeam } from "../context/TeamContext";
 import ModalCreateTeam from "../components/modals/ModalCreateTeam";
 import { useOrganization } from "../context/OrganizationContext";
+import Loading from "../components/Loading";
 
 function Home() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
+  const [isTeamLoading, setIsTeamLoading] = useState(false);
 
   const fetchTeams = async () => {
     try {
+      setIsTeamLoading(true);
       const teams = await getTeams(true);
       setTeams(teams);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
+    } finally {
+      setIsTeamLoading(false);
     }
   };
 
@@ -54,20 +59,24 @@ function Home() {
       <div className={styles.container_teams}>
         <h2>Minhas Equipes</h2>
 
-        <div className={styles.teams}>
-          {teams.map((team) => (
-            <TeamCard
-              key={team.id}
-              team={team}
-              handleOnClick={() => {
-                handleTeamClick(team.id);
-              }}
-            />
-          ))}
-          <button className={styles.add} onClick={() => setShowModal(true)}>
-            <span>+</span>
-          </button>
-        </div>
+        {isTeamLoading ? (
+          <Loading />
+        ) : (
+          <div className={styles.teams}>
+            {teams.map((team) => (
+              <TeamCard
+                key={team.id}
+                team={team}
+                handleOnClick={() => {
+                  handleTeamClick(team.id);
+                }}
+              />
+            ))}
+            <button className={styles.add} onClick={() => setShowModal(true)}>
+              <span>+</span>
+            </button>
+          </div>
+        )}
       </div>
       {showModal && (
         <ModalCreateTeam

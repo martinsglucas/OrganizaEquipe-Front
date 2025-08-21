@@ -4,20 +4,24 @@ import { useEffect, useState, useCallback } from "react";
 import TeamDetail from "../components/TeamDetail";
 import { useTeam } from "../context/TeamContext";
 import ModalCreateTeam from "../components/modals/ModalCreateTeam";
-import { createTeam } from "../api/services/teamService";
 import { useOrganization } from "../context/OrganizationContext";
+import Loading from "../components/Loading";
 
 function Team() {
   const { team, setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
   const [showModal, setShowModal] = useState(false);
+  const [isTeamLoading, setIsTeamLoading] = useState(false);
 
   const fetchTeams = useCallback(async () => {
     try {
+      setIsTeamLoading(true);
       const teams = await getTeams(true);
       setTeams(teams);
     } catch (error) {
       console.error("Erro ao buscar equipes:", error);
+    } finally {
+      setIsTeamLoading(false);
     }
   }, [setTeams]);
 
@@ -44,12 +48,6 @@ function Team() {
     setTeam(team);
   };
 
-  const addTeam = async (name, organization) => {
-    const team = await createTeam({ name, organization });
-    setTeams([...teams, team]);
-    setShowModal(false);
-  };
-
   if (!organization) {
     return (
       <div className={`${styles.container} ${styles.center}`}>
@@ -62,24 +60,28 @@ function Team() {
     return (
       <div className={styles.container}>
         <h2 className={styles.warning}>Nenhuma equipe selecionada</h2>
-        <div className={styles.teams}>
-          {teams.map((team) => (
-            <button
-              key={team.id}
-              className={styles.team}
-              onClick={() => handleSwapTeam(team.id)}
-            >
-              <h3>{team.name}</h3>
+        {isTeamLoading ? (
+          <Loading />
+        ) : (
+          <div className={styles.teams}>
+            {teams.map((team) => (
+              <button
+                key={team.id}
+                className={styles.team}
+                onClick={() => handleSwapTeam(team.id)}
+              >
+                <h3>{team.name}</h3>
+              </button>
+            ))}
+            <button className={styles.add} onClick={() => setShowModal(true)}>
+              <span>+</span>
             </button>
-          ))}
-          <button className={styles.add} onClick={() => setShowModal(true)}>
-            <span>+</span>
-          </button>
-        </div>
+          </div>
+        )}
         {showModal && (
           <ModalCreateTeam
             closeModal={() => setShowModal(false)}
-            handleCreateTeam={addTeam}
+            onClose={() => setShowModal(false)}
           />
         )}
       </div>

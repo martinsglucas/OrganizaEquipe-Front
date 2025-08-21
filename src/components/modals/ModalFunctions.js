@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useTeam } from "../../context/TeamContext";
 import ModalConfirmation from "./ModalConfirmation";
 import ModalCreateOrEditFunction from "./ModalCreateOrEditFunction";
+import ModalLoading from "./ModalLoading";
 import { useState } from "react";
 
 function ModalFunctions({ onClose, functions }) {
@@ -14,6 +15,7 @@ function ModalFunctions({ onClose, functions }) {
   const [showCreateFunction, setShowCreateFunction] = useState(false);
   const [functionToDelete, setFunctionToDelete] = useState(null);
   const [functionToEdit, setFunctionToEdit] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { team, setTeam } = useTeam();
 
@@ -32,6 +34,7 @@ function ModalFunctions({ onClose, functions }) {
       const newFunctions = functions.filter(
         (func) => func.id !== functionToDelete.id
       );
+      setIsLoading(true);
       await deleteFunction(functionToDelete.id);
       setTeam({ ...team, roles: newFunctions });
       toast.success("Função removida com sucesso!");
@@ -39,6 +42,8 @@ function ModalFunctions({ onClose, functions }) {
     } catch (error) {
       console.error(error);
       toast.error("Erro ao remover função!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,6 +95,7 @@ function ModalFunctions({ onClose, functions }) {
           }}
         />
       )}
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

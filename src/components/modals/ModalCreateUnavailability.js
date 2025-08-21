@@ -3,10 +3,10 @@ import { useState } from "react";
 import DateInput from "../form/DateInput";
 import { createUnavailability } from "../../api/services/unavailabilityService";
 import Input from "../form/Input";
-import Checkbox from "../form/Checkbox";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import Modal from "./Modal";
+import ModalLoading from "./ModalLoading";
 import { toast } from "react-toastify";
 dayjs.locale("pt-br");
 
@@ -19,6 +19,7 @@ function ModalCreateUnavailability({
 }) {
   const [reason, setReason] = useState("");
   const [date, setDate] = useState(dayjs(day).format("YYYY-MM-DD"));
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDateChange = (newValue) => {
     setDate(newValue);
@@ -26,6 +27,7 @@ function ModalCreateUnavailability({
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       const unavailability = await createUnavailability({ description: reason, start_date: date });
       setUnavailabilities([...unavailabilities, unavailability])
       onClose();
@@ -33,6 +35,8 @@ function ModalCreateUnavailability({
     } catch (error) {
       console.error("Erro ao criar indisponibilidade:", error);
       toast.error("Erro ao criar indisponibilidade");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,6 +56,7 @@ function ModalCreateUnavailability({
           Criar
         </button>
       </div>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

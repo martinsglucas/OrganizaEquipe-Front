@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ModalCreateSchedule from "../components/modals/ModalCreateSchedule";
 import { useOrganization } from "../context/OrganizationContext";
+import Loading from "../components/Loading";
 
 function Schedule() {
 
@@ -80,7 +81,9 @@ function Schedule() {
         />
       )}
       {isLoading ? (
-        <div>Carregando...</div>
+        <div className={styles.loading}>
+          <Loading />
+        </div>
       ) : schedules.length > 0 ? (
         schedules.map((schedule) => (
           <ScheduleCard

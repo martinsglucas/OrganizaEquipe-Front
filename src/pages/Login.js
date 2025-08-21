@@ -5,12 +5,17 @@ import { loginUser } from "../api/services/userService";
 import LinkButton from "../components/LinkButton";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import ModalLoading from "../components/modals/ModalLoading";
+import { useState } from "react";
 
 function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async (email, password) => {
     try {
+      setIsLoading(true);
       const { user } = await loginUser({
         email,
         password,
@@ -24,6 +29,8 @@ function Login() {
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       toast.error("Erro ao fazer login");
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -33,6 +40,7 @@ function Login() {
       <p>
         Não possui conta? <LinkButton to={"/cadastro"} text={"Cadastre-se"} />
       </p>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </div>
   );
 }

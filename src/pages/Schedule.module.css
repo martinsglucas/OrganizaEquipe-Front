@@ -77,3 +77,7 @@
   border-radius: 20px;
   /* transition: background-color 0.3s ease; */
 }
+
+.loading {
+  margin-top: 2em;
+}

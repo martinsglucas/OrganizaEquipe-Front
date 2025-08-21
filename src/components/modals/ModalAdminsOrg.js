@@ -2,6 +2,7 @@ import styles from "./ModalAdminsOrg.module.css";
 import SelectCheckbox from "../form/SelectCheckbox";
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
+import ModalLoading from "./ModalLoading";
 import { updateOrganization } from "../../api/services/organizationService";
 import { toast } from "react-toastify";
 import { useOrganization } from "../../context/OrganizationContext";
@@ -11,7 +12,7 @@ function ModalAdminsOrg({ isOpen, onClose }) {
   const members = organization?.members || [];
   const [admins, setAdmins] = useState(organization?.admins || []);
   const [disabled, setDisabled] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const adminsIds = admins.map((admin) => admin.id);
@@ -36,6 +37,7 @@ function ModalAdminsOrg({ isOpen, onClose }) {
 
   const updateAdmins = async () => {
     try {
+      setIsLoading(true);
       const adminsIds = admins.map((admin) => admin.id);
       await updateOrganization(organization.id, { admins: adminsIds });
       toast.success("Administradores atualizados com sucesso!");
@@ -47,6 +49,7 @@ function ModalAdminsOrg({ isOpen, onClose }) {
         ...prev,
         admins: admins,
       }));
+      setIsLoading(false);
       onClose();
     }
   }
@@ -70,13 +73,12 @@ function ModalAdminsOrg({ isOpen, onClose }) {
       />
       <button
         disabled={disabled}
-        className={`${styles.buttonApply} ${
-          disabled ? styles.disabled : ""
-        }`}
+        className={`${styles.buttonApply} ${disabled ? styles.disabled : ""}`}
         onClick={() => updateAdmins()}
       >
         Aplicar
       </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

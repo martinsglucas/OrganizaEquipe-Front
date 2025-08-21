@@ -9,11 +9,13 @@ import Input from "../form/Input"
 import Select from "../form/Select";
 import { useTeam } from "../../context/TeamContext";
 import ModalAddParticipation from "./ModalAddParticipation";
+import ModalLoading from "./ModalLoading";
 import { IoMdTrash } from "react-icons/io";
 import { createSchedule, updateSchedule } from "../../api/services/scheduleService";
 
 function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop = false }) {
   const [viewMembers, setViewMembers] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
   
   const getBrazilDate = () => {
@@ -53,6 +55,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
 
   const addSchedule = async () => {
     try {
+      setIsLoading(true);
       const mappedParticipations = participations.map((p) => ({
         roles: p.roles.map((r) => r.id),
         user: p.user.id
@@ -67,21 +70,13 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       };
 
       const newSchedule = await createSchedule(scheduleData);
-      // newSchedule.team = scheduleTeam;
-      // newSchedule.participations = newSchedule.participations.map((p) => {
-      //   const participation = participations.find((part) => p.user === part.user.id);
-      //   return {
-      //     id: p.id,
-      //     user: participation.user,
-      //     roles: participation.roles,
-      //     confirmation: false,
-      //   };
-      // });
       toast.success("Escala criada com sucesso!");
       onCreate(newSchedule);
       onClose();
     } catch (error) {
       toast.error("Erro ao criar escala.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -92,6 +87,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
 
   const editSchedule = async () => {
     try {
+      setIsLoading(true);
       const mappedParticipations = participations.map((p) => ({
         roles: p.roles.map((r) => r.id),
         user: p.user.id,
@@ -117,6 +113,8 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       onClose();
     } catch (error) {
       toast.error("Erro ao alterar escala.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -259,7 +257,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       {showModal && (
         <ModalAddParticipation
           title="Nova Participação"
-          schedule={{team: scheduleTeam, date: date}}
+          schedule={{ team: scheduleTeam, date: date }}
           participations={participations}
           setParticipations={setParticipations}
           onClose={() => setShowModal(false)}
@@ -275,6 +273,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
           onClose={() => setEditMemberModal(false)}
         />
       )}
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

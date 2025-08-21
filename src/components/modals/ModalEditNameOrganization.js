@@ -2,6 +2,7 @@ import styles from "./ModalEditNameOrganization.module.css"
 import { useState } from "react";
 import { updateTeam } from "../../api/services/teamService";
 import Modal from "./Modal"
+import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
 import { toast } from "react-toastify";
 import { useOrganization } from "../../context/OrganizationContext";
@@ -11,6 +12,7 @@ function ModalEditNameOrganization({onClose}) {
 
   const {organization, setOrganization} = useOrganization();
   const [name, setName] = useState(organization.name);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnChange = (e) => {
     setName(e.target.value);
@@ -19,6 +21,7 @@ function ModalEditNameOrganization({onClose}) {
   const updateName = async () => {
     try {
       if (name){
+        setIsLoading(true);
         await updateOrganization(organization.id, {name});
         setOrganization({...organization, name});
         toast.success("Nome alterado com sucesso!");
@@ -29,6 +32,8 @@ function ModalEditNameOrganization({onClose}) {
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -42,7 +47,10 @@ function ModalEditNameOrganization({onClose}) {
         handleOnChange={handleOnChange}
         placeholder={"Digite o nome da organização"}
       />
-      <button className={styles.btn} onClick={updateName}>Alterar</button>
+      <button className={styles.btn} onClick={updateName}>
+        Alterar
+      </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

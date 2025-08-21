@@ -1,5 +1,6 @@
 import styles from "./ModalOrganizationInvitation.module.css";
 import Modal from "./Modal";
+import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
@@ -9,11 +10,13 @@ import { createOrganizationInvitation } from "../../api/services/organizationInv
 
 function ModalOrganizationInvitation({ onClose }) {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { organization } = useOrganization();
   const { user } = useAuth();
 
   const invite = async () => {
     try {
+      setIsLoading(true);
       await createOrganizationInvitation({
         recipient_email: email,
         sender_name: user.first_name,
@@ -38,6 +41,8 @@ function ModalOrganizationInvitation({ onClose }) {
       } else {
         toast.error("Erro ao enviar convite");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +64,7 @@ function ModalOrganizationInvitation({ onClose }) {
       <button className={styles.button} onClick={invite}>
         Convidar
       </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

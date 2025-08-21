@@ -3,13 +3,16 @@ import SelectCheckbox from "../form/SelectCheckbox";
 import { useTeam } from "../../context/TeamContext";
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
+import ModalLoading from "./ModalLoading";
 import { updateTeam } from "../../api/services/teamService";
 import { toast } from "react-toastify";
+
 function ModalAdmins({ isOpen, onClose }) {
   const { team, setTeam } = useTeam();
   const members = team?.members || [];
   const [admins, setAdmins] = useState(team?.admins || []);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   useEffect(() => {
@@ -35,6 +38,7 @@ function ModalAdmins({ isOpen, onClose }) {
 
   const updateAdmins = async () => {
     try {
+      setIsLoading(true);
       const adminsIds = admins.map((admin) => admin.id);
       await updateTeam(team.id, { admins: adminsIds });
       toast.success("Administradores atualizados com sucesso!");
@@ -43,6 +47,7 @@ function ModalAdmins({ isOpen, onClose }) {
       toast.error("Erro ao atualizar administradores");
     } finally {
       setTeam({ ...team, admins: admins });
+      setIsLoading(false);
       onClose();
     }
   }
@@ -66,13 +71,12 @@ function ModalAdmins({ isOpen, onClose }) {
       />
       <button
         disabled={disabled}
-        className={`${styles.buttonApply} ${
-          disabled ? styles.disabled : ""
-        }`}
+        className={`${styles.buttonApply} ${disabled ? styles.disabled : ""}`}
         onClick={() => updateAdmins()}
       >
         Aplicar
       </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }

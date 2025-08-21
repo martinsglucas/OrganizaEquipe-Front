@@ -1,5 +1,6 @@
 import styles from "./ModalTeamInvitation.module.css";
 import Modal from "./Modal";
+import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
 import { useState } from "react";
 import { useTeam } from "../../context/TeamContext";
@@ -9,11 +10,13 @@ import { toast } from "react-toastify";
 
 function ModalTeamInvitation({ onClose }) {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { team } = useTeam();
   const { user } = useAuth();
 
   const invite = async () => {
     try {
+      setIsLoading(true);
       await createTeamInvitation({
         recipient_email: email,
         sender_name: user.first_name,
@@ -36,6 +39,8 @@ function ModalTeamInvitation({ onClose }) {
       } else {
         toast.error("Erro ao enviar convite");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,6 +62,7 @@ function ModalTeamInvitation({ onClose }) {
       <button className={styles.button} onClick={invite}>
         Convidar
       </button>
+      {isLoading && <ModalLoading isOpen={isLoading} />}
     </Modal>
   );
 }
