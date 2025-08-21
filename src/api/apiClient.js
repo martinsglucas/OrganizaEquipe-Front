@@ -1,9 +1,10 @@
 import axios from "axios";
 import { logoutUser } from "./services/userService";
 import { toast } from "react-toastify";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
 
 const apiClient = axios.create({
-  baseURL: "https://organizaequipe-api.onrender.com/api/",
+  baseURL: BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
