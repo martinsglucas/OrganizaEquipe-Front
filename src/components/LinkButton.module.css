@@ -4,6 +4,7 @@
   transition: 0.5s;
   background-color: #333;
   margin: 0.5em;
+  font-weight: bold;
   /* width: fit-content; */
   border-radius: 1em;
   color: white;

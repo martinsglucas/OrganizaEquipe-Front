@@ -6,7 +6,7 @@
   margin-bottom: 1em;
 }
 
-.teams {
+.team {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,18 +20,6 @@
   cursor: pointer;
 }
 
-.button_cancel {
-  display: flex;
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 0.5s;
-  background-color: #c42d2d;
-  border-radius: 1em;
-  color: white;
-  font-size: 1em;
-  cursor: pointer;
-}
-
 .add {
   display: flex;
   flex-direction: column;
@@ -39,6 +27,7 @@
   width: 10em;
   height: 3em;
   border: solid 1px #333;
+  background-color: #333;
   border-radius: 20px;
   margin: 1em;
   justify-content: center;
@@ -47,4 +36,5 @@
 
 .add span {
   font-size: 3em;
+  color: white;
 }

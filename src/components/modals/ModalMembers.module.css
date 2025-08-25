@@ -8,13 +8,11 @@ flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* background-color: #333; */
   border: 1px solid #333;
-  /* color: white; */
   padding: 0.5em 1em;
   border-radius: 1em;
   margin: 0.5em 0;
-  min-width: 10em;
+  min-width: 14em;
 }
 
 .delete {
