@@ -7,9 +7,10 @@ import { useTeam } from "../context/TeamContext";
 import ModalCreateTeam from "../components/modals/ModalCreateTeam";
 import { useOrganization } from "../context/OrganizationContext";
 import Loading from "../components/Loading";
+import LinkButton from "../components/LinkButton";
 
 function Home() {
-  const [showModal, setShowModal] = useState(false);
+  const [createTeamModal, setCreateTeamModal] = useState(false);
   const navigate = useNavigate();
   const { setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
@@ -40,16 +41,16 @@ function Home() {
   const addTeam = async (name, organization) => {
     const team = await createTeam({ name, organization });
     setTeams([...teams, team]);
-    setShowModal(false);
+    setCreateTeamModal(false);
   };
 
   if (!organization) {
     return (
       <div className={`${styles.container} ${styles.center}`}>
         <h2 className={styles.warning}>
-          Você ainda não faz parte de uma organização. <br></br> Crie ou
-          ingresse em uma
+          É necessário fazer parte de uma organização.
         </h2>
+        <LinkButton text={"Ir para organização"} to={"/organizacao"} />
       </div>
     );
   }
@@ -72,15 +73,15 @@ function Home() {
                 }}
               />
             ))}
-            <button className={styles.add} onClick={() => setShowModal(true)}>
+            <button className={styles.add} onClick={() => setCreateTeamModal(true)}>
               <span>+</span>
             </button>
           </div>
         )}
       </div>
-      {showModal && (
+      {createTeamModal && (
         <ModalCreateTeam
-          closeModal={() => setShowModal(false)}
+          closeModal={() => setCreateTeamModal(false)}
           handleCreateTeam={addTeam}
         />
       )}

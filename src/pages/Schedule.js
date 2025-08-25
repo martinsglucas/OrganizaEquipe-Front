@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import ModalCreateSchedule from "../components/modals/ModalCreateSchedule";
 import { useOrganization } from "../context/OrganizationContext";
 import Loading from "../components/Loading";
+import LinkButton from "../components/LinkButton";
 
 function Schedule() {
 
@@ -46,7 +47,10 @@ function Schedule() {
   if (!organization) {
       return (
         <div className={`${styles.container} ${styles.center}`}>
-          <h2 className={styles.warning}>Você ainda não faz parte de uma organização. <br></br> Crie ou ingresse em uma</h2>
+          <h2 className={styles.warning}>
+            É necessário fazer parte de uma organização.
+          </h2>
+          <LinkButton text={"Ir para organização"} to={"/organizacao"} />
         </div>
       );
     }

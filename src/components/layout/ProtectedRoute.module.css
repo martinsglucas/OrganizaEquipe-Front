@@ -2,5 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
+  justify-content: center;
+  height: 70vh;
+}
+
+.container h1 {
+  margin-bottom: 0;
 }

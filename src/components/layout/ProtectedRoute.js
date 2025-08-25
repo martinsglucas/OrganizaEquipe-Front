@@ -22,8 +22,8 @@ function ProtectedRoute({ children }) {
     children
   ) : (
     <div className={styles.container}>
-      <h1>Acesso não autorizado</h1>
-      <p>Faça login ou cadastre-se para continuar.</p>
+      <h1>Acesso restrito</h1>
+      <p>Para continuar, entre na sua conta ou crie uma nova.</p>
       <LinkButton to={"/login"} text={"Login"} />
       <LinkButton to={"/cadastro"} text={"Cadastrar-se"} />
     </div>
