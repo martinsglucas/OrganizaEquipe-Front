@@ -21,7 +21,6 @@ function ModalAddParticipation({ title, schedule, participation, participations,
     try {
       setIsLoading(true);
       const members = await getAvailableMembers(team.id, {date: schedule.date});
-      console.log(members.available_members);
       setAvailableMembers(members.available_members);
       setUnvailableMembers(members.unavailable_members.map((m) => ({id: m.id, name:`${m.first_name} (Indisponível)`})));
     } catch (error) {

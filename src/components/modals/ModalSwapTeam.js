@@ -32,9 +32,6 @@ function ModalSwapTeam({ closeModal, handleSwapTeam, teams }) {
           <span>+</span>
         </button>
       </div>
-      {/* <button className={styles.button_cancel} onClick={closeModal}>
-          Cancelar
-        </button> */}
       {showModal && (
         <ModalCreateTeam
           closeModal={() => setShowModal(false)}
