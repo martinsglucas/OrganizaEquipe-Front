@@ -1,6 +1,5 @@
 import styles from "./ModalEditNameOrganization.module.css"
 import { useState } from "react";
-import { updateTeam } from "../../api/services/teamService";
 import Modal from "./Modal"
 import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
