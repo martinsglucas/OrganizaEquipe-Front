@@ -54,6 +54,10 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
   }
 
   const addSchedule = async () => {
+    if (!titleInput) {
+      toast.warn("A escala precisa de um nome!")
+      return;
+    }
     try {
       setIsLoading(true);
       const mappedParticipations = participations.map((p) => ({
@@ -86,6 +90,10 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
   }
 
   const editSchedule = async () => {
+    if (!titleInput) {
+      toast.warn("A escala precisa de um nome!");
+      return;
+    }
     try {
       setIsLoading(true);
       const mappedParticipations = participations.map((p) => ({
