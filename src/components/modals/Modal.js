@@ -24,7 +24,7 @@ function Modal({ isOpen, onClose, title, children, noMarginTop }) {
   if (!isVisible && !isClosing) return null;
   
   return (
-    <div className={styles.background} onClick={onClose}>
+    <div className={styles.background}>
       <div
         className={`${styles.container} ${
           isClosing ? styles.slide_down : styles.slide_up
