@@ -7,9 +7,6 @@ import { useTeam } from "../../context/TeamContext";
 import { MdPerson, MdPersonOff, MdNotifications, MdNotificationsActive, MdLogout } from "react-icons/md";
 
 import SidebarItem from "./SidebarItem";
-import { getTeamInvitations } from "../../api/services/teamInvitationService";
-import { getOrganizationInvitations } from "../../api/services/organizationInvitationService";
-import { useEffect, useState } from "react";
 
 function Sidebar({ active }) { 
   
@@ -17,20 +14,7 @@ function Sidebar({ active }) {
   
   const { setTeam } = useTeam();
   const { setOrganization } = useOrganization();
-  const [hasNotifications, setHasNotifications] = useState(false);
-  
-  const { user, setUser } = useAuth();
-
-  const getNotifications = async () => {
-    const teamNotifications = await getTeamInvitations(user.email);
-    const orgNotifications = await getOrganizationInvitations(user.email);
-    setHasNotifications(teamNotifications.length > 0 || orgNotifications.length > 0)
-  };
-
-  useEffect(() => {
-    getNotifications();
-  }, []);
-  
+  const { user, setUser, hasInvitations } = useAuth();
   
   const logout = () => {
     logoutUser();
@@ -61,11 +45,11 @@ function Sidebar({ active }) {
           onClick={closeSidebar}
         />
         <SidebarItem
-          to={"/notificacoes"}
-          Icon={hasNotifications ? MdNotificationsActive : MdNotifications}
-          Text={"Notificações"}
+          to={"/convites"}
+          Icon={hasInvitations ? MdNotificationsActive : MdNotifications}
+          Text={"Convites"}
           onClick={closeSidebar}
-          highlight={hasNotifications}
+          highlight={hasInvitations}
         />
         <SidebarItem
           to={"/login"}

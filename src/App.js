@@ -17,7 +17,7 @@ import { TeamProvider } from "./context/TeamContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Notifications from "./pages/Notifications";
+import Invitations from "./pages/Invitations";
 import { OrganizationProvider} from "./context/OrganizationContext";
 
 function App() {
@@ -82,10 +82,10 @@ function App() {
                   }
                 />
                 <Route
-                  path="/notificacoes"
+                  path="/convites"
                   element={
                     <ProtectedRoute>
-                      <Notifications />
+                      <Invitations />
                     </ProtectedRoute>
                   }
                 />

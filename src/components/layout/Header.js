@@ -24,8 +24,8 @@ function Header({ sidebar, setSitebar }) {
         return "Perfil";
       case "/organizacao":
         return "Organização";
-      case "/notificacoes":
-        return "Notificações"
+      case "/convites":
+        return "Convites"
       default:
         return "";
     }
