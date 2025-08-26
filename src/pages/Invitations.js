@@ -1,6 +1,7 @@
-import styles from "./Notifications.module.css"
-import { deleteOrganizationInvitation, getOrganizationInvitations } from "../api/services/organizationInvitationService";
-import { deleteTeamInvitation, getTeamInvitations } from "../api/services/teamInvitationService";
+import styles from "./Invitations.module.css"
+import { deleteOrganizationInvitation } from "../api/services/organizationInvitationService";
+import { deleteTeamInvitation } from "../api/services/teamInvitationService";
+import { getInvitations } from "../api/services/userService";
 import { useEffect, useState, useCallback } from "react";
 import { useOrganization } from "../context/OrganizationContext";
 import { useTeam } from "../context/TeamContext";
@@ -11,7 +12,7 @@ import { addMember as addOrgMember } from "../api/services/organizationService";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 
-function Notifications() {
+function Invitations() {
 
   const [orgInvitations, setOrgInvitations] = useState([]);
   const [teamInvitations, setTeamInvitations] = useState([]);
@@ -25,13 +26,11 @@ function Notifications() {
 
     try {
       setIsLoading(true);
-      const orgInvites = await getOrganizationInvitations(user.email);
-      setOrgInvitations(orgInvites);
-
-      const teamInvites = await getTeamInvitations(user.email);
-      setTeamInvitations(teamInvites);
+      const invitations = await getInvitations(user.id);
+      setOrgInvitations(invitations.org_invitations);
+      setTeamInvitations(invitations.team_invitations);
     } catch (error) {
-      toast.error("Erro ao buscar indisponibilidades!");
+      toast.error("Erro ao buscar convites!");
       console.error("Erro ao buscar convites:", error);
     } finally {
       setIsLoading(false);
@@ -157,4 +156,4 @@ function Notifications() {
   );
 }
 
-export default Notifications;
+export default Invitations;
