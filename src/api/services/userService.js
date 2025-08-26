@@ -80,6 +80,17 @@ export const logoutUser = () => {
   }
 };
 
+export const getInvitations = async (id) => {
+  try {
+    const response = await apiClient.get(`users/${id}/get_invitations/`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar convites:", error);
+    throw error;
+  }
+
+} 
+
 export const verifyToken = async () => {
   const token = sessionStorage.getItem("accessToken");
 
