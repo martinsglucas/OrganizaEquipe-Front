@@ -1,3 +1,11 @@
+.scheduleDetails {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 70vh;
+}
+
 .button_submit {
   display: flex;
   padding: 0.5em 1em;
