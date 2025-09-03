@@ -6,6 +6,7 @@ import SelectCheckbox from "../form/SelectCheckbox";
 import { toast } from "react-toastify";
 import { getAvailableMembers } from "../../api/services/teamService";
 import ModalLoading from "./ModalLoading";
+import ModalConfirmation from "./ModalConfirmation";
 
 function ModalAddParticipation({ title, schedule, participation, participations, setParticipations, onClose }) {
 
@@ -13,16 +14,20 @@ function ModalAddParticipation({ title, schedule, participation, participations,
   const [selectedMember, setSelectedMember] = useState(participation?.user.id || "");
   const [selectedRoles, setSelectedRoles] = useState(participation?.roles || []);
   const [availableMembers, setAvailableMembers] = useState([])
+  const [assignedMembers, setAssignedMembers] = useState([])
   const [unavailableMembers, setUnvailableMembers] = useState([])
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [memberToSelect, setMemberToSelect] = useState(null);
 
   const fetchAvailableMembers = async () => {
     try {
       setIsLoading(true);
       const members = await getAvailableMembers(team.id, {date: schedule.date});
-      setAvailableMembers(members.available_members);
       setUnvailableMembers(members.unavailable_members.map((m) => ({id: m.id, name:`${m.first_name} (Indisponível)`})));
+      const assigned = members.assigned_members.map((m) => ({id: m.id, first_name: `${m.first_name} (Escalado)`}))
+      setAssignedMembers(assigned);
+      setAvailableMembers(members.available_members.concat(assigned));
     } catch (error) {
       toast.error("Erro ao buscar membros disponíveis");
     } finally {
@@ -81,6 +86,18 @@ function ModalAddParticipation({ title, schedule, participation, participations,
     setSelectedRoles(newRoles);
   }
 
+  const handleSelect = (id) => {
+    if (assignedMembers.some((m) => m.id === id)) {
+      setShowConfirmation(true);
+      setMemberToSelect(
+        assignedMembers.find((m) => m.id === id)
+      );
+    } else {
+      setSelectedMember(id);
+    }
+
+  }
+
   return (
     <Modal isOpen={true} onClose={onClose} title={title} noMarginTop={true}>
       <div className={styles.scheduleDetails}>
@@ -93,7 +110,7 @@ function ModalAddParticipation({ title, schedule, participation, participations,
             disabledOptions={unavailableMembers}
             value={selectedMember}
             handleOnChange={(e) => {
-              setSelectedMember(e.target.value);
+              handleSelect(parseInt(e.target.value))
             }}
           />
         </div>
@@ -118,6 +135,15 @@ function ModalAddParticipation({ title, schedule, participation, participations,
         </div>
       </div>
       {isLoading && <ModalLoading isOpen={isLoading} />}
+      {showConfirmation && (
+        <ModalConfirmation
+          title={"Membro já escalado"}
+          message={`${memberToSelect.first_name.slice(0, -11)} já está relacionado em outra escala nessa mesma data. Deseja escalar mesmo assim?`}
+          onClose={() => setShowConfirmation(false)}
+          onConfirm={() => {setSelectedMember(memberToSelect.id); setShowConfirmation(false)}}
+          noMarginTop={true}
+        />
+      )}
     </Modal>
   );
 }
