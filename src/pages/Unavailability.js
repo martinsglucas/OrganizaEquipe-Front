@@ -7,6 +7,7 @@ import ModalCreateUnavailability from "../components/modals/ModalCreateUnavailab
 import { getUnavailabilities } from "../api/services/unavailabilityService";
 import UnavailabilityDetail from "../components/UnavailabilityDetail";
 import { toast } from "react-toastify";
+dayjs.locale("pt-br");
 
 function Unavailability() {
   const [value, setValue] = useState(dayjs());
