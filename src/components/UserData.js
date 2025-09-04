@@ -9,10 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import ModalConfirmation from "./modals/ModalConfirmation";
 
 function UserData({ edit, setEdit }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const putUser = async (user_id, first_name, email) => {
     try {
@@ -37,6 +40,7 @@ function UserData({ edit, setEdit }) {
   const deleteUserAccount = async () => {
     try {
       await deleteUser(user.id);
+      setShowConfirmation(false);
       logoutUser();
       navigate("/login");
       toast.success("Conta deletada com sucesso!");
@@ -58,7 +62,7 @@ function UserData({ edit, setEdit }) {
           <button
             className={styles.btn}
             onClick={() => {
-              deleteUserAccount();
+              setShowConfirmation(true);
             }}
           >
             <FaTrash />
@@ -79,6 +83,14 @@ function UserData({ edit, setEdit }) {
             </div>
           </div>
         </div>
+      )}
+      {showConfirmation && (
+        <ModalConfirmation
+          title={"Deletar conta"}
+          message={"Tem certeza que deseja apagar sua conta?"}
+          onClose={() => setShowConfirmation(false)}
+          onConfirm={() => deleteUserAccount()}
+        />
       )}
     </>
   );

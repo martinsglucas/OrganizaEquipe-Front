@@ -13,6 +13,7 @@ import { useAuth } from "../../context/AuthContext";
 import { confirmScheduleParticipation, deleteSchedule } from "../../api/services/scheduleService";
 import { toast } from "react-toastify";
 import ModalCreateSchedule from "./ModalCreateSchedule";
+import ModalConfirmation from "./ModalConfirmation";
 
 function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
   const [year, month, day] = schedule.date.split("-");
@@ -22,6 +23,7 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
   const [unconfirmed, setUnconfirmed] = useState(schedule.participations.some((p) => p.user.id === user.id && p.confirmation === false))
   const userParticipates = schedule.participations.some((p) => p.user.id === user.id)
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const userIsAdmin = schedule.team.admins.some(
     (admin) => admin.id === user.id
   );
@@ -58,6 +60,7 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
   const removeSchedule = async () => {
     try {
       await deleteSchedule(schedule.id);
+      setShowConfirmation(false);
       toast.success("Escala excluída com sucesso!");
       onDelete(schedule)
       onClose()
@@ -154,7 +157,7 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
           ))}
         {userIsAdmin && (
           <div className={styles.edit}>
-            <button className={styles.button_delete} onClick={() => {removeSchedule()}}>
+            <button className={styles.button_delete} onClick={() => {setShowConfirmation(true)}}>
               Apagar
             </button>
             <button
@@ -173,6 +176,14 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
           onCreate={() => {}}
           schedule={schedule}
           noMarginTop={true}
+        />
+      )}
+      {showConfirmation && (
+        <ModalConfirmation
+          title={"Apagar escala"}
+          message={`Tem certeza que deseja apagar a escala ${schedule.name}`}
+          onClose={() => setShowConfirmation(false)}
+          onConfirm={() => removeSchedule()}
         />
       )}
     </Modal>
