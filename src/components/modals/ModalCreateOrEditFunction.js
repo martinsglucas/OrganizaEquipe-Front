@@ -17,7 +17,10 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
       if (name){
         setIsLoading(true);
         const newFunction = await createFunction({ team: team.id, name });
-        setTeam({ ...team, roles: [...team.roles, newFunction] });
+        const updatedFunctions = [...team.roles, newFunction].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        setTeam({ ...team, roles: updatedFunctions });
         toast.success("Função criada com sucesso!");
         onClose();
       } else {
@@ -36,11 +39,12 @@ function ModalCreateOrEditFunction({ title, func, onClose }) {
       if (name){
         setIsLoading(true);
         const updatedFunction = await updateFunction(func.id, {name});
+        const updatedFunctions = team.roles.map((f) =>
+          f.id === func.id ? updatedFunction : f
+        ).sort((a, b) => a.name.localeCompare(b.name));
         setTeam({
           ...team,
-          roles: team.roles.map((f) =>
-            f.id === func.id ? updatedFunction : f
-          ),
+          roles: updatedFunctions,
         });
         toast.success("Função alterada com sucesso!");
         onClose();
