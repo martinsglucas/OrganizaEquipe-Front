@@ -45,7 +45,10 @@ function ModalRequestsOrg({ onClose }) {
   const acceptRequest = async (request) => {
     try {
       await addMember(organization.id, { user_id: request.user.id });
-      setOrganization({ ...organization, members: [...organization.members, request.user] });
+      const updatedMembers = [...organization.members, request.user].sort((a, b) =>
+        a.first_name.localeCompare(b.first_name)
+      );
+      setOrganization({ ...organization, members: updatedMembers });
       await deleteRequest(request.id);
       const newRequests = requests.filter((r) => r.id !== request.id);
       setRequests(newRequests);

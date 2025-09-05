@@ -45,7 +45,10 @@ function ModalRequests({ onClose }) {
   const acceptRequest = async (request) => {
     try {
       await addMember(team.id, { user_id: request.user.id });
-      setTeam({ ...team, members: [...team.members, request.user] });
+      const updatedMembers = [...team.members, request.user].sort(
+        (a, b) => a.first_name.localeCompare(b.first_name)
+      );
+      setTeam({ ...team, members: updatedMembers });
       await deleteRequest(request.id);
       const newRequests = requests.filter((r) => r.id !== request.id);
       setRequests(newRequests);
