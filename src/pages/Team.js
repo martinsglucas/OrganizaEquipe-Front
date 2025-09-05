@@ -44,7 +44,7 @@ function Team() {
   }, []);
 
 
-  const handleSwapTeam = async (id) => {
+  const handleChangeTeam = async (id) => {
     const team = await getTeam(id);
     setTeam(team);
   };
@@ -72,7 +72,7 @@ function Team() {
               <button
                 key={team.id}
                 className={styles.team}
-                onClick={() => handleSwapTeam(team.id)}
+                onClick={() => handleChangeTeam(team.id)}
               >
                 <h3>{team.name}</h3>
               </button>

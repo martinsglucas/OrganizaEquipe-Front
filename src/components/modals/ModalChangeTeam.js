@@ -1,17 +1,17 @@
-import styles from "./ModalSwapTeam.module.css";
+import styles from "./ModalChangeTeam.module.css";
 import Modal from "./Modal";
 import ModalCreateTeam from "./ModalCreateTeam";
 import { useState } from "react";
 import { createTeam } from "../../api/services/teamService";
 import { useOrganization } from "../../context/OrganizationContext";
 
-function ModalSwapTeam({ closeModal, handleSwapTeam, teams }) {
+function ModalChangeTeam({ closeModal, handleChangeTeam, teams }) {
   const [showModal, setShowModal] = useState(false);
   const { organization } = useOrganization();
 
   const handleAddTeam = async (name) => {
     const team = await createTeam({ name, organization: organization.id });
-    handleSwapTeam(team);
+    handleChangeTeam(team);
     setShowModal(false);
     teams.push(team);
   };
@@ -23,7 +23,7 @@ function ModalSwapTeam({ closeModal, handleSwapTeam, teams }) {
           <button
             key={team.id}
             className={styles.team}
-            onClick={() => handleSwapTeam(team)}
+            onClick={() => handleChangeTeam(team)}
           >
             {team.name}
           </button>
@@ -43,4 +43,4 @@ function ModalSwapTeam({ closeModal, handleSwapTeam, teams }) {
   );
 }
 
-export default ModalSwapTeam;
+export default ModalChangeTeam;

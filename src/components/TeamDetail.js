@@ -1,7 +1,7 @@
 import styles from "./TeamDetail.module.css";
 import { IoMdSwap } from "react-icons/io";
 import { useState } from "react";
-import ModalSwapTeam from "./modals/ModalSwapTeam";
+import ModalChangeTeam from "./modals/ModalChangeTeam";
 import { useTeam } from "../context/TeamContext";
 import { getTeam, deleteTeam, getTeams } from "../api/services/teamService";
 import ModalAdmins from "./modals/ModalAdmins";
@@ -57,7 +57,7 @@ function TeamDetail() {
     setShowModalSwap(true);
   };
 
-  const handleSwapTeam = async (id) => {
+  const handleChangeTeam = async (id) => {
     const team = await getTeam(id);
     setTeam(team);
     setShowModalSwap(false);
@@ -193,10 +193,10 @@ function TeamDetail() {
         <ModalRequests onClose={() => setShowModalRequests(false)} />
       )}
       {showModalSwap && (
-        <ModalSwapTeam
+        <ModalChangeTeam
           closeModal={() => setShowModalSwap(false)}
-          handleSwapTeam={(team) => {
-            handleSwapTeam(team.id);
+          handleChangeTeam={(team) => {
+            handleChangeTeam(team.id);
           }}
           teams={teams}
         />
