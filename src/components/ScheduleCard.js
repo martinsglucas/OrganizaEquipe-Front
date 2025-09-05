@@ -67,7 +67,6 @@ function ScheduleCard({ schedule, onDelete }) {
       </button>
       {showModal && (
         <ModalViewSchedule
-          title={schedule.name}
           schedule={schedule}
           onClose={() => setShowModal(false)}
           onDelete={onDelete}

@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import ModalCreateSchedule from "./ModalCreateSchedule";
 import ModalConfirmation from "./ModalConfirmation";
 
-function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
+function ModalViewSchedule({ schedule, onClose, onDelete }) {
   const [year, month, day] = schedule.date.split("-");
   const date = new Date(year, month - 1, day);
   const [viewMembers, setViewMembers] = useState(false);
@@ -70,7 +70,7 @@ function ModalViewSchedule({ title, schedule, onClose, onDelete }) {
   }
 
   return (
-    <Modal isOpen={true} onClose={onClose} title={title} noMarginTop={false}>
+    <Modal isOpen={true} onClose={onClose} title={schedule.name} noMarginTop={false}>
       <div className={styles.scheduleDetails}>
         <div
           className={styles.change}
