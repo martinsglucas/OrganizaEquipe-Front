@@ -90,7 +90,7 @@ function Invitations() {
   if (!orgInvitations.length && !teamInvitations.length) {
     return (
       <div className={`${styles.container} ${styles.center}`}>
-        <h2 className={styles.aviso}>Você não tem notificações</h2>
+        <h2 className={styles.aviso}>Você não tem convites</h2>
       </div>
     );
   }
