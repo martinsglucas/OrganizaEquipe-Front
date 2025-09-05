@@ -66,15 +66,23 @@ function ModalAddParticipation({ title, schedule, participation, participations,
     }
     if (participation) {
       const newParticipations = participations.filter((p) => p.user.id !== participation.user.id);
-      setParticipations([
+      const orderedParticipations = [
         ...newParticipations,
         {
           roles: selectedRoles,
           user: team.members.find((m) => m.id === parseInt(selectedMember)),
         },
-      ]);
+      ].sort((a, b) => a.user.first_name.localeCompare(b.user.first_name));
+      setParticipations(orderedParticipations);
     } else {
-      setParticipations([...participations, {roles: selectedRoles, user: team.members.find((m) => m.id === parseInt(selectedMember))}])
+      const orderedParticipations = [
+        ...participations,
+        {
+          roles: selectedRoles,
+          user: team.members.find((m) => m.id === parseInt(selectedMember)),
+        },
+      ].sort((a, b) => a.user.first_name.localeCompare(b.user.first_name));
+      setParticipations(orderedParticipations);
     }
     onClose();
   }
