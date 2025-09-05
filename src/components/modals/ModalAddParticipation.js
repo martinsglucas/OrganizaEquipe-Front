@@ -25,7 +25,12 @@ function ModalAddParticipation({ title, schedule, participation, participations,
       setIsLoading(true);
       const members = await getAvailableMembers(team.id, {date: schedule.date});
       setUnvailableMembers(members.unavailable_members.map((m) => ({id: m.id, name:`${m.first_name} (Indisponível)`})));
-      const assigned = members.assigned_members.map((m) => ({id: m.id, first_name: `${m.first_name} (Escalado)`}))
+      const assigned = members.assigned_members.map((m) => ({
+        id: m.id,
+        first_name: `${m.first_name} (Escalado)`,
+        schedule: m.schedules__schedule__name,
+        team: m.schedules__schedule__team__name,
+      }));
       setAssignedMembers(assigned);
       setAvailableMembers(members.available_members.concat(assigned));
     } catch (error) {
@@ -118,7 +123,7 @@ function ModalAddParticipation({ title, schedule, participation, participations,
             disabledOptions={unavailableMembers}
             value={selectedMember}
             handleOnChange={(e) => {
-              handleSelect(parseInt(e.target.value))
+              handleSelect(parseInt(e.target.value));
             }}
           />
         </div>
@@ -146,9 +151,20 @@ function ModalAddParticipation({ title, schedule, participation, participations,
       {showConfirmation && (
         <ModalConfirmation
           title={"Membro já escalado"}
-          message={`${memberToSelect.first_name.slice(0, -11)} já está relacionado em outra escala nessa mesma data. Deseja escalar mesmo assim?`}
+          message={
+            <>
+              <b>{memberToSelect.first_name.slice(0, -11)}</b> já está
+              relacionado na escala{" "}
+              <b>{memberToSelect.schedule}</b> da equipe{" "}
+              <b>{memberToSelect.team}</b> nessa
+              mesma data. Deseja escalar mesmo assim?
+            </>
+          }
           onClose={() => setShowConfirmation(false)}
-          onConfirm={() => {setSelectedMember(memberToSelect.id); setShowConfirmation(false)}}
+          onConfirm={() => {
+            setSelectedMember(memberToSelect.id);
+            setShowConfirmation(false);
+          }}
           noMarginTop={true}
         />
       )}
