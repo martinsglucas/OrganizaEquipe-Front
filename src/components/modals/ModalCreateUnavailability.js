@@ -27,6 +27,10 @@ function ModalCreateUnavailability({
 
   const handleSubmit = async () => {
     try {
+      if (!reason) {
+        toast.warn("Insira o motivo da indisponibilidade.");
+        return;
+      }
       setIsLoading(true);
       const unavailability = await createUnavailability({ description: reason, start_date: date });
       setUnavailabilities([...unavailabilities, unavailability])
