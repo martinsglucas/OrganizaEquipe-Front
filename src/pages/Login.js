@@ -15,6 +15,10 @@ function Login() {
 
   const handleLogin = async (email, password) => {
     try {
+      if (!email || !password) {
+        toast.error("Preencha todos os campos.");
+        return;
+      }
       setIsLoading(true);
       const { user } = await loginUser({
         email,
