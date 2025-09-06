@@ -24,6 +24,10 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
 
   const addTeam = async () => {
     try {
+      if (teamName.trim() === "") {
+        toast.warn("Por favor, insira um nome de equipe válido.");
+        return;
+      }
       setIsLoading(true);
       const team = await createTeam({ name: teamName, organization: organization.id });
       setTeams([...teams, team]);
@@ -40,7 +44,7 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
   const confirm = async () => {
     try {
       if (teamCode.trim() === "") {
-        toast.error("Por favor, insira um código de equipe válido.");
+        toast.warn("Por favor, insira um código de equipe válido.");
         return;
       }
       const response = await getTeams(false, teamCode);
