@@ -32,11 +32,17 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
     } catch (error) {
       toast.error("Erro ao criar equipe!");
       // throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const confirm = async () => {
     try {
+      if (teamCode.trim() === "") {
+        toast.error("Por favor, insira um código de equipe válido.");
+        return;
+      }
       const response = await getTeams(false, teamCode);
       setTeamToJoin(response[0].name);
       setShowConfirmation(true);
