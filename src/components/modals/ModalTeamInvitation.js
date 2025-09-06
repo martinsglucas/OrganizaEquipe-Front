@@ -16,6 +16,10 @@ function ModalTeamInvitation({ onClose }) {
 
   const invite = async () => {
     try {
+      if (!email) {
+        toast.warn("Por favor, insira um email válido.");
+        return;
+      }
       setIsLoading(true);
       await createTeamInvitation({
         recipient_email: email,
@@ -34,7 +38,7 @@ function ModalTeamInvitation({ onClose }) {
         if (errorMessage.includes("já faz parte dessa equipe")) {
           toast.info(errorMessage);
         } else {
-          toast.error(errorMessage);
+          toast.error("Erro ao enviar convite");
         }
       } else {
         toast.error("Erro ao enviar convite");

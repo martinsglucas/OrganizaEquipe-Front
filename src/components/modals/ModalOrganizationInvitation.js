@@ -16,6 +16,10 @@ function ModalOrganizationInvitation({ onClose }) {
 
   const invite = async () => {
     try {
+      if (!email) {
+        toast.warn("Por favor, insira um email válido.");
+        return;
+      }
       setIsLoading(true);
       await createOrganizationInvitation({
         recipient_email: email,
@@ -36,7 +40,7 @@ function ModalOrganizationInvitation({ onClose }) {
         } else if (errorMessage.includes("não encontrado")) {
           toast.error("Usuário não encontrado");
         } else {
-          toast.error(errorMessage);
+          toast.error("Erro ao enviar convite");
         }
       } else {
         toast.error("Erro ao enviar convite");
