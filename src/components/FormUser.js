@@ -4,6 +4,8 @@ import { useState } from "react";
 import Input from "./form/Input";
 import PasswordInput from "./form/PasswordInput";
 import SubmitButton from "./form/SubmitButton";
+import { MdCancel, MdCheckCircle } from "react-icons/md";
+import { toast } from "react-toastify";
 
 function FormUser({ type, handle }) {
   function handleLogin(e) {
@@ -12,12 +14,47 @@ function FormUser({ type, handle }) {
   }
   function handleCadastro(e) {
     e.preventDefault();
+    if (!passwordMinLength) {
+      toast.error("A senha deve ter no mínimo 8 caracteres.");
+      return;
+    }
+    if (!passwordLeastOneLetter) {
+      toast.error("A senha deve ter no mínimo uma letra.");
+      return;
+    }
     handle(name, email, password);
   }
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordLeastOneLetter, setPasswordLeastOneLetter] = useState(false);
+  const [iconPasswordLeastOneLetter, setIconPasswordLeastOneLetter] = useState(<MdCancel className={styles.not_check}/>);
+  const [passwordMinLength, setPasswordMinLength] = useState(false);
+  const [iconPasswordMinLength, setIconPasswordMinLength] = useState(<MdCancel className={styles.not_check}/>);
+
+  const validatePassword = (pwd) => {
+    if (pwd.length >= 8) {
+      setPasswordMinLength(true);
+      setIconPasswordMinLength(<MdCheckCircle className={styles.check}/>);
+    } else {
+      setPasswordMinLength(false);
+      setIconPasswordMinLength(<MdCancel className={styles.not_check}/>);
+    }
+
+    if (/[a-zA-Z]/.test(pwd)) {
+      setPasswordLeastOneLetter(true);
+      setIconPasswordLeastOneLetter(<MdCheckCircle className={styles.check}/>);
+    } else {
+      setPasswordLeastOneLetter(false);
+      setIconPasswordLeastOneLetter(<MdCancel className={styles.not_check}/>);
+    }
+  };
+
+  const handlePasswordChange = (pwd) => {
+    setPassword(pwd);
+    validatePassword(pwd);
+  };
 
   return (
     <>
@@ -43,9 +80,13 @@ function FormUser({ type, handle }) {
             text={"Senha"}
             name={"password"}
             placeholder={"Digite sua senha"}
-            handleOnChange={(e) => setPassword(e.target.value)}
+            handleOnChange={(e) => handlePasswordChange(e.target.value)}
             value={password}
           />
+          <div className={styles.passwordInfo}>
+            <span className={styles.info}>{iconPasswordMinLength}A senha deve ter no mínimo 8 caracteres.</span>
+            <span className={styles.info}>{iconPasswordLeastOneLetter}A senha deve ter no mínimo uma letra.</span>
+          </div>
           <SubmitButton text={"Cadastrar"} />
         </form>
       )}

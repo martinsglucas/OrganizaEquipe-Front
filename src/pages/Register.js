@@ -10,6 +10,14 @@ function Register() {
   
   const handleRegister = async (first_name, email, password) => {
     try {
+      if (!first_name || !email || !password) {
+        toast.error("Por favor, preencha todos os campos.");
+        return;
+      }
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        toast.error("Por favor, insira um email válido.");
+        return;
+      }
       const response = await createUser({
         first_name,
         email,
@@ -20,6 +28,7 @@ function Register() {
       navigate("/login");
     } catch (error) {
       console.error("Erro ao fazer cadastro:", error);
+      toast.error("Erro ao criar conta. Tente novamente.");
     }
   };
   return (

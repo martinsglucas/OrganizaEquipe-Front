@@ -3,3 +3,28 @@
   flex-direction: column;
   align-items: center;
 }
+
+.passwordInfo {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #555;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.check {
+  color: green;
+  margin-right: 3px;
+}
+
+.not_check {
+  color: red;
+  margin-right: 3px;
+}
