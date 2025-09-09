@@ -275,7 +275,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       {editMemberModal && (
         <ModalAddParticipation
           title="Editar Participação"
-          team={scheduleTeam}
+          schedule={{ team: scheduleTeam, date: date }}
           participation={participationToEdit}
           participations={participations}
           setParticipations={setParticipations}

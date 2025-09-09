@@ -76,6 +76,7 @@ function ModalAddParticipation({ title, schedule, participation, participations,
         {
           roles: selectedRoles,
           user: team.members.find((m) => m.id === parseInt(selectedMember)),
+          confirmation: participation.confirmation,
         },
       ].sort((a, b) => a.user.first_name.localeCompare(b.user.first_name));
       setParticipations(orderedParticipations);
