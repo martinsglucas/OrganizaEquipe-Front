@@ -99,6 +99,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       const mappedParticipations = participations.map((p) => ({
         roles: p.roles.map((r) => r.id),
         user: p.user.id,
+        confirmation: p.confirmation,
       }));
 
       const scheduleData = {
