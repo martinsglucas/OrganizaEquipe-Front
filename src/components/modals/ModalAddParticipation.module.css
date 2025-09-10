@@ -1,9 +1,12 @@
 .scheduleDetails {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 70vh;
+  max-height: calc(100vh - 300px);
+
 }
 
 .button_submit {
