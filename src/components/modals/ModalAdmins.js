@@ -63,20 +63,22 @@ function ModalAdmins({ isOpen, onClose }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={"Administradores"}>
-      <SelectCheckbox
-        options={members}
-        info={"first_name"}
-        checked={admins}
-        handleOnChange={(user) => handleAdminsChange(user)}
-      />
-      <button
-        disabled={disabled}
-        className={`${styles.buttonApply} ${disabled ? styles.disabled : ""}`}
-        onClick={() => updateAdmins()}
-      >
-        Aplicar
-      </button>
-      {isLoading && <ModalLoading isOpen={isLoading} />}
+      <div className={styles.container}>
+        <SelectCheckbox
+          options={members}
+          info={"first_name"}
+          checked={admins}
+          handleOnChange={(user) => handleAdminsChange(user)}
+        />
+        <button
+          disabled={disabled}
+          className={`${styles.buttonApply} ${disabled ? styles.disabled : ""}`}
+          onClick={() => updateAdmins()}
+        >
+          Aplicar
+        </button>
+        {isLoading && <ModalLoading isOpen={isLoading} />}
+      </div>
     </Modal>
   );
 }

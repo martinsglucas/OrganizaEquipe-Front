@@ -5,7 +5,7 @@
   width: 90%;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 60vh;
+  max-height: calc(100vh - 300px);
   margin-bottom: 110px;
 }
 

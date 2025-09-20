@@ -5,8 +5,7 @@
   width: 90%;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 60vh;
-  /* margin-bottom: 110px; */
+  max-height: calc(100vh - 300px);
 }
 
 .change {
