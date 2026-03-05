@@ -1,7 +1,7 @@
 import apiClient, { setAccessToken, clearAccessToken } from "../apiClient";
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
 
 export const getUsers = async () => {
   const response = await apiClient.get("users/");
