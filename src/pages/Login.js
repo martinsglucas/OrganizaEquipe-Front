@@ -1,6 +1,6 @@
 import styles from "./Login.module.css";
 import FormUser from "../components/FormUser";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { loginUser } from "../api/services/userService";
 import LinkButton from "../components/LinkButton";
 import { useAuth } from "../context/AuthContext";
@@ -11,14 +11,18 @@ import { useState } from "react";
 function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
 
+  const from = location.state?.from?.pathname || "/";
+
   const handleLogin = async (email, password) => {
+    if (!email || !password) {
+      toast.error("Preencha todos os campos.");
+      return;
+    }
+
     try {
-      if (!email || !password) {
-        toast.error("Preencha todos os campos.");
-        return;
-      }
       setIsLoading(true);
       const { user } = await loginUser({
         email,
@@ -26,13 +30,13 @@ function Login() {
       });
 
       setUser(user);
-
-      navigate("/");
-
-      console.log("Login realizado com sucesso!");
+      navigate(from, { replace: true });
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      toast.error("Erro ao fazer login");
+      const message =
+        error.response?.data?.detail ||
+        error.response?.data?.non_field_errors?.[0] ||
+        "Erro ao fazer login";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

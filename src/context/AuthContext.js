@@ -1,39 +1,60 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { logoutUser, verifyToken } from "../api/services/userService";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { logoutUser, refreshSession } from "../api/services/userService";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasInvitations, setHasInvitations] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
   const isSignedIn = !!user;
 
   useEffect(() => {
-    const checkTokenValidity = async () => {
-      const isValid = await verifyToken();
-      if (!isValid) {
-        console.log("Token expirado! Fazendo logout...");
-        logoutUser();
-        setUser(null);
-      } else {
+    const restoreSession = async () => {
+      try {
+        await refreshSession();
         const storedUser = sessionStorage.getItem("user");
-        setUser(storedUser ? JSON.parse(storedUser) : null);
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+      } catch {
+        sessionStorage.removeItem("user");
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    checkTokenValidity();
+    restoreSession();
   }, []);
 
+  const logout = useCallback(async () => {
+    await logoutUser();
+    setUser(null);
+  }, []);
+
+  const [hasInvitations, setHasInvitations] = useState(false);
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isSignedIn, isLoading, setIsLoading, hasInvitations, setHasInvitations }}
+      value={{
+        user,
+        setUser,
+        isSignedIn,
+        isLoading,
+        logout,
+        hasInvitations,
+        setHasInvitations,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -41,4 +62,4 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within a AuthProvider");
   }
   return context;
-}
+};
