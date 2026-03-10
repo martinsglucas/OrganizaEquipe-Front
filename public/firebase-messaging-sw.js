@@ -18,7 +18,10 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  const { title, body } = payload.notification;
+  const { title, body } = payload.data || {};
+
+  if (!title || !body) return;
+
   self.registration.showNotification(title, {
     body,
     icon: "/favicon.ico",
