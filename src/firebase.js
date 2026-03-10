@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, isSupported, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEHSZzFYjUUP-2T_eX9V3Y3Mae3Mz_mFU",
@@ -14,18 +14,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
 
+const isNotificationsApiSupported = () => {
+  return (
+    typeof window !== "undefined" &&
+    typeof Notification !== "undefined" &&
+    typeof navigator !== "undefined" &&
+    "serviceWorker" in navigator
+  );
+};
+
 export const requestNotificationPermission = async () => {
   try {
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") return null
+    if (!isNotificationsApiSupported()) return null;
+
+    const messagingSupported = await isSupported();
+    if (!messagingSupported) return null;
+
+    if (Notification.permission === "denied") return null;
+
+    const permission =
+      Notification.permission === "granted"
+        ? "granted"
+        : await Notification.requestPermission();
+
+    if (permission !== "granted") return null;
 
     const token = await getToken(messaging, {
       vapidKey:
         "BPmteqr8zn8JEYREj8iG9MX9Pxu-dg32G_w116YMl4g9QkqjpkERtTdEdxmJ2pVQ6jjhkHU1yQe4VXrkpCesLr0",
     });
-    return token;
+    return token || null;
 
-    } catch (error) {
+  } catch (error) {
     console.error("Error requesting notification permission:", error);
     return null;
   }
