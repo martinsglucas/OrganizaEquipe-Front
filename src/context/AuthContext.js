@@ -5,7 +5,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { logoutUser, refreshSession } from "../api/services/userService";
+import { logoutUser, refreshSession, saveFcmToken } from "../api/services/userService";
+import { requestNotificationPermission } from "../firebase";
 
 const AuthContext = createContext();
 
@@ -21,6 +22,10 @@ export const AuthProvider = ({ children }) => {
         const storedUser = sessionStorage.getItem("user");
         if (storedUser) {
           setUser(JSON.parse(storedUser));
+          const token = await requestNotificationPermission();
+          if (token) {
+            await saveFcmToken(token);
+          }
         }
       } catch {
         sessionStorage.removeItem("user");

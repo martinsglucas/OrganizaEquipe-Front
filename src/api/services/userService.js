@@ -64,3 +64,14 @@ export const refreshSession = async () => {
   setAccessToken(access);
   return access;
 };
+
+export const saveFcmToken = async (token) => {
+  try {
+    const response = await apiClient.post("users/fcm_token/", {
+      fcm_token: token,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao salvar FCM token:", error);
+  }
+};
