@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  gap: 0.75rem;
 }
 
 .title {
@@ -12,11 +13,6 @@
   width: 80%;
 }
 
-/* .title svg {
-  cursor: pointer;
-  font-size: 2em;
-} */
-
 .pencil {
   cursor: pointer;
   font-size: 2em;
@@ -25,6 +21,10 @@
 .close {
   cursor: pointer;
   font-size: 2.5em;
+}
+
+.notificationSection {
+  width: min(720px, 100%);
 }
 
 .btnEdit {
@@ -44,12 +44,10 @@
   padding: 0.5em 1em;
   text-decoration: none;
   transition: 0.5s;
-  /* background-color: #333; */
   background-color: #c42d2d;
   border-radius: 1em;
   color: white;
   font-size: 16px;
   width: 8em;
   cursor: pointer;
-  /* margin: 0.5em; */
 }

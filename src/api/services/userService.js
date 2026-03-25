@@ -75,3 +75,18 @@ export const saveFcmToken = async (token) => {
     console.error("Erro ao salvar FCM token:", error);
   }
 };
+
+export const upsertPushSubscription = async (payload) => {
+  const response = await apiClient.post("push_subscriptions/", payload);
+  return response.data;
+};
+
+export const listPushSubscriptions = async () => {
+  const response = await apiClient.get("push_subscriptions/");
+  return response.data?.results || response.data;
+};
+
+export const deactivatePushSubscription = async (token) => {
+  const response = await apiClient.post("push_subscriptions/deactivate/", { token });
+  return response.data;
+};

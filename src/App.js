@@ -15,99 +15,101 @@ import Container from "./components/layout/Container";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import { TeamProvider } from "./context/TeamContext";
 import { AuthProvider } from "./context/AuthContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Invitations from "./pages/Invitations";
-import { OrganizationProvider} from "./context/OrganizationContext";
+import { OrganizationProvider } from "./context/OrganizationContext";
 
 function App() {
   const [sidebar, setSidebar] = useState(false);
 
   return (
     <AuthProvider>
-      <OrganizationProvider>
-        <TeamProvider>
-          <Router>
-            <Header sidebar={sidebar} setSitebar={setSidebar} />
-            <Container customClass="min_height">
-              <Routes>
-                <Route path="/cadastro" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/indisponibilidade"
-                  element={
-                    <ProtectedRoute>
-                      <Unavailability />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/escala"
-                  element={
-                    <ProtectedRoute>
-                      <Schedule />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/equipe"
-                  element={
-                    <ProtectedRoute>
-                      <Team />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/organizacao"
-                  element={
-                    <ProtectedRoute>
-                      <Organization />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/perfil"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/convites"
-                  element={
-                    <ProtectedRoute>
-                      <Invitations />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </Container>
-            <Footer setSidebar={setSidebar} />
-            <ToastContainer
-              position="top-center"
-              autoClose={2000}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-              // theme="dark"
-            />
-          </Router>
-        </TeamProvider>
-      </OrganizationProvider>
+      <NotificationProvider>
+        <OrganizationProvider>
+          <TeamProvider>
+            <Router>
+              <Header sidebar={sidebar} setSitebar={setSidebar} />
+              <Container customClass="min_height">
+                <Routes>
+                  <Route path="/cadastro" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Home />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/indisponibilidade"
+                    element={
+                      <ProtectedRoute>
+                        <Unavailability />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/escala"
+                    element={
+                      <ProtectedRoute>
+                        <Schedule />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/equipe"
+                    element={
+                      <ProtectedRoute>
+                        <Team />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/organizacao"
+                    element={
+                      <ProtectedRoute>
+                        <Organization />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/perfil"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/convites"
+                    element={
+                      <ProtectedRoute>
+                        <Invitations />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </Container>
+              <Footer setSidebar={setSidebar} />
+              <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
+            </Router>
+          </TeamProvider>
+        </OrganizationProvider>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

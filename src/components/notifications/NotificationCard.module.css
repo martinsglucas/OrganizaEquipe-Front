@@ -1,0 +1,101 @@
+.card {
+  width: min(720px, 100%);
+  background: #ffffff;
+  border: 1px solid #d8dee8;
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.statusHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.title {
+  margin: 0;
+  color: #1f2937;
+}
+
+.description {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.content {
+  margin-top: 0.85rem;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.button {
+  border: none;
+  border-radius: 999px;
+  background: #1f2937;
+  color: #ffffff;
+  padding: 0.75rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.badge {
+  background: #e5eefc;
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.warning {
+  border-color: #f2c572;
+  background: #fff8eb;
+}
+
+.success {
+  border-color: #9edbb9;
+  background: #effbf3;
+}
+
+.danger {
+  border-color: #efb0b0;
+  background: #fff1f1;
+}
+
+@media (max-width: 640px) {
+  .statusHeader {
+    flex-direction: column;
+  }
+
+  .badge {
+    white-space: normal;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

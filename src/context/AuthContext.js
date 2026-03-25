@@ -5,40 +5,15 @@ import {
   useEffect,
   useState,
 } from "react";
-import { logoutUser, refreshSession, saveFcmToken } from "../api/services/userService";
-import { requestNotificationPermission } from "../firebase";
+import { logoutUser, refreshSession } from "../api/services/userService";
 
 const AuthContext = createContext();
-const LAST_FCM_TOKEN_KEY = "lastSavedFcmToken";
-const LAST_FCM_TOKEN_USER_ID_KEY = "lastSavedFcmTokenUserId";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasInvitations, setHasInvitations] = useState(false);
   const isSignedIn = !!user;
-
-  const registerPushToken = useCallback(async (currentUser) => {
-    if (!currentUser?.id) return;
-
-    const token = await requestNotificationPermission();
-    if (!token) return;
-
-    const lastSavedToken = localStorage.getItem(LAST_FCM_TOKEN_KEY);
-    const lastSavedUserId = localStorage.getItem(LAST_FCM_TOKEN_USER_ID_KEY);
-
-    if (
-      lastSavedToken === token &&
-      lastSavedUserId === String(currentUser.id)
-    ) {
-      return;
-    }
-
-    const response = await saveFcmToken(token);
-    if (!response) return;
-
-    localStorage.setItem(LAST_FCM_TOKEN_KEY, token);
-    localStorage.setItem(LAST_FCM_TOKEN_USER_ID_KEY, String(currentUser.id));
-  }, []);
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -58,20 +33,10 @@ export const AuthProvider = ({ children }) => {
     restoreSession();
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-
-    registerPushToken(user);
-  }, [user, registerPushToken]);
-
   const logout = useCallback(async () => {
     await logoutUser();
-    localStorage.removeItem(LAST_FCM_TOKEN_KEY);
-    localStorage.removeItem(LAST_FCM_TOKEN_USER_ID_KEY);
     setUser(null);
   }, []);
-
-  const [hasInvitations, setHasInvitations] = useState(false);
 
   return (
     <AuthContext.Provider
