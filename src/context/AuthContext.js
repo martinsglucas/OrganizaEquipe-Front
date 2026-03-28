@@ -19,12 +19,12 @@ export const AuthProvider = ({ children }) => {
     const restoreSession = async () => {
       try {
         await refreshSession();
-        const storedUser = sessionStorage.getItem("user");
+        const storedUser = localStorage.getItem("user");
         if (storedUser) {
           setUser(JSON.parse(storedUser));
         }
       } catch {
-        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
       } finally {
         setIsLoading(false);
       }

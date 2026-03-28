@@ -104,6 +104,7 @@ apiClient.interceptors.response.use(
 
 function _handleLogout() {
   clearAccessToken();
+  localStorage.removeItem("user");
   toast.warn("Sessão expirada. Faça login novamente.");
   setTimeout(() => {
     window.location.href = "/login";

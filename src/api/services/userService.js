@@ -34,7 +34,7 @@ export const loginUser = async (credentials) => {
   const { access, user } = response.data;
 
   setAccessToken(access);
-  sessionStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("user", JSON.stringify(user));
 
   return { user };
 };
@@ -45,7 +45,7 @@ export const logoutUser = () => {
   } catch {
   } finally {
     clearAccessToken();
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
   }
 };
 
