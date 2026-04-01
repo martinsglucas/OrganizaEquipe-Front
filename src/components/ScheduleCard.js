@@ -3,14 +3,26 @@ import styles from "./ScheduleCard.module.css";
 import { MdNotificationImportant, MdThumbUp } from "react-icons/md";
 import ModalViewSchedule from "./modals/ModalViewSchedule";
 
-function ScheduleCard({ schedule, onDelete }) {
-
+function ScheduleCard({ schedule, onDelete, onUpdate }) {
   const [showModal, setShowModal] = useState(false);
 
   const formatDate = (dateStr) => {
     const [year, month, day] = dateStr.split("-");
-    const date = new Date(year, month-1, day);
-    const months = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    const date = new Date(year, month - 1, day);
+    const months = [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez",
+    ];
     return (
       <>
         <span className={styles.date}>{day}</span>
@@ -25,24 +37,33 @@ function ScheduleCard({ schedule, onDelete }) {
         </span>
       </>
     );
-  }
+  };
 
-  const handleConfirmations = (schedule) => {
-    const confirmedCount = schedule.participations.filter((p) => p.confirmation === true).length;
-    const totalCount = schedule.participations.length;
+  const handleConfirmations = (currentSchedule) => {
+    const confirmedCount = currentSchedule.participations.filter(
+      (p) => p.confirmation === true
+    ).length;
+    const totalCount = currentSchedule.participations.length;
     if (confirmedCount === totalCount) {
-      return <>
-        <MdThumbUp className={styles.iconConfirmed} />
-        <span>{confirmedCount}/{totalCount}</span>
-      </>
-    } else {
-      return <>
-        <MdNotificationImportant className={styles.iconUnconfirmed} />
-        <span>{confirmedCount}/{totalCount}</span>
-      </>
+      return (
+        <>
+          <MdThumbUp className={styles.iconConfirmed} />
+          <span>
+            {confirmedCount}/{totalCount}
+          </span>
+        </>
+      );
     }
 
-  }
+    return (
+      <>
+        <MdNotificationImportant className={styles.iconUnconfirmed} />
+        <span>
+          {confirmedCount}/{totalCount}
+        </span>
+      </>
+    );
+  };
 
   return (
     <>
@@ -70,6 +91,7 @@ function ScheduleCard({ schedule, onDelete }) {
           schedule={schedule}
           onClose={() => setShowModal(false)}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       )}
     </>

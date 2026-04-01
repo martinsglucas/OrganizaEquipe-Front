@@ -34,7 +34,6 @@
 
 .teams {
   display: flex;
-  /* flex-wrap: wrap; */
   justify-content: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
@@ -63,4 +62,11 @@
 .add span {
   font-size: 3em;
   color: white;
+}
+
+.container_schedules {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }

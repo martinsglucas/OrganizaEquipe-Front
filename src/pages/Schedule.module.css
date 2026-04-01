@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  /* padding: 20px; */
   overflow-y: auto;
   overflow-x: hidden;
   margin-bottom: 110px;
@@ -22,63 +21,168 @@
   text-align: center;
 }
 
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 90%;
+  max-width: 400px;
+  padding: 0.9rem 1rem 1rem;
+  margin: 1em;
+  border: 1px solid #d4d4d4;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.filtersTitle {
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.filtersRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
 .add {
   position: fixed;
   right: 0.3em;
   bottom: 3em;
   font-size: 2.5em;
   padding: 0.2em;
-  background:#000;
+  background: #000;
   color: #fff;
   border-radius: 50%;
   margin: 0;
   cursor: pointer;
 }
 
-.change {
+.filterField {
   display: flex;
   align-items: center;
-  background-color: #333;
-  padding: 5px 10px;
-  border-radius: 20px;
+  min-width: 0;
+  border: 1px solid #cfcfcf;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0 0.85rem;
+}
+
+.filterField select {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: #222;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.8rem 2rem 0.8rem 0;
+  appearance: none;
   cursor: pointer;
-  font-weight: bold;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'><path d='M6 9l6 6 6-6' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 1rem;
 }
 
-.pastSelected {
-  color: #333;
-  background-color: #fff;
-  margin-right: .5em;
-  padding: 2px 7px;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
+.filterField select:focus {
+  outline: none;
 }
 
-.pastNotSelected {
-  color: #fff;
-  background-color: #333;
-  margin-right: .5em;
-  padding: 2px 7px;
-  border-radius: 20px;
-  /* transition: background-color 0.3s ease; */
+.filterField:focus-within {
+  border-color: #333;
+  box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.12);
 }
 
-.nextSelected {
-  color: #333;
-  background-color: #fff;
-  padding: 2px 7px;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
-}
-
-.nextNotSelected {
-  color: #fff;
-  background-color: #333;
-  padding: 2px 7px;
-  border-radius: 20px;
-  /* transition: background-color 0.3s ease; */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .loading {
   margin-top: 2em;
+}
+
+.loadMoreContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.loadMoreButton {
+  background: #333;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(11, 115, 255, 0.12);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  min-width: 160px;
+  text-align: center;
+}
+
+.loadMoreButton:hover:not(:disabled),
+.loadMoreButton:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(11, 115, 255, 0.16);
+  outline: none;
+}
+
+.loadMoreButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.loadMoreButton:disabled,
+.loadMoreButton[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 520px) {
+  .filters {
+    padding: 0.85rem 0.85rem 0.9rem;
+    border-radius: 16px;
+  }
+
+  .filtersRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .filterField {
+    padding: 0 0.7rem;
+  }
+
+  .filterField select {
+    font-size: 0.88rem;
+    padding: 0.72rem 1.4rem 0.72rem 0;
+    background-size: 0.9rem;
+  }
+
+  .loadMoreContainer {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .loadMoreButton {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+  }
 }

@@ -4,24 +4,33 @@ import {
   MdThumbUp,
   MdWatchLater,
   MdNotificationImportant,
-  MdCalendarMonth
+  MdCalendarMonth,
 } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { confirmScheduleParticipation, deleteSchedule } from "../../api/services/scheduleService";
+import {
+  confirmScheduleParticipation,
+  deleteSchedule,
+} from "../../api/services/scheduleService";
 import { toast } from "react-toastify";
 import ModalCreateSchedule from "./ModalCreateSchedule";
 import ModalConfirmation from "./ModalConfirmation";
 
-function ModalViewSchedule({ schedule, onClose, onDelete }) {
+function ModalViewSchedule({ schedule, onClose, onDelete, onUpdate }) {
   const [year, month, day] = schedule.date.split("-");
   const date = new Date(year, month - 1, day);
   const [viewMembers, setViewMembers] = useState(false);
   const { user } = useAuth();
-  const [unconfirmed, setUnconfirmed] = useState(schedule.participations.some((p) => p.user.id === user.id && p.confirmation === false))
-  const userParticipates = schedule.participations.some((p) => p.user.id === user.id)
+  const [unconfirmed, setUnconfirmed] = useState(
+    schedule.participations.some(
+      (p) => p.user.id === user.id && p.confirmation === false
+    )
+  );
+  const userParticipates = schedule.participations.some(
+    (p) => p.user.id === user.id
+  );
   const [showEditModal, setShowEditModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const userIsAdmin = schedule.team.admins.some(
@@ -34,7 +43,9 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
 
   const confirmParticipation = async (confirmation) => {
     try {
-      const participation = schedule.participations.find((p) => p.user.id === user.id);
+      const participation = schedule.participations.find(
+        (p) => p.user.id === user.id
+      );
       if (participation) {
         participation.confirmation = confirmation;
         await confirmScheduleParticipation(participation.id, {
@@ -55,27 +66,31 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
         toast.error("Erro ao cancelar participação");
       }
     }
-  }
+  };
 
   const removeSchedule = async () => {
     try {
       await deleteSchedule(schedule.id);
       setShowConfirmation(false);
       toast.success("Escala excluída com sucesso!");
-      onDelete(schedule)
-      onClose()
+      if (onDelete) {
+        await onDelete(schedule);
+      }
+      onClose();
     } catch (error) {
       toast.error("Erro ao excluir escala!");
     }
-  }
+  };
 
   return (
-    <Modal isOpen={true} onClose={onClose} title={schedule.name} noMarginTop={false}>
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title={schedule.name}
+      noMarginTop={false}
+    >
       <div className={styles.scheduleDetails}>
-        <div
-          className={styles.change}
-          onClick={() => setViewMembers(!viewMembers)}
-        >
+        <div className={styles.change} onClick={() => setViewMembers(!viewMembers)}>
           <div
             className={`${
               !viewMembers ? styles.infoSelected : styles.infoNotSelected
@@ -96,9 +111,7 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
             <div className={styles.item}>
               <MdCalendarMonth className={styles.icon} />
               <span>
-                {capitalize(
-                  date.toLocaleDateString("pt-BR", { weekday: "long" })
-                )}{" "}
+                {capitalize(date.toLocaleDateString("pt-BR", { weekday: "long" }))}{" "}
                 |{" "}
                 {date.toLocaleDateString("pt-BR", {
                   day: "numeric",
@@ -118,14 +131,11 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
             <div className={styles.item}>
               <MdThumbUp className={styles.icon} />
               <span>
-                Confirmações:{" "}
-                {schedule.participations.filter((p) => p.confirmation).length}/
+                Confirmações: {schedule.participations.filter((p) => p.confirmation).length}/
                 {schedule.participations.length}
               </span>
             </div>
-            {unconfirmed && (
-              <p className={styles.alert}>Confirmação pendente</p>
-            )}
+            {unconfirmed && <p className={styles.alert}>Confirmação pendente</p>}
             {userParticipates && (
               <div
                 className={styles.confirm}
@@ -157,7 +167,12 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
           ))}
         {userIsAdmin && (
           <div className={styles.edit}>
-            <button className={styles.button_delete} onClick={() => {setShowConfirmation(true)}}>
+            <button
+              className={styles.button_delete}
+              onClick={() => {
+                setShowConfirmation(true);
+              }}
+            >
               Apagar
             </button>
             <button
@@ -173,9 +188,15 @@ function ModalViewSchedule({ schedule, onClose, onDelete }) {
         <ModalCreateSchedule
           title={"Editar"}
           onClose={() => setShowEditModal(false)}
-          onCreate={() => {}}
           schedule={schedule}
           noMarginTop={true}
+          onSuccess={async () => {
+            setShowEditModal(false);
+            if (onUpdate) {
+              await onUpdate(schedule);
+            }
+            onClose();
+          }}
         />
       )}
       {showConfirmation && (

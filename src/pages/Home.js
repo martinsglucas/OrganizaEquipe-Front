@@ -1,5 +1,5 @@
 import styles from "./Home.module.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getTeams, getTeam, createTeam } from "../api/services/teamService";
 import TeamCard from "../components/TeamCard";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ function Home() {
     error: notificationsError,
   } = useNotifications();
 
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     try {
       setIsTeamLoading(true);
       const teams = await getTeams(true);
@@ -36,11 +36,11 @@ function Home() {
     } finally {
       setIsTeamLoading(false);
     }
-  };
+  }, [setTeams]);
 
   useEffect(() => {
     fetchTeams();
-  }, []);
+  }, [fetchTeams]);
 
   const handleTeamClick = async (id) => {
     const teams = await getTeam(id);
@@ -48,8 +48,8 @@ function Home() {
     navigate("/equipe");
   };
 
-  const addTeam = async (name, organization) => {
-    const team = await createTeam({ name, organization });
+  const addTeam = async (name, organizationId) => {
+    const team = await createTeam({ name, organization: organizationId });
     setTeams([...teams, team]);
     setCreateTeamModal(false);
   };
@@ -140,7 +140,10 @@ function Home() {
                 }}
               />
             ))}
-            <button className={styles.add} onClick={() => setCreateTeamModal(true)}>
+            <button
+              className={styles.add}
+              onClick={() => setCreateTeamModal(true)}
+            >
               <span>+</span>
             </button>
           </div>

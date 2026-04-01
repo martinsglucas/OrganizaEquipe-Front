@@ -3,9 +3,9 @@ import Modal from "./Modal";
 import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getTeam } from "../../api/services/teamService"
+import { getTeam } from "../../api/services/teamService";
 import { toast } from "react-toastify";
-import Input from "../form/Input"
+import Input from "../form/Input";
 import Select from "../form/Select";
 import { useTeam } from "../../context/TeamContext";
 import ModalAddParticipation from "./ModalAddParticipation";
@@ -13,20 +13,31 @@ import ModalLoading from "./ModalLoading";
 import { IoMdTrash } from "react-icons/io";
 import { createSchedule, updateSchedule } from "../../api/services/scheduleService";
 
-function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop = false }) {
+function ModalCreateSchedule({
+  title,
+  schedule,
+  onClose,
+  onCreate,
+  onSuccess,
+  noMarginTop = false,
+}) {
   const [viewMembers, setViewMembers] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
-  
+
   const getBrazilDate = () => {
     const now = new Date();
-    const brazilDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+    const brazilDate = new Date(
+      now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+    );
     return brazilDate.toISOString().split("T")[0];
   };
 
   const getBrazilHour = () => {
     const now = new Date();
-    const brazilDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+    const brazilDate = new Date(
+      now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+    );
     return brazilDate.toTimeString().slice(0, 5);
   };
 
@@ -34,35 +45,40 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
   const [date, setDate] = useState(schedule?.date || getBrazilDate());
   const [hour, setHour] = useState(schedule?.hour || getBrazilHour());
   const { teams } = useTeam();
-  const availableTeams = teams.filter(team => team.admins.includes(user.id));
-  const [scheduleTeam, setScheduleTeam] = useState(schedule?.team || { id: "", name: "" });
-  const [participations, setParticipations] = useState(schedule?.participations || []);
-  const [participationToEdit, setParticipationToEdit] = useState(null)
+  const availableTeams = teams.filter((team) => team.admins.includes(user.id));
+  const [scheduleTeam, setScheduleTeam] = useState(
+    schedule?.team || { id: "", name: "" }
+  );
+  const [participations, setParticipations] = useState(
+    schedule?.participations || []
+  );
+  const [participationToEdit, setParticipationToEdit] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editMemberModal, setEditMemberModal] = useState(false);
-
 
   const searchTeam = async (idTeam) => {
     const team = await getTeam(idTeam);
     setScheduleTeam(team);
-  }
+  };
 
   const removeParticipation = (participation) => {
-    const newParticipations = participations.filter((p) => p.user.id !== participation.user.id)
+    const newParticipations = participations.filter(
+      (p) => p.user.id !== participation.user.id
+    );
     setParticipations(newParticipations);
     toast.success("Membro removido com sucesso!");
-  }
+  };
 
   const addSchedule = async () => {
     if (!titleInput) {
-      toast.warn("A escala precisa de um nome!")
+      toast.warn("A escala precisa de um nome!");
       return;
     }
     try {
       setIsLoading(true);
       const mappedParticipations = participations.map((p) => ({
         roles: p.roles.map((r) => r.id),
-        user: p.user.id
+        user: p.user.id,
       }));
 
       const scheduleData = {
@@ -70,24 +86,29 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
         name: titleInput,
         date,
         hour,
-        team: scheduleTeam.id
+        team: scheduleTeam.id,
       };
 
       const newSchedule = await createSchedule(scheduleData);
       toast.success("Escala criada com sucesso!");
-      onCreate(newSchedule);
       onClose();
+      if (onCreate) {
+        await onCreate(newSchedule);
+      }
+      if (onSuccess) {
+        await onSuccess(newSchedule);
+      }
     } catch (error) {
       toast.error("Erro ao criar escala.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const editParticipation = (part) => {
-    setEditMemberModal(true); 
+    setEditMemberModal(true);
     setParticipationToEdit(part);
-  }
+  };
 
   const editSchedule = async () => {
     if (!titleInput) {
@@ -112,20 +133,17 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
 
       await updateSchedule(schedule.id, scheduleData);
 
-      schedule.participations = participations;
-      schedule.name = titleInput;
-      schedule.date = date;
-      schedule.hour = hour;
-      schedule.team = scheduleTeam;
-
       toast.success("Escala alterada com sucesso!");
       onClose();
+      if (onSuccess) {
+        await onSuccess();
+      }
     } catch (error) {
       toast.error("Erro ao alterar escala.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Modal
@@ -135,10 +153,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
       noMarginTop={noMarginTop}
     >
       <div className={styles.scheduleDetails}>
-        <div
-          className={styles.change}
-          onClick={() => setViewMembers(!viewMembers)}
-        >
+        <div className={styles.change} onClick={() => setViewMembers(!viewMembers)}>
           <div
             className={`${
               !viewMembers ? styles.infoSelected : styles.infoNotSelected
@@ -217,9 +232,7 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
                   <FaUserCircle className={styles.iconUser} />
                   <div className={styles.participationDetails}>
                     <p>{participation.user.first_name}</p>
-                    <span>
-                      {participation.roles.map((p) => p.name).join(", ")}
-                    </span>
+                    <span>{participation.roles.map((p) => p.name).join(", ")}</span>
                   </div>
                   <IoMdTrash
                     className={styles.iconTrash}
@@ -248,17 +261,11 @@ function ModalCreateSchedule({ title, schedule, onClose, onCreate, noMarginTop =
         )}
         {participations.length > 0 &&
           (schedule ? (
-            <button
-              className={styles.button_submit}
-              onClick={() => editSchedule()}
-            >
+            <button className={styles.button_submit} onClick={() => editSchedule()}>
               Salvar
             </button>
           ) : (
-            <button
-              className={styles.button_submit}
-              onClick={() => addSchedule()}
-            >
+            <button className={styles.button_submit} onClick={() => addSchedule()}>
               Criar
             </button>
           ))}
