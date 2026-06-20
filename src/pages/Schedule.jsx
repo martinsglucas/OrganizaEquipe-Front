@@ -21,14 +21,63 @@ const SCOPE_OPTIONS = [
   { value: "mine", label: "Escalado" },
 ];
 
+const DEFAULT_SCHEDULE_FILTERS = {
+  periodFilter: "next",
+  scope: "mine",
+};
+
+const VALID_PERIOD_FILTERS = new Set(PERIOD_OPTIONS.map((option) => option.value));
+const VALID_SCOPES = new Set(SCOPE_OPTIONS.map((option) => option.value));
+
+const getScheduleFiltersStorageKey = (userId) =>
+  `scheduleFilters:user:${userId}`;
+
+const readStoredScheduleFilters = (userId) => {
+  try {
+    const storedFilters = localStorage.getItem(
+      getScheduleFiltersStorageKey(userId)
+    );
+
+    if (!storedFilters) {
+      return DEFAULT_SCHEDULE_FILTERS;
+    }
+
+    const parsedFilters = JSON.parse(storedFilters);
+    const periodFilter = VALID_PERIOD_FILTERS.has(parsedFilters.periodFilter)
+      ? parsedFilters.periodFilter
+      : DEFAULT_SCHEDULE_FILTERS.periodFilter;
+    const scope = VALID_SCOPES.has(parsedFilters.scope)
+      ? parsedFilters.scope
+      : DEFAULT_SCHEDULE_FILTERS.scope;
+
+    return { periodFilter, scope };
+  } catch {
+    return DEFAULT_SCHEDULE_FILTERS;
+  }
+};
+
+const saveScheduleFilters = (userId, filters) => {
+  try {
+    localStorage.setItem(
+      getScheduleFiltersStorageKey(userId),
+      JSON.stringify(filters)
+    );
+  } catch {
+    // Storage can fail in private browsing or quota-limited contexts.
+  }
+};
+
 function Schedule() {
   const { user } = useAuth();
   const { teams } = useTeam();
   const { organization } = useOrganization();
 
   const [schedules, setSchedules] = useState([]);
-  const [periodFilter, setPeriodFilter] = useState("next");
-  const [scope, setScope] = useState("all");
+  const [periodFilter, setPeriodFilter] = useState(
+    DEFAULT_SCHEDULE_FILTERS.periodFilter
+  );
+  const [scope, setScope] = useState(DEFAULT_SCHEDULE_FILTERS.scope);
+  const [filtersReady, setFiltersReady] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +86,32 @@ function Schedule() {
   const [pageSize] = useState(10);
   const [nextPage, setNextPage] = useState(null);
 
+  const userId = user?.id;
+
   const isAdminSomeTeam = teams
     .map((team) => team.admins)
-    .some((admins) => admins.includes(user.id));
+    .some((admins) => admins.includes(userId));
+
+  useEffect(() => {
+    if (!userId) {
+      setFiltersReady(false);
+      return;
+    }
+
+    const storedFilters = readStoredScheduleFilters(userId);
+    setPeriodFilter(storedFilters.periodFilter);
+    setScope(storedFilters.scope);
+    setNextPage(null);
+    setFiltersReady(true);
+  }, [userId]);
+
+  useEffect(() => {
+    if (!filtersReady || !userId) {
+      return;
+    }
+
+    saveScheduleFilters(userId, { periodFilter, scope });
+  }, [filtersReady, periodFilter, scope, userId]);
 
   const fetchSchedules = useCallback(
     async (pageToLoad = 1, append = false) => {
@@ -77,8 +149,12 @@ function Schedule() {
   );
 
   useEffect(() => {
+    if (!filtersReady) {
+      return;
+    }
+
     fetchSchedules(1);
-  }, [fetchSchedules]);
+  }, [fetchSchedules, filtersReady]);
 
   const refreshSchedules = async () => {
     await fetchSchedules(1);
