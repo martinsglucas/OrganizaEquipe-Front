@@ -1,19 +1,20 @@
 import styles from "./Home.module.css";
 import { useCallback, useEffect, useState } from "react";
-import { getTeams, getTeam, createTeam } from "../api/services/teamService";
+import { getTeams, getTeam } from "../api/services/teamService";
 import TeamCard from "../components/TeamCard";
 import { useNavigate } from "react-router-dom";
 import { useTeam } from "../context/TeamContext";
-import ModalCreateTeam from "../components/modals/ModalCreateTeam";
+import ModalChangeTeam from "../components/modals/ModalChangeTeam";
 import { useOrganization } from "../context/OrganizationContext";
 import Loading from "../components/Loading";
 import LinkButton from "../components/LinkButton";
 import NotificationCard from "../components/notifications/NotificationCard";
 import IosInstallHint from "../components/notifications/IosInstallHint";
 import { useNotifications } from "../context/NotificationContext";
+import { IoSettingsOutline } from "react-icons/io5";
 
 function Home() {
-  const [createTeamModal, setCreateTeamModal] = useState(false);
+  const [manageTeamModal, setManageTeamModal] = useState(false);
   const navigate = useNavigate();
   const { setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
@@ -46,12 +47,6 @@ function Home() {
     const teams = await getTeam(id);
     setTeam(teams);
     navigate("/equipe");
-  };
-
-  const addTeam = async (name, organizationId) => {
-    const team = await createTeam({ name, organization: organizationId });
-    setTeams([...teams, team]);
-    setCreateTeamModal(false);
   };
 
   const renderNotificationCard = () => {
@@ -125,11 +120,23 @@ function Home() {
       <div className={styles.notificationBlock}>{renderNotificationCard()}</div>
 
       <div className={styles.container_teams}>
-        <h2>Minhas Equipes</h2>
+        <div className={styles.teamsHeader}>
+          <h2>Minhas Equipes</h2>
+          {!isTeamLoading && teams.length > 0 && (
+            <button
+              className={styles.manageTeams}
+              onClick={() => setManageTeamModal(true)}
+              aria-label="Gerenciar equipes"
+              title="Gerenciar equipes"
+            >
+              <IoSettingsOutline />
+            </button>
+          )}
+        </div>
 
         {isTeamLoading ? (
           <Loading />
-        ) : (
+        ) : teams.length > 0 ? (
           <div className={styles.teams}>
             {teams.map((team) => (
               <TeamCard
@@ -140,19 +147,26 @@ function Home() {
                 }}
               />
             ))}
+          </div>
+        ) : (
+          <div className={styles.emptyTeams}>
+            <p>Você ainda não participa de uma equipe.</p>
             <button
-              className={styles.add}
-              onClick={() => setCreateTeamModal(true)}
+              className={styles.findTeam}
+              onClick={() => setManageTeamModal(true)}
             >
-              <span>+</span>
+              Encontrar uma equipe
             </button>
           </div>
         )}
       </div>
-      {createTeamModal && (
-        <ModalCreateTeam
-          closeModal={() => setCreateTeamModal(false)}
-          handleCreateTeam={addTeam}
+      {manageTeamModal && (
+        <ModalChangeTeam
+          closeModal={() => setManageTeamModal(false)}
+          handleChangeTeam={(selectedTeam) => {
+            handleTeamClick(selectedTeam.id);
+            setManageTeamModal(false);
+          }}
         />
       )}
     </div>
