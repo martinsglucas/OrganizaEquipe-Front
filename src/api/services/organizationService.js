@@ -36,6 +36,26 @@ export const createOrganization = async (organizationData) => {
   }
 }
 
+export const getOrganizationCreationRequests = async () => {
+  try {
+    const response = await apiClient.get("/organization_requests/");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar solicitações de organização:", error);
+    throw error;
+  }
+}
+
+export const createOrganizationRequest = async (requestData) => {
+  try {
+    const response = await apiClient.post("/organization_requests/", requestData);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao solicitar criação de organização:", error);
+    throw error;
+  }
+}
+
 export const updateOrganization = async (id, organizationData) => {
   try {
     const response = await apiClient.patch(`/organizations/${id}/`, organizationData);
