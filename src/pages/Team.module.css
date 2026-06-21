@@ -17,89 +17,11 @@
   text-align: center;
 }
 
-.teams {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  /* margin-top: 1em; */
-  margin-bottom: 1em;
-}
-
-.team {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 10em;
-  padding: 10px;
-  height: 3em;
-  background-color: #333;
-  border: solid 1px #333;
-  color: white;
-  border-radius: 20px;
-  margin: 1em;
-  cursor: pointer;
-}
-.add {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 10em;
-  height: 3em;
-  background-color: #333;
-  border: solid 1px #333;
-  border-radius: 20px;
-  margin: 1em;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.add span {
-  font-size: 3em;
-  color: white;
-}
-
-.joinSection {
-  width: min(36em, 90%);
-  margin: 1em 0;
-}
-
-.joinSection h2 {
-  text-align: center;
-}
-
-.joinList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75em;
-}
-
-.joinItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1em;
-  padding: 0.75em 1em;
-  border-radius: 1em;
-  background-color: #f2f2f2;
-}
-
-.joinItem button {
-  padding: 0.5em 0.75em;
+.openHub {
+  padding: 0.75em 1.25em;
   border: 0;
-  border-radius: 1em;
   background-color: #333;
+  border-radius: 1em;
   color: white;
   cursor: pointer;
-}
-
-.pending {
-  color: #9a6700;
-}
-
-.approved {
-  color: #18743b;
-}
-
-.rejected {
-  color: #b42318;
 }
