@@ -57,3 +57,49 @@
   font-size: 3em;
   color: white;
 }
+
+.joinSection {
+  width: min(36em, 90%);
+  margin: 1em 0;
+}
+
+.joinSection h2 {
+  text-align: center;
+}
+
+.joinList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+.joinItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.75em 1em;
+  border-radius: 1em;
+  background-color: #f2f2f2;
+}
+
+.joinItem button {
+  padding: 0.5em 0.75em;
+  border: 0;
+  border-radius: 1em;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.pending {
+  color: #9a6700;
+}
+
+.approved {
+  color: #18743b;
+}
+
+.rejected {
+  color: #b42318;
+}

@@ -16,6 +16,70 @@ export const getTeams = async (userOnly = false, codeAccess = null) => {
   }
 };
 
+export const getDiscoverableTeams = async () => {
+  try {
+    const response = await apiClient.get("/teams/discoverable/");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar equipes disponíveis:", error);
+    throw error;
+  }
+};
+
+export const getMyTeamJoinRequests = async () => {
+  try {
+    const response = await apiClient.get("/teams/my_join_requests/");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar solicitações de equipe:", error);
+    throw error;
+  }
+};
+
+export const requestTeamJoin = async (teamId) => {
+  try {
+    const response = await apiClient.post(`/teams/${teamId}/request_join/`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao solicitar ingresso na equipe:", error);
+    throw error;
+  }
+};
+
+export const getTeamJoinRequests = async (teamId) => {
+  try {
+    const response = await apiClient.get(`/teams/${teamId}/join_requests/`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar solicitações da equipe:", error);
+    throw error;
+  }
+};
+
+export const approveTeamJoinRequest = async (teamId, requestId) => {
+  try {
+    const response = await apiClient.post(
+      `/teams/${teamId}/join_requests/${requestId}/approve/`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao aprovar solicitação da equipe:", error);
+    throw error;
+  }
+};
+
+export const rejectTeamJoinRequest = async (teamId, requestId) => {
+  try {
+    const response = await apiClient.post(
+      `/teams/${teamId}/join_requests/${requestId}/reject/`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao rejeitar solicitação da equipe:", error);
+    throw error;
+  }
+};
+
 export const getTeam = async (id) => {
   try {
     const response = await apiClient.get(`teams/${id}/`);

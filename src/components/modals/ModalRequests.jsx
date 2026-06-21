@@ -2,10 +2,13 @@ import styles from "./ModalRequests.module.css";
 import Modal from "./Modal";
 import { useState, useEffect } from "react";
 import { useTeam } from "../../context/TeamContext";
-import { deleteRequest, getRequests } from "../../api/services/requestService";
 import { MdCancel, MdDone } from "react-icons/md";
 import { toast } from "react-toastify";
-import { addMember } from "../../api/services/teamService";
+import {
+  approveTeamJoinRequest,
+  getTeamJoinRequests,
+  rejectTeamJoinRequest,
+} from "../../api/services/teamService";
 import Loading from "../Loading";
 
 function ModalRequests({ onClose }) {
@@ -15,10 +18,10 @@ function ModalRequests({ onClose }) {
 
   useEffect(() => {
     const fetchRequests = async () => {
-      if (team?.code_access) {
+      if (team?.id) {
         try {
           setIsLoading(true);
-          const response = await getRequests(team.code_access);
+          const response = await getTeamJoinRequests(team.id);
           setRequests(response);
         } catch (error) {
           console.error("Erro ao buscar solicitações:", error);
@@ -33,7 +36,7 @@ function ModalRequests({ onClose }) {
 
   const refuseRequest = async (id) => {
     try {
-      await deleteRequest(id);
+      await rejectTeamJoinRequest(team.id, id);
       const newRequests = requests.filter((request) => request.id !== id);
       setRequests(newRequests);
       toast.success("Solicitação recusada com sucesso");
@@ -44,12 +47,11 @@ function ModalRequests({ onClose }) {
 
   const acceptRequest = async (request) => {
     try {
-      await addMember(team.id, { user_id: request.user.id });
-      const updatedMembers = [...team.members, request.user].sort(
+      const approvedRequest = await approveTeamJoinRequest(team.id, request.id);
+      const updatedMembers = [...team.members, approvedRequest.user].sort(
         (a, b) => a.first_name.localeCompare(b.first_name)
       );
       setTeam({ ...team, members: updatedMembers });
-      await deleteRequest(request.id);
       const newRequests = requests.filter((r) => r.id !== request.id);
       setRequests(newRequests);
       toast.success("Solicitação aceita com sucesso");

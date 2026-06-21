@@ -4,22 +4,18 @@ import Input from "../form/Input";
 import Modal from "./Modal";
 import ModalConfirmation from "./ModalConfirmation";
 import ModalLoading from "./ModalLoading";
-import { createTeam } from "../../api/services/teamService";
-import { createRequest } from "../../api/services/requestService";
-import { getTeams } from "../../api/services/teamService";
-import { useAuth } from "../../context/AuthContext";
+import { createTeam, getTeams, requestTeamJoin } from "../../api/services/teamService";
 import { toast } from "react-toastify";
 import { useOrganization } from "../../context/OrganizationContext";
 import { useTeam } from "../../context/TeamContext";
 
-function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
+function ModalCreateTeam({ closeModal, onClose, noMarginTop, onJoinRequested }) {
   const [teamName, setTeamName] = useState("");
   const [teamCode, setTeamCode] = useState("");
   const [teamToJoin, setTeamToJoin] = useState("");
   const { organization, admin } = useOrganization();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
   const { teams, setTeams } = useTeam();
 
   const addTeam = async () => {
@@ -48,7 +44,11 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
         return;
       }
       const response = await getTeams(false, teamCode);
-      setTeamToJoin(response[0].name);
+      if (!response[0]) {
+        toast.error("Equipe não encontrada na sua organização!");
+        return;
+      }
+      setTeamToJoin(response[0]);
       setShowConfirmation(true);
     } catch (error) {
       toast.error("Erro ao buscar equipe!");
@@ -58,10 +58,8 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
   const join = async () => {
     try {
       setIsLoading(true);
-      await createRequest({
-        user: user.id,
-        code: teamCode,
-      });
+      const response = await requestTeamJoin(teamToJoin.id);
+      onJoinRequested?.(response);
       toast.success("Solicitação enviada com sucesso!");
       closeModal();
     } catch (error) {
@@ -109,7 +107,7 @@ function ModalCreateTeam({ closeModal, onClose, noMarginTop }) {
       {showConfirmation && (
         <ModalConfirmation
           title={"Enviar solicitação"}
-          message={`Tem certeza que deseja enviar solicitação para a equipe ${teamToJoin}`}
+          message={`Tem certeza que deseja enviar solicitação para a equipe ${teamToJoin.name}`}
           onClose={() => setShowConfirmation(false)}
           onConfirm={join}
           noMarginTop={true}
