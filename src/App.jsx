@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Home from "./pages/Home";
 import Schedule from "./pages/Schedule";
+import ScheduleDetail from "./pages/ScheduleDetail";
 import Team from "./pages/Team";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -56,6 +57,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Schedule />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/escala/:id"
+                    element={
+                      <ProtectedRoute>
+                        <ScheduleDetail />
                       </ProtectedRoute>
                     }
                   />

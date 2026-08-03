@@ -1,10 +1,9 @@
-import { useState } from "react";
 import styles from "./ScheduleCard.module.css";
 import { MdNotificationImportant, MdThumbUp } from "react-icons/md";
-import ModalViewSchedule from "./modals/ModalViewSchedule";
+import { useNavigate } from "react-router-dom";
 
-function ScheduleCard({ schedule, onDelete, onUpdate }) {
-  const [showModal, setShowModal] = useState(false);
+function ScheduleCard({ schedule }) {
+  const navigate = useNavigate();
 
   const formatDate = (dateStr) => {
     const [year, month, day] = dateStr.split("-");
@@ -66,35 +65,23 @@ function ScheduleCard({ schedule, onDelete, onUpdate }) {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        className={styles.card}
-        onClick={() => {
-          setShowModal(true);
-        }}
-      >
-        <div className={styles.dateContainer}>
-          {formatDate(schedule.date)}
-          <span className={styles.weekday}>{schedule.hour.slice(0, 5)}</span>
-        </div>
-        <div className={styles.info}>
-          <span className={styles.name}>{schedule.name}</span>
-          <span>{schedule.team.name}</span>
-          <span className={styles.confirmations}>
-            {handleConfirmations(schedule)}
-          </span>
-        </div>
-      </button>
-      {showModal && (
-        <ModalViewSchedule
-          schedule={schedule}
-          onClose={() => setShowModal(false)}
-          onDelete={onDelete}
-          onUpdate={onUpdate}
-        />
-      )}
-    </>
+    <button
+      type="button"
+      className={styles.card}
+      onClick={() => navigate(`/escala/${schedule.id}`)}
+    >
+      <div className={styles.dateContainer}>
+        {formatDate(schedule.date)}
+        <span className={styles.weekday}>{schedule.hour.slice(0, 5)}</span>
+      </div>
+      <div className={styles.info}>
+        <span className={styles.name}>{schedule.name}</span>
+        <span>{schedule.team.name}</span>
+        <span className={styles.confirmations}>
+          {handleConfirmations(schedule)}
+        </span>
+      </div>
+    </button>
   );
 }
 

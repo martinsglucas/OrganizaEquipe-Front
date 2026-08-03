@@ -12,7 +12,10 @@ function Footer({ setSidebar }) {
   const location = useLocation();
   const {user} = useAuth();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) =>
+    path === "/escala"
+      ? location.pathname.startsWith(path)
+      : location.pathname === path;
 
   if (!user) {
     return null;

@@ -11,6 +11,10 @@ function Header({ sidebar, setSitebar }) {
   const { user } = useAuth();
 
   const handleTitle = () => {
+    if (location.pathname.startsWith("/escala/")) {
+      return "Detalhes da escala";
+    }
+
     switch (location.pathname) {
       case "/":
         return "Início";

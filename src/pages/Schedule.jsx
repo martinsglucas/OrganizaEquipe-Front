@@ -232,8 +232,6 @@ function Schedule() {
             <ScheduleCard
               key={schedule.id}
               schedule={schedule}
-              onDelete={refreshSchedules}
-              onUpdate={refreshSchedules}
             />
           ))}
 

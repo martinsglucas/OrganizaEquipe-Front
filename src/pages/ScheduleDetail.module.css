@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0 6rem;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 1rem;
+  text-align: center;
+}
+
+.backButton {
+  align-self: flex-start;
+  margin: 0 5% 1rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 1rem;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.center .backButton {
+  align-self: center;
+}

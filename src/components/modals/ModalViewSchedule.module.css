@@ -9,6 +9,11 @@
   margin-bottom: 110px;
 }
 
+.standalone {
+  max-height: none;
+  margin-bottom: 0;
+}
+
 .change {
   display: flex;
   align-items: center;
