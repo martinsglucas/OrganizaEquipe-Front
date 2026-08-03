@@ -2,6 +2,7 @@ import apiClient, { setAccessToken, clearAccessToken } from "../apiClient";
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+let refreshSessionPromise = null;
 
 export const getUsers = async () => {
   const response = await apiClient.get("users/");
@@ -54,15 +55,20 @@ export const getInvitations = async (id) => {
   return response.data;
 };
 
-export const refreshSession = async () => {
-  const response = await axios.post(
-    `${BASE_URL}/token/refresh/`,
-    {},
-    { withCredentials: true },
-  );
-  const { access } = response.data;
-  setAccessToken(access);
-  return access;
+export const refreshSession = () => {
+  if (!refreshSessionPromise) {
+    refreshSessionPromise = axios
+      .post(`${BASE_URL}/token/refresh/`, {}, { withCredentials: true })
+      .then(({ data }) => {
+        setAccessToken(data.access);
+        return data.access;
+      })
+      .finally(() => {
+        refreshSessionPromise = null;
+      });
+  }
+
+  return refreshSessionPromise;
 };
 
 export const saveFcmToken = async (token) => {
