@@ -93,21 +93,30 @@ function ScheduleDetails({ schedule, onDelete, onUpdate, standalone = false }) {
         standalone ? styles.standalone : ""
       }`}
     >
-      <div className={styles.change} onClick={() => setViewMembers(!viewMembers)}>
-        <div
+      <div className={styles.change} role="group" aria-label="Detalhes da escala">
+        <button
+          type="button"
+          aria-pressed={!viewMembers}
+          onClick={() => setViewMembers(false)}
           className={
             !viewMembers ? styles.infoSelected : styles.infoNotSelected
           }
         >
           Informações
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
+          aria-pressed={viewMembers}
+          onClick={() => setViewMembers(true)}
           className={
             viewMembers ? styles.membersSelected : styles.membersNotSelected
           }
         >
           Participantes
-        </div>
+          <span className={styles.count}>
+            {currentSchedule.participations.length}
+          </span>
+        </button>
       </div>
       {!viewMembers && (
         <div className={styles.info}>
@@ -145,43 +154,64 @@ function ScheduleDetails({ schedule, onDelete, onUpdate, standalone = false }) {
               /{currentSchedule.participations.length}
             </span>
           </div>
-          {unconfirmed && <p className={styles.alert}>Confirmação pendente</p>}
+          {unconfirmed && (
+            <p className={styles.alert}>
+              <MdNotificationImportant aria-hidden="true" />
+              Confirmação pendente
+            </p>
+          )}
           {userParticipation && (
-            <div
+            <button
+              type="button"
               className={styles.confirm}
               onClick={() => confirmParticipation(unconfirmed)}
             >
               <MdNotificationImportant className={styles.iconConfirm} />
               <span>{unconfirmed ? "Confirmar" : "Cancelar"}</span>
-            </div>
+            </button>
           )}
         </div>
       )}
-      {viewMembers &&
-        currentSchedule.participations.map((participation) => (
-          <div key={participation.id} className={styles.participation}>
-            <FaUserCircle className={styles.iconUser} />
-            <div className={styles.participationDetails}>
-              <p>{participation.user.first_name}</p>
-              <span>{participation.roles.map((role) => role.name).join(", ")}</span>
-              {participation.confirmation && (
-                <div className={styles.confirmed}>
-                  <MdThumbUp className={styles.icon} />
-                  <span>Confirmado</span>
+      {viewMembers && (
+        <div className={styles.participants}>
+          {currentSchedule.participations.map((participation) => (
+            <div key={participation.id} className={styles.participation}>
+              <FaUserCircle className={styles.iconUser} />
+              <div className={styles.participationDetails}>
+                <p>{participation.user.first_name}</p>
+                <span>{participation.roles.map((role) => role.name).join(", ")}</span>
+                <div
+                  className={
+                    participation.confirmation
+                      ? styles.confirmed
+                      : styles.pending
+                  }
+                >
+                  {participation.confirmation ? (
+                    <MdThumbUp aria-hidden="true" />
+                  ) : (
+                    <MdNotificationImportant aria-hidden="true" />
+                  )}
+                  <span>
+                    {participation.confirmation ? "Confirmado" : "Pendente"}
+                  </span>
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      )}
       {userIsAdmin && (
         <div className={styles.edit}>
           <button
+            type="button"
             className={styles.button_delete}
             onClick={() => setShowConfirmation(true)}
           >
             Apagar
           </button>
           <button
+            type="button"
             className={styles.button_edit}
             onClick={() => setShowEditModal(true)}
           >

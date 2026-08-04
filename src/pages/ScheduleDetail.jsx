@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getSchedule } from "../api/services/scheduleService";
@@ -59,16 +60,27 @@ function ScheduleDetail() {
 
   return (
     <main className={styles.container}>
-      <button className={styles.backButton} onClick={() => navigate(-1)}>
-        Voltar
-      </button>
-      <h2>{schedule.name}</h2>
-      <ScheduleDetails
-        schedule={schedule}
-        standalone={true}
-        onDelete={() => navigate("/escala", { replace: true })}
-        onUpdate={fetchSchedule}
-      />
+      <div className={styles.content}>
+        <button className={styles.backButton} onClick={() => navigate(-1)}>
+          <MdArrowBack aria-hidden="true" />
+          <span>Voltar</span>
+        </button>
+
+        <section className={styles.card} aria-labelledby="schedule-title">
+          <header className={styles.hero}>
+            <span className={styles.eyebrow}>Escala</span>
+            <h1 id="schedule-title">{schedule.name}</h1>
+            <span className={styles.team}>{schedule.team.name}</span>
+          </header>
+
+          <ScheduleDetails
+            schedule={schedule}
+            standalone={true}
+            onDelete={() => navigate("/escala", { replace: true })}
+            onUpdate={fetchSchedule}
+          />
+        </section>
+      </div>
     </main>
   );
 }
