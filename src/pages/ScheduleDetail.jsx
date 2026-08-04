@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getSchedule } from "../api/services/scheduleService";
 import Loading from "../components/Loading";
 import ScheduleDetails from "../components/ScheduleDetails";
+import ScheduleShareButton from "../components/ScheduleShareButton";
 import styles from "./ScheduleDetail.module.css";
 
 function ScheduleDetail() {
@@ -68,7 +69,13 @@ function ScheduleDetail() {
 
         <section className={styles.card} aria-labelledby="schedule-title">
           <header className={styles.hero}>
-            <span className={styles.eyebrow}>Escala</span>
+            <div className={styles.heroTop}>
+              <span className={styles.eyebrow}>Escala</span>
+              <ScheduleShareButton
+                scheduleId={schedule.id}
+                scheduleName={schedule.name}
+              />
+            </div>
             <h1 id="schedule-title">{schedule.name}</h1>
             <span className={styles.team}>{schedule.team.name}</span>
           </header>
