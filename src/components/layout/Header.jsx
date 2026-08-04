@@ -12,7 +12,7 @@ function Header({ sidebar, setSitebar }) {
 
   const handleTitle = () => {
     if (location.pathname.startsWith("/escala/")) {
-      return "Detalhes da escala";
+      return "Escala";
     }
 
     switch (location.pathname) {
