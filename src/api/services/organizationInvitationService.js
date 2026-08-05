@@ -22,12 +22,22 @@ export const createOrganizationInvitation = async (invitationData) => {
   }
 };
 
-export const deleteOrganizationInvitation = async (id) => {
+export const acceptOrganizationInvitation = async (id) => {
   try {
-    const response = await apiClient.delete(`organization_invitations/${id}/`);
+    const response = await apiClient.post(`organization_invitations/${id}/accept/`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao deletar solicitaçao:", error);
+    console.error("Erro ao aceitar convite:", error);
+    throw error;
+  }
+}
+
+export const rejectOrganizationInvitation = async (id) => {
+  try {
+    const response = await apiClient.post(`organization_invitations/${id}/reject/`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao recusar convite:", error);
     throw error;
   }
 }

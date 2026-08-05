@@ -1,14 +1,18 @@
 import styles from "./Invitations.module.css"
-import { deleteOrganizationInvitation } from "../api/services/organizationInvitationService";
-import { deleteTeamInvitation } from "../api/services/teamInvitationService";
+import {
+  acceptOrganizationInvitation,
+  rejectOrganizationInvitation,
+} from "../api/services/organizationInvitationService";
+import {
+  acceptTeamInvitation as acceptTeamInvitationRequest,
+  rejectTeamInvitation,
+} from "../api/services/teamInvitationService";
 import { getInvitations } from "../api/services/userService";
 import { useEffect, useState, useCallback } from "react";
 import { useOrganization } from "../context/OrganizationContext";
 import { useTeam } from "../context/TeamContext";
 import { useAuth } from "../context/AuthContext";
 import { MdCancel, MdDone } from "react-icons/md";
-import { addMember as addTeamMember } from "../api/services/teamService";
-import { addMember as addOrgMember } from "../api/services/organizationService";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 
@@ -43,8 +47,7 @@ function Invitations() {
 
   const acceptTeamInvitation = async (invite) => {
     try {
-      await addTeamMember(invite.team.id, {user_id: user.id});
-      await deleteTeamInvitation(invite.id);
+      await acceptTeamInvitationRequest(invite.id);
       const newInvitations = teamInvitations.filter((i) => i.id !== invite.id);
       setTeamInvitations(newInvitations);
       toast.success("Convite aceito!");
@@ -55,7 +58,7 @@ function Invitations() {
   
   const refuseTeamInvitation = async (invite) => {
     try {
-      await deleteTeamInvitation(invite.id);
+      await rejectTeamInvitation(invite.id);
       const newInvitations = teamInvitations.filter((i) => i.id !== invite.id);
       setTeamInvitations(newInvitations);
       toast.success("Convite recusado!");
@@ -66,8 +69,7 @@ function Invitations() {
   
   const acceptOrgInvitation = async (invite) => {
     try {
-      await addOrgMember(invite.organization.id, {user_id: user.id});
-      await deleteOrganizationInvitation(invite.id);
+      await acceptOrganizationInvitation(invite.id);
       const newInvitations = orgInvitations.filter((i) => i.id !== invite.id);
       setOrgInvitations(newInvitations);
       toast.success("Convite aceito!");
@@ -78,7 +80,7 @@ function Invitations() {
   
   const refuseOrgInvitation = async (invite) => {
     try {
-      await deleteOrganizationInvitation(invite.id);
+      await rejectOrganizationInvitation(invite.id);
       const newInvitations = orgInvitations.filter((i) => i.id !== invite.id);
       setOrgInvitations(newInvitations);
       toast.success("Convite recusado!");

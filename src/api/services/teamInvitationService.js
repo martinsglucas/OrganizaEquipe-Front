@@ -22,12 +22,22 @@ export const createTeamInvitation = async (invitationData) => {
   }
 }
 
-export const deleteTeamInvitation = async (id) => {
+export const acceptTeamInvitation = async (id) => {
   try {
-    const response = await apiClient.delete(`team_invitations/${id}/`);
+    const response = await apiClient.post(`team_invitations/${id}/accept/`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao deletar solicitaçao:", error);
+    console.error("Erro ao aceitar convite:", error);
+    throw error;
+  }
+};
+
+export const rejectTeamInvitation = async (id) => {
+  try {
+    const response = await apiClient.post(`team_invitations/${id}/reject/`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao recusar convite:", error);
     throw error;
   }
 };
