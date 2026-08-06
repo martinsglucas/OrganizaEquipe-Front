@@ -14,7 +14,10 @@ function Login() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
 
-  const from = location.state?.from?.pathname || "/";
+  const fromLocation = location.state?.from;
+  const from = fromLocation
+    ? `${fromLocation.pathname}${fromLocation.search || ""}${fromLocation.hash || ""}`
+    : "/";
 
   const handleLogin = async (email, password) => {
     if (!email || !password) {
@@ -46,7 +49,12 @@ function Login() {
       <h1>Login</h1>
       <FormUser type={"login"} handle={handleLogin} />
       <p>
-        Não possui conta? <LinkButton to={"/cadastro"} text={"Cadastre-se"} />
+        Não possui conta?{" "}
+        <LinkButton
+          to={"/cadastro"}
+          text={"Cadastre-se"}
+          state={{ from: fromLocation }}
+        />
       </p>
       {isLoading && <ModalLoading isOpen={isLoading} />}
     </div>

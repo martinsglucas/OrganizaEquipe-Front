@@ -18,6 +18,8 @@ import ModalConfirmation from "./modals/ModalConfirmation";
 import ModalRequestsOrg from "./modals/ModalRequestsOrg";
 import { toast } from "react-toastify";
 import { IoIosArrowForward } from "react-icons/io";
+import { FaLink } from "react-icons/fa6";
+import OrganizationInviteLinkModal from "./modals/OrganizationInviteLinkModal";
 
 function OrganizationDetail() {
   const [showModalEditName, setShowModalEditName] = useState(false);
@@ -26,6 +28,7 @@ function OrganizationDetail() {
   const [showModalMembers, setShowModalMembers] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
+  const [showInviteLink, setShowInviteLink] = useState(false);
   const { setTeam } = useTeam();
   const { organization, setOrganization, admin } = useOrganization();
   const members = organization.members.map((member) => ({
@@ -110,17 +113,30 @@ function OrganizationDetail() {
             }}
           />
           {admin && (
-            <button
-              className={styles.item}
-              onClick={() => setShowModalRequests(true)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.description}>
-                <MdEmail className={styles.itemTitle} />
-                <b>Solicitações</b>
-              </div>
-              <IoIosArrowForward className={styles.openButton} />
-            </button>
+            <>
+              <button
+                className={styles.item}
+                onClick={() => setShowModalRequests(true)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className={styles.description}>
+                  <MdEmail className={styles.itemTitle} />
+                  <b>Solicitações</b>
+                </div>
+                <IoIosArrowForward className={styles.openButton} />
+              </button>
+              <button
+                className={styles.item}
+                onClick={() => setShowInviteLink(true)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className={styles.description}>
+                  <FaLink className={styles.itemTitle} />
+                  <b>Link de convite</b>
+                </div>
+                <IoIosArrowForward className={styles.openButton} />
+              </button>
+            </>
           )}
         </div>
         <br></br>
@@ -162,6 +178,9 @@ function OrganizationDetail() {
           onConfirm={() => handleDeleteOrganization()}
           onClose={() => setShowModalDelete(false)}
         />
+      )}
+      {showInviteLink && (
+        <OrganizationInviteLinkModal onClose={() => setShowInviteLink(false)} />
       )}
     </div>
   );

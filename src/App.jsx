@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Invitations from "./pages/Invitations";
 import { OrganizationProvider } from "./context/OrganizationContext";
+import OrganizationInvite from "./pages/OrganizationInvite";
 
 function App() {
   const [sidebar, setSidebar] = useState(false);
@@ -97,6 +98,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Invitations />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/convite/organizacao/:token"
+                    element={
+                      <ProtectedRoute>
+                        <OrganizationInvite />
                       </ProtectedRoute>
                     }
                   />

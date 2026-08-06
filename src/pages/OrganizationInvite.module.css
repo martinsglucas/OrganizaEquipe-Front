@@ -1,0 +1,67 @@
+.container {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 60vh;
+  padding: 1.5rem;
+}
+
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 420px);
+  padding: 2rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card h1 {
+  margin: 0.5rem 0;
+}
+
+.card p {
+  margin: 0.5rem 0 1.5rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.primaryButton,
+.secondaryButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.primaryButton {
+  border: none;
+  background: #333;
+  color: #fff;
+}
+
+.secondaryButton {
+  border: 1px solid #333;
+  background: #fff;
+  color: #333;
+}
+
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

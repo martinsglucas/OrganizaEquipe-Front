@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createUser } from "../api/services/userService";
 import FormUser from "../components/FormUser";
 import styles from "./Register.module.css";
@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromLocation = location.state?.from;
   
   const handleRegister = async (first_name, email, password) => {
     try {
@@ -25,7 +27,7 @@ function Register() {
       });
       console.log("Usuário cadastrado com sucesso!", response);
       toast.success("Conta criada com sucesso!");
-      navigate("/login");
+      navigate("/login", { state: { from: fromLocation }, replace: true });
     } catch (error) {
       console.error("Erro ao fazer cadastro:", error);
       toast.error("Erro ao criar conta. Tente novamente.");
@@ -36,7 +38,12 @@ function Register() {
       <h1>Cadastro</h1>
       <FormUser type={"cadastro"} handle={handleRegister} />
       <p>
-        Já possui conta? <LinkButton to={"/login"} text={"Entrar"} />
+        Já possui conta?{" "}
+        <LinkButton
+          to={"/login"}
+          text={"Entrar"}
+          state={{ from: fromLocation }}
+        />
       </p>
     </div>
   );
