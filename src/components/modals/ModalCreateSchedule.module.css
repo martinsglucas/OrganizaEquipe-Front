@@ -64,6 +64,38 @@
   width: 100%;
 }
 
+.notesField {
+  display: flex;
+  flex-direction: column;
+  width: 15em;
+  margin-bottom: 1em;
+  padding: 10px;
+  border: solid 1px #333;
+  border-radius: 20px;
+  box-sizing: content-box;
+}
+
+.notesField label {
+  margin-bottom: 0.3em;
+  font-weight: bold;
+}
+
+.notesField textarea {
+  width: 100%;
+  min-height: 5.5em;
+  padding: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font: inherit;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.notesField textarea::placeholder {
+  font-size: 1em;
+}
+
 .add {
   display: flex;
   flex-direction: column;

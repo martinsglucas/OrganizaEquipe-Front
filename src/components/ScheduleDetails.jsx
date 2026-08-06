@@ -4,6 +4,7 @@ import {
   MdWatchLater,
   MdNotificationImportant,
   MdCalendarMonth,
+  MdNotes,
 } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
@@ -154,6 +155,18 @@ function ScheduleDetails({ schedule, onDelete, onUpdate, standalone = false }) {
               /{currentSchedule.participations.length}
             </span>
           </div>
+          {currentSchedule.notes?.trim() && (
+            <section
+              className={`${styles.item} ${styles.notes}`}
+              aria-labelledby="schedule-notes-title"
+            >
+              <MdNotes className={styles.icon} aria-hidden="true" />
+              <div>
+                <h3 id="schedule-notes-title">Observações</h3>
+                <p>{currentSchedule.notes.trim()}</p>
+              </div>
+            </section>
+          )}
           {unconfirmed && (
             <p className={styles.alert}>
               <MdNotificationImportant aria-hidden="true" />

@@ -44,6 +44,7 @@ function ModalCreateSchedule({
   const [titleInput, setTitleInput] = useState(schedule?.name || "");
   const [date, setDate] = useState(schedule?.date || getBrazilDate());
   const [hour, setHour] = useState(schedule?.hour || getBrazilHour());
+  const [notes, setNotes] = useState(schedule?.notes || "");
   const { teams } = useTeam();
   const availableTeams = teams.filter((team) => team.admins.includes(user.id));
   const [scheduleTeam, setScheduleTeam] = useState(
@@ -87,6 +88,7 @@ function ModalCreateSchedule({
         date,
         hour,
         team: scheduleTeam.id,
+        notes,
       };
 
       const newSchedule = await createSchedule(scheduleData);
@@ -129,6 +131,7 @@ function ModalCreateSchedule({
         date,
         hour,
         team: scheduleTeam.id,
+        notes,
       };
 
       await updateSchedule(schedule.id, scheduleData);
@@ -214,6 +217,17 @@ function ModalCreateSchedule({
                 handleOnChange={(e) => {
                   searchTeam(e.target.value);
                 }}
+              />
+            </div>
+            <div className={styles.notesField}>
+              <label htmlFor="schedule-notes">Observações</label>
+              <textarea
+                id="schedule-notes"
+                name="notes"
+                placeholder="Adicione informações úteis sobre a escala"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={4}
               />
             </div>
           </div>

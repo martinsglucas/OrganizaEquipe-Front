@@ -108,6 +108,22 @@
   font-size: 1.15rem;
 }
 
+.notes {
+  align-items: start;
+}
+
+.notes h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.92rem;
+}
+
+.notes p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #555;
+  white-space: pre-wrap;
+}
+
 .alert {
   display: flex;
   align-items: center;
