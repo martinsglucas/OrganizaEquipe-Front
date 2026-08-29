@@ -1,45 +1,31 @@
 import styles from "./ModalCreateOrganization.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../form/Input";
 import Modal from "./Modal";
 import ModalConfirmation from "./ModalConfirmation";
 import ModalLoading from "./ModalLoading";
 import { createRequest } from "../../api/services/requestService";
 import { useAuth } from "../../context/AuthContext";
+import { useOrganization } from "../../context/OrganizationContext";
 import { toast } from "react-toastify";
 import {
-  createOrganizationRequest,
-  getOrganizationCreationRequests,
+  createOrganization,
+  getOrganization,
   getOrganizations,
 } from "../../api/services/organizationService";
 
-const requestStatusLabels = {
-  pending: "Pendente",
-  approved: "Aprovada",
-  rejected: "Rejeitada",
-};
-
-function ModalCreateOrganization({ closeModal, noMarginTop }) {
+function ModalCreateOrganization({
+  closeModal,
+  noMarginTop,
+  canCreateOrganization,
+}) {
   const [name, setName] = useState("");
   const [orgCode, setOrgCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [organizationToJoin, setOrganizationToJoin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [creationRequests, setCreationRequests] = useState([]);
   const { user } = useAuth();
-
-  useEffect(() => {
-    const loadCreationRequests = async () => {
-      try {
-        const requests = await getOrganizationCreationRequests();
-        setCreationRequests(requests);
-      } catch (error) {
-        toast.error("Erro ao buscar solicitações de organização!");
-      }
-    };
-
-    loadCreationRequests();
-  }, []);
+  const { setOrganization } = useOrganization();
 
   const handleCreate = async () => {
     if (!name.trim()) {
@@ -49,13 +35,15 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
 
     try {
       setIsLoading(true);
-      const response = await createOrganizationRequest({ name: name.trim() });
-      setCreationRequests((requests) => [response, ...requests]);
-      setName("");
-      toast.success("Solicitação de criação enviada!");
+      const createdOrganization = await createOrganization({ name: name.trim() });
+      const organization = await getOrganization(createdOrganization.id);
+      setOrganization(organization);
+      toast.success("Organização criada com sucesso!");
+      closeModal();
     } catch (error) {
-      const message = error.response?.data?.name?.[0];
-      toast.error(message || "Erro ao solicitar criação da organização!");
+      const message =
+        error.response?.data?.detail || error.response?.data?.name?.[0];
+      toast.error(message || "Erro ao criar organização!");
     } finally {
       setIsLoading(false);
     }
@@ -104,33 +92,22 @@ function ModalCreateOrganization({ closeModal, noMarginTop }) {
       <button className={styles.button_submit} onClick={confirm}>
         Enviar solicitação
       </button>
-      <h2>OU</h2>
-      <h1 className={styles.create_org}>Criar organização</h1>
-      <Input
-        text={"Nome da Organização"}
-        name={"name"}
-        type={"text"}
-        value={name}
-        placeholder={"Digite o nome da organização"}
-        handleOnChange={(e) => setName(e.target.value)}
-      />
-      <button className={styles.button_submit} onClick={handleCreate}>
-        Solicitar criação
-      </button>
-      {creationRequests.length > 0 && (
-        <section className={styles.requests}>
-          <h2>Solicitações de criação</h2>
-          <ul>
-            {creationRequests.map((request) => (
-              <li key={request.id}>
-                <span>{request.name}</span>
-                <strong className={styles[request.status]}>
-                  {requestStatusLabels[request.status] || request.status}
-                </strong>
-              </li>
-            ))}
-          </ul>
-        </section>
+      {canCreateOrganization && (
+        <>
+          <h2>OU</h2>
+          <h1 className={styles.create_org}>Criar organização</h1>
+          <Input
+            text={"Nome da Organização"}
+            name={"name"}
+            type={"text"}
+            value={name}
+            placeholder={"Digite o nome da organização"}
+            handleOnChange={(e) => setName(e.target.value)}
+          />
+          <button className={styles.button_submit} onClick={handleCreate}>
+            Criar organização
+          </button>
+        </>
       )}
       {showConfirmation && (
         <ModalConfirmation
