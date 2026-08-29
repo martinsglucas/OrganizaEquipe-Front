@@ -24,6 +24,8 @@ import ModalConfirmation from "./modals/ModalConfirmation";
 import ModalRequests from "./modals/ModalRequests";
 import { toast } from "react-toastify";
 import { IoIosArrowForward } from "react-icons/io";
+import { FaLink } from "react-icons/fa6";
+import TeamInviteLinkModal from "./modals/TeamInviteLinkModal";
 
 const visibilityOptions = [
   {
@@ -52,6 +54,7 @@ function TeamDetail() {
   const [showModalFunctions, setShowModalFunctions] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
+  const [showInviteLink, setShowInviteLink] = useState(false);
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false);
   const { team, setTeam, admin, teams, setTeams } = useTeam();
   const members = team.members.map((member) => ({
@@ -239,6 +242,19 @@ function TeamDetail() {
               <IoIosArrowForward className={styles.openButton} />
             </button>
           )}
+          {admin && visibility !== "closed" && (
+            <button
+              className={styles.item}
+              onClick={() => setShowInviteLink(true)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className={styles.description}>
+                <FaLink className={styles.itemTitle} />
+                <b>Link de convite</b>
+              </div>
+              <IoIosArrowForward className={styles.openButton} />
+            </button>
+          )}
         </div>
         <br></br>
         <div className={styles.section}>
@@ -283,6 +299,9 @@ function TeamDetail() {
       )}
       {showModalRequests && (
         <ModalRequests onClose={() => setShowModalRequests(false)} />
+      )}
+      {showInviteLink && (
+        <TeamInviteLinkModal onClose={() => setShowInviteLink(false)} />
       )}
       {showModalSwap && (
         <ModalChangeTeam

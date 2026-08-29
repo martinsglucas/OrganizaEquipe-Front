@@ -20,6 +20,14 @@ export const getOrCreateOrganizationInvitationLink = async (organizationId) => {
   return response.data;
 };
 
+export const getOrCreateTeamInvitationLink = async (teamId) => {
+  const response = await apiClient.post("/invitation_links/", {
+    target_type: "team",
+    target_id: teamId,
+  });
+  return response.data;
+};
+
 export const revokeInvitationLink = async (linkId) => {
   await apiClient.post(`/invitation_links/${linkId}/revoke/`);
 };
