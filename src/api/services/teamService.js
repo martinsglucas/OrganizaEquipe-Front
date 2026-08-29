@@ -16,6 +16,16 @@ export const getTeams = async (userOnly = false, codeAccess = null) => {
   }
 };
 
+export const getTeamHub = async () => {
+  try {
+    const response = await apiClient.get("/teams/hub/");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao carregar central de equipes:", error);
+    throw error;
+  }
+};
+
 export const getDiscoverableTeams = async () => {
   try {
     const response = await apiClient.get("/teams/discoverable/");

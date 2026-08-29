@@ -2,12 +2,7 @@ import styles from "./ModalChangeTeam.module.css";
 import Modal from "./Modal";
 import ModalCreateTeam from "./ModalCreateTeam";
 import { useEffect, useState } from "react";
-import {
-  getDiscoverableTeams,
-  getMyTeamJoinRequests,
-  getTeams,
-  requestTeamJoin,
-} from "../../api/services/teamService";
+import { getTeamHub, requestTeamJoin } from "../../api/services/teamService";
 import { useTeam } from "../../context/TeamContext";
 import { toast } from "react-toastify";
 import Loading from "../Loading";
@@ -28,11 +23,11 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
   useEffect(() => {
     const loadTeamHub = async () => {
       try {
-        const [memberTeams, availableTeams, requests] = await Promise.all([
-          getTeams(true),
-          getDiscoverableTeams(),
-          getMyTeamJoinRequests(),
-        ]);
+        const {
+          member_teams: memberTeams = [],
+          discoverable_teams: availableTeams = [],
+          join_requests: requests = [],
+        } = await getTeamHub();
         setTeams(memberTeams);
         setDiscoverableTeams(availableTeams);
         setJoinRequests(requests);
@@ -47,7 +42,10 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
   }, [setTeams]);
 
   const handleJoinRequested = (joinRequest) => {
-    setJoinRequests((requests) => [joinRequest, ...requests]);
+    setJoinRequests((requests) => [
+      joinRequest,
+      ...requests.filter((request) => request.id !== joinRequest.id),
+    ]);
     setDiscoverableTeams((availableTeams) =>
       availableTeams.filter((team) => team.id !== joinRequest.team.id)
     );
