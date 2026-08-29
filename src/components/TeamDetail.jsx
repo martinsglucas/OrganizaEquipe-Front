@@ -3,7 +3,12 @@ import { IoMdSwap } from "react-icons/io";
 import { useState } from "react";
 import ModalChangeTeam from "./modals/ModalChangeTeam";
 import { useTeam } from "../context/TeamContext";
-import { getTeam, deleteTeam, getTeams } from "../api/services/teamService";
+import {
+  getTeam,
+  deleteTeam,
+  getTeams,
+  updateTeam,
+} from "../api/services/teamService";
 import ModalAdmins from "./modals/ModalAdmins";
 import Accordion from "./Accordion";
 import { FaTrash } from "react-icons/fa";
@@ -11,7 +16,7 @@ import { BsPersonFillGear } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { RiAdminFill } from "react-icons/ri";
 import { IoMdKey } from "react-icons/io";
-import { MdTitle, MdEmail } from "react-icons/md";
+import { MdTitle, MdEmail, MdVisibility } from "react-icons/md";
 import ModalEditNameTeam from "./modals/ModalEditNameTeam";
 import ModalMembers from "./modals/ModalMembers";
 import ModalFunctions from "./modals/ModalFunctions";
@@ -19,6 +24,24 @@ import ModalConfirmation from "./modals/ModalConfirmation";
 import ModalRequests from "./modals/ModalRequests";
 import { toast } from "react-toastify";
 import { IoIosArrowForward } from "react-icons/io";
+
+const visibilityOptions = [
+  {
+    value: "discoverable",
+    label: "Descoberta",
+    description: "Membros da organização podem encontrar e solicitar ingresso.",
+  },
+  {
+    value: "private",
+    label: "Privada",
+    description: "Oculta na busca; a entrada acontece somente por convite.",
+  },
+  {
+    value: "closed",
+    label: "Fechada",
+    description: "Não aceita novos ingressos.",
+  },
+];
 
 function TeamDetail() {
   const [showModalEditName, setShowModalEditName] = useState(false);
@@ -29,6 +52,7 @@ function TeamDetail() {
   const [showModalFunctions, setShowModalFunctions] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalRequests, setShowModalRequests] = useState(false);
+  const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false);
   const { team, setTeam, admin, teams, setTeams } = useTeam();
   const members = team.members.map((member) => ({
     id: member.id,
@@ -82,9 +106,43 @@ function TeamDetail() {
     }
   }
 
+  const handleVisibilityChange = async (event) => {
+    const visibility = event.target.value;
+
+    if (!admin || visibility === team.visibility) {
+      return;
+    }
+
+    try {
+      setIsUpdatingVisibility(true);
+      await updateTeam(team.id, { visibility });
+      setTeam((currentTeam) =>
+        currentTeam ? { ...currentTeam, visibility } : currentTeam
+      );
+      setTeams((currentTeams) =>
+        currentTeams.map((currentTeam) =>
+          currentTeam.id === team.id
+            ? { ...currentTeam, visibility }
+            : currentTeam
+        )
+      );
+      toast.success("Visibilidade alterada com sucesso!");
+    } catch (error) {
+      const message = error.response?.data?.detail;
+      toast.error(message || "Erro ao alterar a visibilidade da equipe.");
+    } finally {
+      setIsUpdatingVisibility(false);
+    }
+  };
+
   if (!team || Object.keys(team).length === 0) {
     return <h3>Selecione uma equipe</h3>;
   }
+
+  const visibility = team.visibility || "discoverable";
+  const visibilityOption =
+    visibilityOptions.find((option) => option.value === visibility) ||
+    visibilityOptions[0];
 
   return (
     <div className={styles.container}>
@@ -108,6 +166,40 @@ function TeamDetail() {
               <IoMdKey className={styles.itemTitle} />
               <b>Código:</b>&nbsp;{team.code_access}
             </div>
+          </div>
+          <div className={`${styles.item} ${styles.visibilityItem}`}>
+            <div className={styles.description}>
+              <MdVisibility className={styles.itemTitle} />
+              <div className={styles.visibilityDescription}>
+                <b id="team-visibility-label">Visibilidade</b>
+                <small id="team-visibility-description" aria-live="polite">
+                  {isUpdatingVisibility
+                    ? "Salvando visibilidade..."
+                    : visibilityOption.description}
+                </small>
+              </div>
+            </div>
+            {admin ? (
+              <select
+                id="team-visibility"
+                className={styles.visibilitySelect}
+                value={visibility}
+                onChange={handleVisibilityChange}
+                disabled={isUpdatingVisibility}
+                aria-labelledby="team-visibility-label"
+                aria-describedby="team-visibility-description"
+              >
+                {visibilityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <strong className={styles.visibilityValue}>
+                {visibilityOption.label}
+              </strong>
+            )}
           </div>
           <Accordion
             title={"Administradores"}

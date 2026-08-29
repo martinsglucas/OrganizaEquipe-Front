@@ -76,3 +76,53 @@
   /* align-items: center; */
   /* justify-content: space-between; */
 }
+
+.visibilityItem {
+  gap: 12px;
+}
+
+.visibilityDescription {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.visibilityDescription small {
+  color: #666;
+  line-height: 1.3;
+}
+
+.visibilitySelect {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  background: white;
+  color: #222;
+  font: inherit;
+}
+
+.visibilitySelect:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.visibilityValue {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+  .visibilityItem {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .visibilitySelect {
+    width: 100%;
+  }
+
+  .visibilityValue {
+    padding-left: 28px;
+  }
+}
