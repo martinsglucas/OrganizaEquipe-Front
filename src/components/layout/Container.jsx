@@ -34,7 +34,7 @@ function Container(props) {
     if (user) {
       fillProviders();
     }
-  }, [user, setOrganization, setTeams]);
+  }, [user?.id, setOrganization, setTeams]);
 
   return (
     <div className={`${styles.container} ${styles[props.customClass]}`}>
