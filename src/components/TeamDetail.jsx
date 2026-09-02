@@ -30,7 +30,7 @@ import TeamInviteLinkModal from "./modals/TeamInviteLinkModal";
 const visibilityOptions = [
   {
     value: "discoverable",
-    label: "Descoberta",
+    label: "Visível",
     description: "Membros da organização podem encontrar e solicitar ingresso.",
   },
   {
