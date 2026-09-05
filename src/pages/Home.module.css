@@ -81,6 +81,14 @@
   box-sizing: border-box;
 }
 
+.schedulePreviewCard > button {
+  width: 100%;
+  max-width: none;
+  min-height: 5.125rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .overviewState {
   margin: 0;
   color: var(--color-text-muted);
@@ -91,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  min-height: 5rem;
+  min-height: 5.125rem;
   padding: 0.625rem;
   border: 1px solid var(--color-action);
   border-radius: 20px;

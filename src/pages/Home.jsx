@@ -304,7 +304,9 @@ function Home() {
             ) : upcomingSchedules.length > 0 ? (
               <div className={styles.previewList}>
                 {upcomingSchedules.map((schedule) => (
-                  <ScheduleCard key={schedule.id} schedule={schedule} />
+                  <div className={styles.schedulePreviewCard} key={schedule.id}>
+                    <ScheduleCard schedule={schedule} />
+                  </div>
                 ))}
               </div>
             ) : (
