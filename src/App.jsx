@@ -32,7 +32,12 @@ function App() {
       <NotificationProvider>
         <OrganizationProvider>
           <TeamProvider>
-            <Router>
+            <Router
+              future={{
+                v7_relativeSplatPath: true,
+                v7_startTransition: true,
+              }}
+            >
               <Header sidebar={sidebar} setSitebar={setSidebar} />
               <Container customClass="min_height">
                 <Routes>
