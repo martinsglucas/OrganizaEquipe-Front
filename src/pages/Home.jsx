@@ -283,7 +283,7 @@ function Home() {
       </div>
 
       <section className={styles.overview} aria-labelledby="home-overview-title">
-        <h2 id="home-overview-title">Em breve</h2>
+        <h2 id="home-overview-title">Agenda</h2>
 
         <div className={styles.overviewGrid}>
           <section
@@ -291,7 +291,7 @@ function Home() {
             aria-labelledby="upcoming-schedules-title"
           >
             <div className={styles.overviewPanelHeader}>
-              <h3 id="upcoming-schedules-title">Próximas escalas</h3>
+              <h3 id="upcoming-schedules-title">Escalas</h3>
               <LinkButton text="Ver todas" to="/escala" />
             </div>
 
@@ -322,7 +322,7 @@ function Home() {
           >
             <div className={styles.overviewPanelHeader}>
               <h3 id="upcoming-unavailabilities-title">
-                Próximas indisponibilidades
+                Indisponibilidades
               </h3>
               <LinkButton text="Ver todas" to="/indisponibilidade" />
             </div>
