@@ -37,13 +37,10 @@
 .content {
   background: #fafafa;
   padding: 0 12px;
-  max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
 }
 
 .open {
-  max-height: 300px; /* Ajuste conforme necessário */
   padding: 10px 12px;
 }
 
@@ -54,6 +51,12 @@
 
 .list li {
   margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.empty {
+  margin: 0;
+  color: #666;
   font-size: 14px;
 }
 

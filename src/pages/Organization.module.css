@@ -1,38 +1,66 @@
 .container {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding: 1.5rem 1rem 7rem;
 }
 
 .center {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  height: 70vh;
+  min-height: 65vh;
 }
 
-.warning {
+.stateCard {
+  box-sizing: border-box;
+  width: min(100%, 34rem);
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
+.stateCard h1 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+}
 
-.add {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 10em;
-  height: 3em;
-  border: solid 1px #333;
-  background-color: #333;
-  border-radius: 20px;
-  margin: 1em;
-  justify-content: center;
+.stateCard > p:not(.eyebrow) {
+  margin: 0 0 1.5rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.primaryAction {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--color-action);
+  color: var(--color-action-contrast);
+  font: inherit;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.add span {
-  font-size: 3em;
-  color: white;
+.primaryAction:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.primaryAction:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }

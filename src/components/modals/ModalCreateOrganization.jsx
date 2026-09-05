@@ -2,8 +2,6 @@ import styles from "./ModalCreateOrganization.module.css";
 import { useState } from "react";
 import Input from "../form/Input";
 import Modal from "./Modal";
-import ModalConfirmation from "./ModalConfirmation";
-import ModalLoading from "./ModalLoading";
 import { createRequest } from "../../api/services/requestService";
 import { useAuth } from "../../context/AuthContext";
 import { useOrganization } from "../../context/OrganizationContext";
@@ -21,20 +19,22 @@ function ModalCreateOrganization({
 }) {
   const [name, setName] = useState("");
   const [orgCode, setOrgCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [pendingAction, setPendingAction] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [organizationToJoin, setOrganizationToJoin] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const { user } = useAuth();
   const { setOrganization } = useOrganization();
 
-  const handleCreate = async () => {
+  const handleCreate = async (event) => {
+    event.preventDefault();
     if (!name.trim()) {
-      toast.error("Informe o nome da organização!");
+      setErrorMessage("Informe o nome da organização.");
       return;
     }
 
     try {
-      setIsLoading(true);
+      setPendingAction("create");
+      setErrorMessage("");
       const createdOrganization = await createOrganization({ name: name.trim() });
       const organization = await getOrganization(createdOrganization.id);
       setOrganization(organization);
@@ -43,82 +43,136 @@ function ModalCreateOrganization({
     } catch (error) {
       const message =
         error.response?.data?.detail || error.response?.data?.name?.[0];
-      toast.error(message || "Erro ao criar organização!");
+      setErrorMessage(message || "Não foi possível criar a organização.");
     } finally {
-      setIsLoading(false);
+      setPendingAction("");
     }
   };
-  const confirm = async () => {
+
+  const confirm = async (event) => {
+    event.preventDefault();
+    if (!orgCode.trim()) {
+      setErrorMessage("Informe o código de acesso da organização.");
+      return;
+    }
+
     try {
-      const response = await getOrganizations(false, orgCode);
+      setPendingAction("lookup");
+      setErrorMessage("");
+      const response = await getOrganizations(false, orgCode.trim());
+      if (!response[0]) {
+        setErrorMessage("Organização não encontrada.");
+        return;
+      }
       setOrganizationToJoin(response[0].name);
-      setShowConfirmation(true);
-    } catch (error) {
-      toast.error("Erro ao buscar equipe!");
+    } catch {
+      setErrorMessage("Não foi possível buscar a organização.");
+    } finally {
+      setPendingAction("");
     }
   };
 
   const join = async () => {
     try {
-      setIsLoading(true);
+      setPendingAction("join");
+      setErrorMessage("");
       await createRequest({
         user: user.id,
-        code: orgCode,
+        code: orgCode.trim(),
       });
       toast.success("Solicitação enviada com sucesso!");
       closeModal();
-    } catch (error) {
-      toast.error("Erro ao enviar solicitação!");
+    } catch {
+      setErrorMessage("Não foi possível enviar a solicitação.");
     } finally {
-      setIsLoading(false);
+      setPendingAction("");
     }
   };
+
+  const isLoading = Boolean(pendingAction);
 
   return (
     <Modal
       isOpen={true}
       onClose={closeModal}
-      title={"Ingressar"}
+      title="Acessar organização"
       noMarginTop={noMarginTop}
+      size="sm"
+      isBusy={isLoading}
     >
-      <Input
-        text={"Código de Acesso"}
-        name={"orgCode"}
-        type={"text"}
-        value={orgCode}
-        placeholder={"Digite o código da organização"}
-        handleOnChange={(e) => setOrgCode(e.target.value)}
-      />
-      <button className={styles.button_submit} onClick={confirm}>
-        Enviar solicitação
-      </button>
-      {canCreateOrganization && (
-        <>
-          <h2>OU</h2>
-          <h1 className={styles.create_org}>Criar organização</h1>
+      {errorMessage && (
+        <p className={styles.error} role="alert">
+          {errorMessage}
+        </p>
+      )}
+      <section className={styles.section} aria-labelledby="join-organization-title">
+        <h2 id="join-organization-title">Ingressar por código</h2>
+        <p>Use o código compartilhado por uma pessoa administradora.</p>
+        <form onSubmit={confirm}>
           <Input
-            text={"Nome da Organização"}
-            name={"name"}
-            type={"text"}
-            value={name}
-            placeholder={"Digite o nome da organização"}
-            handleOnChange={(e) => setName(e.target.value)}
+            text="Código de acesso"
+            name="orgCode"
+            type="text"
+            value={orgCode}
+            placeholder="Digite o código da organização"
+            handleOnChange={(event) => {
+              setOrgCode(event.target.value);
+              setOrganizationToJoin("");
+              setErrorMessage("");
+            }}
           />
-          <button className={styles.button_submit} onClick={handleCreate}>
-            Criar organização
+          <button className={styles.primaryButton} disabled={isLoading}>
+            {pendingAction === "lookup" ? "Buscando..." : "Continuar"}
           </button>
-        </>
+        </form>
+        {organizationToJoin && (
+          <div className={styles.confirmation} aria-live="polite">
+            <p>
+              Enviar solicitação para <strong>{organizationToJoin}</strong>?
+            </p>
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setOrganizationToJoin("")}
+                disabled={isLoading}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={join}
+                disabled={isLoading}
+              >
+                {pendingAction === "join" ? "Enviando..." : "Enviar solicitação"}
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
+      {canCreateOrganization && (
+        <section className={styles.section} aria-labelledby="create-organization-title">
+          <h2 id="create-organization-title">Criar organização</h2>
+          <p>Comece um novo espaço e torne-se responsável por ele.</p>
+          <form onSubmit={handleCreate}>
+            <Input
+              text="Nome da organização"
+              name="name"
+              type="text"
+              value={name}
+              placeholder="Digite o nome da organização"
+              handleOnChange={(event) => {
+                setName(event.target.value);
+                setErrorMessage("");
+              }}
+            />
+            <button className={styles.primaryButton} disabled={isLoading}>
+              {pendingAction === "create" ? "Criando..." : "Criar organização"}
+            </button>
+          </form>
+        </section>
       )}
-      {showConfirmation && (
-        <ModalConfirmation
-          title={"Enviar solicitação"}
-          message={`Tem certeza que deseja enviar solicitação para a organização ${organizationToJoin}`}
-          onClose={() => setShowConfirmation(false)}
-          onConfirm={join}
-          noMarginTop={true}
-        />
-      )}
-      {isLoading && <ModalLoading isOpen={isLoading}/>}
     </Modal>
   );
 }

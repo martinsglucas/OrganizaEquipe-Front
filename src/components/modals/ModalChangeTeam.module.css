@@ -2,13 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.25em;
-  width: min(38em, 85vw);
-  max-height: calc(100dvh - 15rem);
-  padding: 0 0.25rem 1rem;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  width: min(100%, 38em);
+  padding: 0 0.25rem 0.5rem;
   box-sizing: border-box;
-  scrollbar-gutter: stable;
 }
 
 .section h2 {
@@ -57,8 +53,15 @@
   background-color: #f2f2f2;
 }
 
+.listItem > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .listItem button,
-.add {
+.add,
+.state button {
+  min-height: 44px;
   padding: 0.55em 0.8em;
   border: 0;
   border-radius: 1em;
@@ -67,8 +70,37 @@
   cursor: pointer;
 }
 
+.listItem button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .add {
   align-self: center;
+}
+
+.state,
+.createPath {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.state h2,
+.state p,
+.createPath h2,
+.createPath p {
+  margin: 0;
+}
+
+.state p,
+.createPath p {
+  color: #666;
 }
 
 .pending {
@@ -81,4 +113,20 @@
 
 .rejected {
   color: #b42318;
+}
+
+@media (max-width: 480px) {
+  .hub {
+    gap: 1rem;
+  }
+
+  .listItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .listItem button,
+  .add {
+    width: 100%;
+  }
 }

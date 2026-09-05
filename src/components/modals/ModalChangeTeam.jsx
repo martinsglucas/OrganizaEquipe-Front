@@ -17,12 +17,15 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [discoverableTeams, setDiscoverableTeams] = useState([]);
   const [joinRequests, setJoinRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [status, setStatus] = useState("loading");
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [pendingTeamId, setPendingTeamId] = useState(null);
   const { teams, setTeams } = useTeam();
 
   useEffect(() => {
     const loadTeamHub = async () => {
       try {
+        setStatus("loading");
         const {
           member_teams: memberTeams = [],
           discoverable_teams: availableTeams = [],
@@ -31,15 +34,14 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
         setTeams(memberTeams);
         setDiscoverableTeams(availableTeams);
         setJoinRequests(requests);
+        setStatus("ready");
       } catch (error) {
-        toast.error("Erro ao carregar equipes e solicitações!");
-      } finally {
-        setIsLoading(false);
+        setStatus("error");
       }
     };
 
     loadTeamHub();
-  }, [setTeams]);
+  }, [setTeams, loadAttempt]);
 
   const handleJoinRequested = (joinRequest) => {
     setJoinRequests((requests) => [
@@ -53,19 +55,33 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
 
   const handleRequestJoin = async (teamId) => {
     try {
+      setPendingTeamId(teamId);
       const joinRequest = await requestTeamJoin(teamId);
       handleJoinRequested(joinRequest);
       toast.success("Solicitação enviada com sucesso!");
     } catch (error) {
       const message = error.response?.data?.detail;
       toast.error(message || "Erro ao enviar solicitação!");
+    } finally {
+      setPendingTeamId(null);
     }
   };
 
   return (
     <Modal isOpen={true} onClose={closeModal} title={"Equipes"}>
-      {isLoading ? (
-        <Loading />
+      {status === "loading" ? (
+        <div className={styles.state} aria-live="polite">
+          <Loading />
+          <p>Carregando equipes e solicitações...</p>
+        </div>
+      ) : status === "error" ? (
+        <div className={styles.state} role="alert">
+          <h2>Não foi possível carregar as equipes</h2>
+          <p>Verifique sua conexão e tente novamente.</p>
+          <button onClick={() => setLoadAttempt((attempt) => attempt + 1)}>
+            Tentar novamente
+          </button>
+        </div>
       ) : (
         <div className={styles.hub}>
           <section className={styles.section}>
@@ -94,8 +110,14 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
                 {discoverableTeams.map((team) => (
                   <div key={team.id} className={styles.listItem}>
                     <span>{team.name}</span>
-                    <button onClick={() => handleRequestJoin(team.id)}>
-                      Solicitar ingresso
+                    <button
+                      onClick={() => handleRequestJoin(team.id)}
+                      disabled={pendingTeamId !== null}
+                      aria-busy={pendingTeamId === team.id}
+                    >
+                      {pendingTeamId === team.id
+                        ? "Enviando..."
+                        : "Solicitar ingresso"}
                     </button>
                   </div>
                 ))}
@@ -123,12 +145,16 @@ function ModalChangeTeam({ closeModal, handleChangeTeam }) {
             )}
           </section>
 
-          <button
-            className={styles.add}
-            onClick={() => setShowCreateModal(true)}
-          >
-            Criar equipe ou ingressar por código
-          </button>
+          <div className={styles.createPath}>
+            <h2>Outra forma de acesso</h2>
+            <p>Use um código recebido ou crie uma equipe se tiver permissão.</p>
+            <button
+              className={styles.add}
+              onClick={() => setShowCreateModal(true)}
+            >
+              Criar equipe ou ingressar por código
+            </button>
+          </div>
         </div>
       )}
       {showCreateModal && (

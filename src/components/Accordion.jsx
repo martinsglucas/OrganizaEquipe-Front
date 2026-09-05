@@ -1,9 +1,11 @@
 import styles from "./Accordion.module.css";
-import { useState, useRef } from "react";
+import { useId, useState } from "react";
 
 const Accordion = ({ title, icon, content, edit, onEdit }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const contentRef = useRef(null);
+  const generatedId = useId().replace(/:/g, "");
+  const triggerId = `accordion-trigger-${generatedId}`;
+  const contentId = `accordion-content-${generatedId}`;
 
   const handleEditClick = (e) => {
     e.stopPropagation();
@@ -12,7 +14,13 @@ const Accordion = ({ title, icon, content, edit, onEdit }) => {
 
   return (
     <div className={styles.item}>
-      <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
+      <button
+        id={triggerId}
+        className={styles.button}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+      >
         <div className={styles.title}>
           {icon && <div className={styles.iconTitle}>{icon}</div>}
           {title}
@@ -20,17 +28,21 @@ const Accordion = ({ title, icon, content, edit, onEdit }) => {
         <span className={styles.iconOpen}>{isOpen ? "−" : "+"}</span>
       </button>
       <div
-        ref={contentRef}
+        id={contentId}
         className={`${styles.content} ${isOpen ? styles.open : ""}`}
-        style={{
-          maxHeight: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px",
-        }}
+        role="region"
+        aria-labelledby={triggerId}
+        hidden={!isOpen}
       >
-        <ul className={styles.list}>
-          {content.map((item) => (
-            <li key={item.id}>{item.content}</li>
-          ))}
-        </ul>
+        {content.length > 0 ? (
+          <ul className={styles.list}>
+            {content.map((item) => (
+              <li key={item.id}>{item.content}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.empty}>Nenhum item cadastrado.</p>
+        )}
         <div className={styles.edit}>
           {edit && (
             <button className={styles.buttonEdit} onClick={handleEditClick}>

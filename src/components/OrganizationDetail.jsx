@@ -70,32 +70,52 @@ function OrganizationDetail() {
   };
 
   if (!organization || Object.keys(organization).length === 0) {
-    return <h3>Selecione uma equipe</h3>;
+    return <h3>Selecione uma organização</h3>;
   }
 
   return (
     <div className={styles.container}>
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>Organização atual</span>
+        <h1>{organization.name}</h1>
+        <p>
+          {admin
+            ? "Gerencie identidade, pessoas e formas de acesso."
+            : "Consulte as informações e pessoas desta organização."}
+        </p>
+      </header>
       <div className={styles.info}>
-        <div className={styles.section}>
-          <button
-            onClick={handleEditName}
-            className={styles.item}
-            style={{ cursor: "pointer" }}
-          >
-            <div className={styles.description}>
-              <MdTitle className={styles.itemTitle} />
-              <b>{organization.name}</b>
+        <section className={styles.group} aria-labelledby="organization-info-title">
+          <h2 id="organization-info-title">Identidade</h2>
+          <div className={styles.section}>
+          {admin ? (
+            <button onClick={handleEditName} className={styles.item}>
+              <div className={styles.description}>
+                <MdTitle className={styles.itemTitle} />
+                <span><b>Nome</b><small>{organization.name}</small></span>
+              </div>
+              <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
+            </button>
+          ) : (
+            <div className={styles.item}>
+              <div className={styles.description}>
+                <MdTitle className={styles.itemTitle} />
+                <span><b>Nome</b><small>{organization.name}</small></span>
+              </div>
             </div>
-            {admin && (
-              <IoIosArrowForward className={styles.openButton} />
-            )}
-          </button>
+          )}
           <div className={styles.item}>
             <div className={styles.description}>
               <IoMdKey className={styles.itemTitle} />
-              <b>Código:</b>&nbsp;{organization.code_access}
+              <span><b>Código de acesso</b><small>{organization.code_access}</small></span>
             </div>
           </div>
+          </div>
+        </section>
+
+        <section className={styles.group} aria-labelledby="organization-people-title">
+          <h2 id="organization-people-title">Pessoas e acesso</h2>
+          <div className={styles.section}>
           <Accordion
             title={"Administradores"}
             icon={<RiAdminFill />}
@@ -117,40 +137,41 @@ function OrganizationDetail() {
               <button
                 className={styles.item}
                 onClick={() => setShowModalRequests(true)}
-                style={{ cursor: "pointer" }}
               >
                 <div className={styles.description}>
                   <MdEmail className={styles.itemTitle} />
                   <b>Solicitações</b>
                 </div>
-                <IoIosArrowForward className={styles.openButton} />
+                <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
               </button>
               <button
                 className={styles.item}
                 onClick={() => setShowInviteLink(true)}
-                style={{ cursor: "pointer" }}
               >
                 <div className={styles.description}>
                   <FaLink className={styles.itemTitle} />
                   <b>Link de convite</b>
                 </div>
-                <IoIosArrowForward className={styles.openButton} />
+                <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
               </button>
             </>
           )}
-        </div>
-        <br></br>
-        <br></br>
+          </div>
+        </section>
         {admin && (
-          <div className={styles.section}>
+          <section className={styles.dangerZone} aria-labelledby="organization-danger-title">
+            <div>
+              <h2 id="organization-danger-title">Zona de perigo</h2>
+              <p>A exclusão remove o acesso de todos os membros.</p>
+            </div>
             <button
-              className={styles.button}
+              className={styles.dangerButton}
               onClick={() => setShowModalDelete(true)}
             >
               <FaTrash />
               <span>Excluir Organização</span>
             </button>
-          </div>
+          </section>
         )}
       </div>
       {showModalEditName && (
@@ -177,6 +198,8 @@ function OrganizationDetail() {
           message={`Tem certeza que deseja remover a organização ${organization.name}?`}
           onConfirm={() => handleDeleteOrganization()}
           onClose={() => setShowModalDelete(false)}
+          confirmLabel="Excluir organização"
+          danger
         />
       )}
       {showInviteLink && (

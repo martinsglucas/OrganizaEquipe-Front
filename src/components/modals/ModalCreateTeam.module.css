@@ -1,23 +1,85 @@
-.button_submit {
-  display: flex;
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 0.5s;
-  background-color: #333;
-  border-radius: 1em;
-  color: white;
-  font-size: 1em;
+.section {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.section + .section {
+  border-top: 1px solid var(--color-border);
+}
+
+.section h2,
+.section p {
+  margin: 0;
+}
+
+.section form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.section form > div {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-action);
+  border-radius: var(--radius-control);
+  font: inherit;
   cursor: pointer;
 }
 
-.button_cancel {
+.primaryButton {
+  background: var(--color-action);
+  color: var(--color-action-contrast);
+}
+
+.secondaryButton {
+  background: var(--color-surface);
+  color: var(--color-action);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.confirmation {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-subtle);
+}
+
+.actions {
   display: flex;
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 0.5s;
-  background-color: #c42d2d;
-  border-radius: 1em;
-  color: white;
-  font-size: 1em;
-  cursor: pointer;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.error {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-control);
+  background: var(--color-danger-surface);
+  color: var(--color-danger-text);
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }

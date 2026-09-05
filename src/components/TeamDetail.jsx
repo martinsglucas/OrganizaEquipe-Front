@@ -56,6 +56,7 @@ function TeamDetail() {
   const [showModalRequests, setShowModalRequests] = useState(false);
   const [showInviteLink, setShowInviteLink] = useState(false);
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false);
+  const [pendingVisibility, setPendingVisibility] = useState(null);
   const { team, setTeam, admin, teams, setTeams } = useTeam();
   const members = team.members.map((member) => ({
     id: member.id,
@@ -109,9 +110,7 @@ function TeamDetail() {
     }
   }
 
-  const handleVisibilityChange = async (event) => {
-    const visibility = event.target.value;
-
+  const updateVisibility = async (visibility) => {
     if (!admin || visibility === team.visibility) {
       return;
     }
@@ -138,6 +137,17 @@ function TeamDetail() {
     }
   };
 
+  const handleVisibilityChange = (event) => {
+    const visibility = event.target.value;
+
+    if (visibility === "closed" && team.visibility !== "closed") {
+      setPendingVisibility(visibility);
+      return;
+    }
+
+    updateVisibility(visibility);
+  };
+
   if (!team || Object.keys(team).length === 0) {
     return <h3>Selecione uma equipe</h3>;
   }
@@ -149,25 +159,39 @@ function TeamDetail() {
 
   return (
     <div className={styles.container}>
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>Equipe atual</span>
+        <h1>{team.name}</h1>
+        <p>
+          {admin
+            ? "Gerencie identidade, pessoas e formas de acesso."
+            : "Consulte as informações, funções e pessoas desta equipe."}
+        </p>
+      </header>
       <div className={styles.info}>
-        <div className={styles.section}>
-          <button
-            onClick={handleEditName}
-            className={styles.item}
-            style={{ cursor: "pointer" }}
-          >
-            <div className={styles.description}>
-              <MdTitle className={styles.itemTitle} />
-              <b>{team.name}</b>
+        <section className={styles.group} aria-labelledby="team-info-title">
+          <h2 id="team-info-title">Identidade</h2>
+          <div className={styles.section}>
+          {admin ? (
+            <button onClick={handleEditName} className={styles.item}>
+              <div className={styles.description}>
+                <MdTitle className={styles.itemTitle} />
+                <span><b>Nome</b><small>{team.name}</small></span>
+              </div>
+              <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
+            </button>
+          ) : (
+            <div className={styles.item}>
+              <div className={styles.description}>
+                <MdTitle className={styles.itemTitle} />
+                <span><b>Nome</b><small>{team.name}</small></span>
+              </div>
             </div>
-            {admin && (
-              <IoIosArrowForward className={styles.openButton} />
-            )}
-          </button>
+          )}
           <div className={styles.item}>
             <div className={styles.description}>
               <IoMdKey className={styles.itemTitle} />
-              <b>Código:</b>&nbsp;{team.code_access}
+              <span><b>Código de acesso</b><small>{team.code_access}</small></span>
             </div>
           </div>
           <div className={`${styles.item} ${styles.visibilityItem}`}>
@@ -204,6 +228,18 @@ function TeamDetail() {
               </strong>
             )}
           </div>
+          </div>
+          {visibility === "closed" && (
+            <p className={styles.closedNotice} role="status">
+              Esta equipe não aceita novos ingressos. Administradores podem reabrir o
+              acesso alterando a visibilidade.
+            </p>
+          )}
+        </section>
+
+        <section className={styles.group} aria-labelledby="team-people-title">
+          <h2 id="team-people-title">Pessoas e acesso</h2>
+          <div className={styles.section}>
           <Accordion
             title={"Administradores"}
             icon={<RiAdminFill />}
@@ -233,47 +269,47 @@ function TeamDetail() {
             <button
               className={styles.item}
               onClick={() => setShowModalRequests(true)}
-              style={{ cursor: "pointer" }}
             >
               <div className={styles.description}>
                 <MdEmail className={styles.itemTitle} />
                 <b>Solicitações</b>
               </div>
-              <IoIosArrowForward className={styles.openButton} />
+              <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
             </button>
           )}
           {admin && visibility !== "closed" && (
             <button
               className={styles.item}
               onClick={() => setShowInviteLink(true)}
-              style={{ cursor: "pointer" }}
             >
               <div className={styles.description}>
                 <FaLink className={styles.itemTitle} />
                 <b>Link de convite</b>
               </div>
-              <IoIosArrowForward className={styles.openButton} />
+              <IoIosArrowForward className={styles.openButton} aria-hidden="true" />
             </button>
           )}
-        </div>
-        <br></br>
-        <div className={styles.section}>
-          <button className={styles.button} onClick={handleSwapModal}>
+          </div>
+        </section>
+
+        <button className={styles.secondaryAction} onClick={handleSwapModal}>
             <IoMdSwap />
             <span>Trocar Equipe</span>
-          </button>
-        </div>
-        <br></br>
+        </button>
         {admin && (
-          <div className={styles.section}>
+          <section className={styles.dangerZone} aria-labelledby="team-danger-title">
+            <div>
+              <h2 id="team-danger-title">Zona de perigo</h2>
+              <p>A exclusão remove o acesso de todos os membros.</p>
+            </div>
             <button
-              className={styles.button}
+              className={styles.dangerButton}
               onClick={() => setShowModalDelete(true)}
             >
               <FaTrash />
               <span>Excluir Equipe</span>
             </button>
-          </div>
+          </section>
         )}
       </div>
       {showModalEditName && (
@@ -318,6 +354,23 @@ function TeamDetail() {
           message={`Tem certeza que deseja remover a equipe ${team.name}?`}
           onConfirm={() => handleDeleteTeam()}
           onClose={() => setShowModalDelete(false)}
+          confirmLabel="Excluir equipe"
+          danger
+        />
+      )}
+      {pendingVisibility && (
+        <ModalConfirmation
+          title={"Fechar equipe"}
+          message={
+            "Ao fechar a equipe, novos ingressos por descoberta, código ou link ficarão indisponíveis. Deseja continuar?"
+          }
+          onConfirm={async () => {
+            await updateVisibility(pendingVisibility);
+            setPendingVisibility(null);
+          }}
+          onClose={() => setPendingVisibility(null)}
+          confirmLabel="Fechar equipe"
+          danger
         />
       )}
     </div>
