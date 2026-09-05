@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   width: min(100%, 520px);
+  min-width: 0;
   gap: 1rem;
+  box-sizing: border-box;
 }
 
 .content > p {
@@ -28,10 +30,13 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
+  width: 100%;
 }
 
 .actions button,
+.confirmationActions button,
 .feedback button {
+  min-width: 0;
   min-height: 44px;
   padding: 0.65rem 1rem;
   border: none;
@@ -40,18 +45,56 @@
   color: #fff;
   font-size: 1rem;
   cursor: pointer;
+  overflow-wrap: anywhere;
 }
 
-.actions button:disabled {
+.actions button:disabled,
+.confirmationActions button:disabled {
   cursor: wait;
   opacity: 0.65;
 }
 
 .actions .dangerButton {
   grid-column: 1 / -1;
+}
+
+.actions .dangerButton,
+.confirmationActions .dangerButton {
   border: 1px solid #b42318;
   background: #fff;
   color: #b42318;
+}
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f7f7f7;
+}
+
+.confirmation p,
+.savingStatus {
+  margin: 0;
+  text-align: center;
+}
+
+.confirmationActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.confirmationActions .secondaryButton {
+  border: 1px solid #333;
+  background: #fff;
+  color: #333;
+}
+
+.savingStatus {
+  font-weight: bold;
 }
 
 .feedback {
@@ -63,4 +106,15 @@
 
 .feedback p {
   margin: 0;
+}
+
+@media (max-width: 480px) {
+  .actions,
+  .confirmationActions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .actions .dangerButton {
+    grid-column: auto;
+  }
 }

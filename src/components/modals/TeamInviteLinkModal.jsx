@@ -14,6 +14,7 @@ function TeamInviteLinkModal({ onClose }) {
   const [link, setLink] = useState(null);
   const [status, setStatus] = useState("loading");
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [pendingAction, setPendingAction] = useState(null);
   const inputRef = useRef(null);
 
   const invitationUrl = link
@@ -60,9 +61,11 @@ function TeamInviteLinkModal({ onClose }) {
     try {
       setStatus("saving");
       await revokeInvitationLink(link.id);
+      setPendingAction(null);
       setStatus("revoked");
       toast.success("Link revogado.");
     } catch {
+      setPendingAction(null);
       setStatus("ready");
       toast.error("Não foi possível revogar o link.");
     }
@@ -73,22 +76,35 @@ function TeamInviteLinkModal({ onClose }) {
       setStatus("saving");
       const regenerated = await regenerateInvitationLink(link.id);
       setLink(regenerated);
+      setPendingAction(null);
       setStatus("ready");
       toast.success("Novo link gerado.");
     } catch {
+      setPendingAction(null);
       setStatus(link ? "ready" : "error");
       toast.error("Não foi possível gerar um novo link.");
     }
   };
 
+  const handleConfirmedAction = () => {
+    if (pendingAction === "regenerate") {
+      handleRegenerate();
+      return;
+    }
+
+    if (pendingAction === "revoke") {
+      handleRevoke();
+    }
+  };
+
+  const isSaving = status === "saving";
+
   return (
     <Modal isOpen={true} title="Link de convite" onClose={onClose} noMarginTop>
       <div
         className={styles.content}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Gerenciar link de convite da equipe"
         aria-live="polite"
+        aria-busy={isSaving}
       >
         <p>
           Compartilhe este link para adicionar membros da organização diretamente
@@ -102,7 +118,7 @@ function TeamInviteLinkModal({ onClose }) {
             <button onClick={handleRetry}>Tentar novamente</button>
           </div>
         )}
-        {(status === "ready" || status === "saving") && (
+        {(status === "ready" || isSaving) && (
           <>
             <label className={styles.label} htmlFor="team-invite-url">
               URL do convite
@@ -116,20 +132,59 @@ function TeamInviteLinkModal({ onClose }) {
               autoFocus
             />
             <div className={styles.actions}>
-              <button onClick={handleCopy} disabled={status === "saving"}>
+              <button onClick={handleCopy} disabled={isSaving}>
                 Copiar link
               </button>
-              <button onClick={handleRegenerate} disabled={status === "saving"}>
-                Regenerar
+              <button
+                onClick={() => setPendingAction("regenerate")}
+                disabled={isSaving || pendingAction !== null}
+              >
+                Regenerar link
               </button>
               <button
                 className={styles.dangerButton}
-                onClick={handleRevoke}
-                disabled={status === "saving"}
+                onClick={() => setPendingAction("revoke")}
+                disabled={isSaving || pendingAction !== null}
               >
-                Revogar
+                Revogar link
               </button>
             </div>
+            {pendingAction && (
+              <div className={styles.confirmation} role="alert">
+                <p>
+                  {pendingAction === "regenerate"
+                    ? "Regenerar invalidará o link atual. Deseja continuar?"
+                    : "Revogar invalidará o link atual imediatamente. Deseja continuar?"}
+                </p>
+                <div className={styles.confirmationActions}>
+                  <button
+                    className={styles.secondaryButton}
+                    onClick={() => setPendingAction(null)}
+                    disabled={isSaving}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className={
+                      pendingAction === "revoke" ? styles.dangerButton : ""
+                    }
+                    onClick={handleConfirmedAction}
+                    disabled={isSaving}
+                  >
+                    {pendingAction === "regenerate"
+                      ? "Regenerar link"
+                      : "Revogar link"}
+                  </button>
+                </div>
+              </div>
+            )}
+            {isSaving && (
+              <p className={styles.savingStatus} role="status">
+                {pendingAction === "revoke"
+                  ? "Revogando link..."
+                  : "Regenerando link..."}
+              </p>
+            )}
           </>
         )}
         {status === "revoked" && (
