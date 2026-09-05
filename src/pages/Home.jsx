@@ -231,6 +231,48 @@ function Home() {
     <div className={styles.container}>
       <div className={styles.notificationBlock}>{renderNotificationCard()}</div>
 
+      <div className={styles.container_teams}>
+        <div className={styles.teamsHeader}>
+          <h2>Minhas Equipes</h2>
+          {!isTeamLoading && teams.length > 0 && (
+            <button
+              className={styles.manageTeams}
+              onClick={() => setManageTeamModal(true)}
+              aria-label="Gerenciar equipes"
+              title="Gerenciar equipes"
+            >
+              <IoSettingsOutline />
+            </button>
+          )}
+        </div>
+
+        {isTeamLoading ? (
+          <Loading />
+        ) : teams.length > 0 ? (
+          <div className={styles.teams}>
+            {teams.map((team) => (
+              <TeamCard
+                key={team.id}
+                team={team}
+                handleOnClick={() => {
+                  handleTeamClick(team.id);
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.emptyTeams}>
+            <p>Você ainda não participa de uma equipe.</p>
+            <button
+              className={styles.findTeam}
+              onClick={() => setManageTeamModal(true)}
+            >
+              Encontrar uma equipe
+            </button>
+          </div>
+        )}
+      </div>
+
       <section className={styles.overview} aria-labelledby="home-overview-title">
         <h2 id="home-overview-title">Em breve</h2>
 
@@ -303,47 +345,6 @@ function Home() {
         </div>
       </section>
 
-      <div className={styles.container_teams}>
-        <div className={styles.teamsHeader}>
-          <h2>Minhas Equipes</h2>
-          {!isTeamLoading && teams.length > 0 && (
-            <button
-              className={styles.manageTeams}
-              onClick={() => setManageTeamModal(true)}
-              aria-label="Gerenciar equipes"
-              title="Gerenciar equipes"
-            >
-              <IoSettingsOutline />
-            </button>
-          )}
-        </div>
-
-        {isTeamLoading ? (
-          <Loading />
-        ) : teams.length > 0 ? (
-          <div className={styles.teams}>
-            {teams.map((team) => (
-              <TeamCard
-                key={team.id}
-                team={team}
-                handleOnClick={() => {
-                  handleTeamClick(team.id);
-                }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className={styles.emptyTeams}>
-            <p>Você ainda não participa de uma equipe.</p>
-            <button
-              className={styles.findTeam}
-              onClick={() => setManageTeamModal(true)}
-            >
-              Encontrar uma equipe
-            </button>
-          </div>
-        )}
-      </div>
       {manageTeamModal && (
         <ModalChangeTeam
           closeModal={() => setManageTeamModal(false)}

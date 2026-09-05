@@ -195,11 +195,23 @@
   .overviewGrid {
     grid-template-columns: minmax(0, 1fr);
   }
-}
 
-@media (max-width: 420px) {
+  .overviewPanel {
+    padding: 0.75rem;
+    border-color: transparent;
+    background: transparent;
+  }
+
   .overviewPanelHeader {
-    align-items: flex-start;
-    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .overviewPanelHeader h3 {
+    min-width: 0;
+  }
+
+  .overviewPanelHeader a {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.875rem;
   }
 }
