@@ -1,41 +1,75 @@
 .members {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: calc(100vh - 300px);
+  gap: 0.75rem;
+  min-width: 0;
   width: 100%;
 }
 
 .member {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  width: 100%;
   border: 1px solid #333;
   padding: 0.5em 1em;
   border-radius: 1em;
-  margin: 0.5em 0;
-  min-width: 14em;
+}
+
+.member > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .delete {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #f0b4ae;
+  border-radius: 0.75rem;
+  background: #fff;
   color: #f44336;
+  cursor: pointer;
 }
 
 .add {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 0.5s;
-  /* background-color: #333; */
+  gap: 0.5rem;
+  min-height: 44px;
+  width: 100%;
+  padding: 0.65rem 1rem;
   background: none;
   border: 1px solid #333;
   border-radius: 1em;
-  /* color: white; */
   font-size: 1em;
   cursor: pointer;
-  margin: 0.5em 0;
-  min-width: 16em;
+}
+
+.delete:disabled,
+.add:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.empty {
+  margin: 0;
+  color: #666;
+  text-align: center;
+}
+
+.error {
+  display: block;
+  margin-top: 0.75rem;
+  color: #b42318;
+  font-weight: 700;
 }

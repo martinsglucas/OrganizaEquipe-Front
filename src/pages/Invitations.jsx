@@ -1,4 +1,4 @@
-import styles from "./Invitations.module.css"
+import styles from "./Invitations.module.css";
 import {
   acceptOrganizationInvitation,
   rejectOrganizationInvitation,
@@ -8,7 +8,7 @@ import {
   rejectTeamInvitation,
 } from "../api/services/teamInvitationService";
 import { getInvitations } from "../api/services/userService";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useOrganization } from "../context/OrganizationContext";
 import { useTeam } from "../context/TeamContext";
 import { useAuth } from "../context/AuthContext";
@@ -17,144 +17,224 @@ import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 
 function Invitations() {
-
   const [orgInvitations, setOrgInvitations] = useState([]);
   const [teamInvitations, setTeamInvitations] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [pendingActions, setPendingActions] = useState({});
+  const [actionErrors, setActionErrors] = useState({});
+  const pendingKeys = useRef(new Set());
   const { organization } = useOrganization();
   const { team } = useTeam();
   const { user } = useAuth();
 
   const fetchInvitations = useCallback(async () => {
-    if (!user?.email) return;
+    if (!user?.id) {
+      return;
+    }
 
     try {
       setIsLoading(true);
+      setLoadError("");
       const invitations = await getInvitations(user.id);
-      setOrgInvitations(invitations.org_invitations);
-      setTeamInvitations(invitations.team_invitations);
+      setOrgInvitations(invitations.org_invitations || []);
+      setTeamInvitations(invitations.team_invitations || []);
     } catch (error) {
+      setLoadError("Não foi possível carregar seus convites.");
       toast.error("Erro ao buscar convites!");
       console.error("Erro ao buscar convites:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [user?.email]);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchInvitations();
-  }, [fetchInvitations, organization, team]);
+  }, [fetchInvitations, organization?.id, team?.id]);
 
-  const acceptTeamInvitation = async (invite) => {
+  const runInvitationAction = async ({ key, action, request, onSuccess, successMessage }) => {
+    if (pendingKeys.current.has(key)) {
+      return;
+    }
+
+    pendingKeys.current.add(key);
+    setPendingActions((current) => ({ ...current, [key]: action }));
+    setActionErrors((current) => ({ ...current, [key]: "" }));
+
     try {
-      await acceptTeamInvitationRequest(invite.id);
-      const newInvitations = teamInvitations.filter((i) => i.id !== invite.id);
-      setTeamInvitations(newInvitations);
-      toast.success("Convite aceito!");
+      await request();
+      onSuccess();
+      toast.success(successMessage);
     } catch (error) {
-      toast.error("Erro ao aceitar convite!");
-    }
-  };
-  
-  const refuseTeamInvitation = async (invite) => {
-    try {
-      await rejectTeamInvitation(invite.id);
-      const newInvitations = teamInvitations.filter((i) => i.id !== invite.id);
-      setTeamInvitations(newInvitations);
-      toast.success("Convite recusado!");
-    } catch (error) {
-      toast.error("Erro ao recusar convite!");
-    }
-  };
-  
-  const acceptOrgInvitation = async (invite) => {
-    try {
-      await acceptOrganizationInvitation(invite.id);
-      const newInvitations = orgInvitations.filter((i) => i.id !== invite.id);
-      setOrgInvitations(newInvitations);
-      toast.success("Convite aceito!");
-    } catch (error){
-      toast.error("Erro ao aceitar convite!");
-    }
-  };
-  
-  const refuseOrgInvitation = async (invite) => {
-    try {
-      await rejectOrganizationInvitation(invite.id);
-      const newInvitations = orgInvitations.filter((i) => i.id !== invite.id);
-      setOrgInvitations(newInvitations);
-      toast.success("Convite recusado!");
-    } catch (error){
-      toast.error("Erro ao recusar convite!");
+      const actionLabel = action === "accept" ? "aceitar" : "recusar";
+      setActionErrors((current) => ({
+        ...current,
+        [key]: `Não foi possível ${actionLabel} este convite. Tente novamente.`,
+      }));
+      toast.error(`Erro ao ${actionLabel} convite!`);
+    } finally {
+      pendingKeys.current.delete(key);
+      setPendingActions((current) => {
+        const next = { ...current };
+        delete next[key];
+        return next;
+      });
     }
   };
 
-  if (!orgInvitations.length && !teamInvitations.length) {
+  const acceptTeamInvitation = (invite) => {
+    const key = `team-${invite.id}`;
+    return runInvitationAction({
+      key,
+      action: "accept",
+      request: () => acceptTeamInvitationRequest(invite.id),
+      onSuccess: () =>
+        setTeamInvitations((current) => current.filter((item) => item.id !== invite.id)),
+      successMessage: "Convite aceito!",
+    });
+  };
+
+  const refuseTeamInvitation = (invite) => {
+    const key = `team-${invite.id}`;
+    return runInvitationAction({
+      key,
+      action: "reject",
+      request: () => rejectTeamInvitation(invite.id),
+      onSuccess: () =>
+        setTeamInvitations((current) => current.filter((item) => item.id !== invite.id)),
+      successMessage: "Convite recusado!",
+    });
+  };
+
+  const acceptOrgInvitation = (invite) => {
+    const key = `organization-${invite.id}`;
+    return runInvitationAction({
+      key,
+      action: "accept",
+      request: () => acceptOrganizationInvitation(invite.id),
+      onSuccess: () =>
+        setOrgInvitations((current) => current.filter((item) => item.id !== invite.id)),
+      successMessage: "Convite aceito!",
+    });
+  };
+
+  const refuseOrgInvitation = (invite) => {
+    const key = `organization-${invite.id}`;
+    return runInvitationAction({
+      key,
+      action: "reject",
+      request: () => rejectOrganizationInvitation(invite.id),
+      onSuccess: () =>
+        setOrgInvitations((current) => current.filter((item) => item.id !== invite.id)),
+      successMessage: "Convite recusado!",
+    });
+  };
+
+  const renderInvitation = (invite, type) => {
+    const isOrganization = type === "organization";
+    const key = `${type}-${invite.id}`;
+    const pendingAction = pendingActions[key];
+    const targetName = isOrganization ? invite.organization.name : invite.team.name;
+
     return (
-      <div className={`${styles.container} ${styles.center}`}>
-        <h2 className={styles.aviso}>Você não tem convites</h2>
-      </div>
+      <article
+        key={key}
+        className={styles.invitation}
+        aria-busy={Boolean(pendingAction)}
+      >
+        <div className={styles.invitationMessage}>
+          <p>
+            Convite para ingressar na {isOrganization ? "organização" : "equipe"}{" "}
+            <strong>{targetName}</strong>
+          </p>
+          <span>Enviado por {invite.sender_name}</span>
+        </div>
+        <div className={styles.buttons}>
+          <button
+            type="button"
+            className={styles.cancel}
+            onClick={() =>
+              isOrganization
+                ? refuseOrgInvitation(invite)
+                : refuseTeamInvitation(invite)
+            }
+            disabled={Boolean(pendingAction)}
+          >
+            <MdCancel aria-hidden="true" />
+            <span>{pendingAction === "reject" ? "Recusando..." : "Recusar"}</span>
+          </button>
+          <button
+            type="button"
+            className={styles.approve}
+            onClick={() =>
+              isOrganization
+                ? acceptOrgInvitation(invite)
+                : acceptTeamInvitation(invite)
+            }
+            disabled={Boolean(pendingAction)}
+          >
+            <MdDone aria-hidden="true" />
+            <span>{pendingAction === "accept" ? "Aceitando..." : "Aceitar"}</span>
+          </button>
+        </div>
+        {actionErrors[key] && (
+          <p className={styles.rowError} role="alert">
+            {actionErrors[key]}
+          </p>
+        )}
+      </article>
     );
-  }
+  };
+
+  const hasInvitations = orgInvitations.length > 0 || teamInvitations.length > 0;
 
   return (
-    <div className={styles.container}>
-      {orgInvitations.length > 0 && (
-        <>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            orgInvitations.map((invite) => (
-              <div key={invite.id} className={styles.invitation}>
-                <span className={styles.invitationMessage}>
-                  <span>
-                    Convite para ingressar na organização{" "}
-                    <b>{invite.organization.name}</b>
-                  </span>
-                  <i>por {invite.sender_name}</i>
-                  {/* Convite de {invite.sender_name}: ingressar na organização {invite.organization} */}
-                </span>
-                <div className={styles.buttons}>
-                  <MdCancel
-                    className={styles.cancel}
-                    onClick={() => refuseOrgInvitation(invite)}
-                  />
-                  <MdDone
-                    className={styles.approve}
-                    onClick={() => acceptOrgInvitation(invite)}
-                  />
-                </div>
+    <main className={styles.container} aria-busy={isLoading}>
+      <header className={styles.header}>
+        <span>Central de acesso</span>
+        <h1>Convites</h1>
+        <p>Aceite ou recuse convites enviados para você.</p>
+      </header>
+
+      {isLoading ? (
+        <section className={styles.status} aria-live="polite">
+          <Loading />
+          <p>Carregando convites...</p>
+        </section>
+      ) : loadError ? (
+        <section className={styles.errorState} role="alert">
+          <h2>Não foi possível exibir os convites</h2>
+          <p>{loadError}</p>
+          <button type="button" onClick={fetchInvitations}>
+            Tentar novamente
+          </button>
+        </section>
+      ) : !hasInvitations ? (
+        <section className={styles.status}>
+          <h2>Nenhum convite pendente</h2>
+          <p>Quando alguém convidar você para uma organização ou equipe, o convite aparecerá aqui.</p>
+        </section>
+      ) : (
+        <div className={styles.sections}>
+          {orgInvitations.length > 0 && (
+            <section className={styles.section} aria-labelledby="organization-invitations-title">
+              <h2 id="organization-invitations-title">Organizações</h2>
+              <div className={styles.list}>
+                {orgInvitations.map((invite) => renderInvitation(invite, "organization"))}
               </div>
-            ))
+            </section>
           )}
-        </>
-      )}
-      {teamInvitations.length > 0 && (
-        <>
-          {teamInvitations.map((invite) => (
-            <div key={invite.id} className={styles.invitation}>
-              <span className={styles.invitationMessage}>
-                <span>
-                  Convite para ingressar na equipe <b>{invite.team.name}</b>
-                </span>
-                <i>por {invite.sender_name}</i>
-                {/* Convite de {invite.sender_name}: ingressar na equipe {invite.team} */}
-              </span>
-              <div className={styles.buttons}>
-                <MdCancel
-                  className={styles.cancel}
-                  onClick={() => refuseTeamInvitation(invite)}
-                />
-                <MdDone
-                  className={styles.approve}
-                  onClick={() => acceptTeamInvitation(invite)}
-                />
+          {teamInvitations.length > 0 && (
+            <section className={styles.section} aria-labelledby="team-invitations-title">
+              <h2 id="team-invitations-title">Equipes</h2>
+              <div className={styles.list}>
+                {teamInvitations.map((invite) => renderInvitation(invite, "team"))}
               </div>
-            </div>
-          ))}
-        </>
+            </section>
+          )}
+        </div>
       )}
-    </div>
+    </main>
   );
 }
 

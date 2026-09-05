@@ -1,6 +1,5 @@
 import styles from "./ModalTeamInvitation.module.css";
 import Modal from "./Modal";
-import ModalLoading from "./ModalLoading";
 import Input from "../form/Input";
 import { useState } from "react";
 import { useTeam } from "../../context/TeamContext";
@@ -11,18 +10,22 @@ import { toast } from "react-toastify";
 function ModalTeamInvitation({ onClose }) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { team } = useTeam();
   const { user } = useAuth();
 
-  const invite = async () => {
+  const invite = async (event) => {
+    event.preventDefault();
+
     try {
-      if (!email) {
-        toast.warn("Por favor, insira um email válido.");
+      setErrorMessage("");
+      if (!email.trim()) {
+        setErrorMessage("Informe o e-mail da pessoa que deseja convidar.");
         return;
       }
       setIsLoading(true);
       await createTeamInvitation({
-        recipient_email: email,
+        recipient_email: email.trim(),
         sender_name: user.first_name,
         team: team.id,
       });
@@ -37,11 +40,14 @@ function ModalTeamInvitation({ onClose }) {
           "Erro ao enviar convite";
         if (errorMessage.includes("já faz parte dessa equipe")) {
           toast.info(errorMessage);
+          setErrorMessage(errorMessage);
         } else {
           toast.error("Erro ao enviar convite");
+          setErrorMessage(errorMessage);
         }
       } else {
         toast.error("Erro ao enviar convite");
+        setErrorMessage("Não foi possível enviar o convite. Tente novamente.");
       }
     } finally {
       setIsLoading(false);
@@ -54,19 +60,23 @@ function ModalTeamInvitation({ onClose }) {
       title={"Enviar Convite"}
       onClose={onClose}
       noMarginTop={true}
+      size="sm"
+      isBusy={isLoading}
     >
-      <Input
-        name={"email"}
-        type={"email"}
-        text={"Email"}
-        value={email}
-        handleOnChange={(e) => setEmail(e.target.value)}
-        placeholder={"Digite o email do convidado"}
-      />
-      <button className={styles.button} onClick={invite}>
-        Convidar
-      </button>
-      {isLoading && <ModalLoading isOpen={isLoading} />}
+      <form className={styles.form} onSubmit={invite} aria-busy={isLoading}>
+        <Input
+          name={"email"}
+          type={"email"}
+          text={"E-mail"}
+          value={email}
+          handleOnChange={(e) => setEmail(e.target.value)}
+          placeholder={"Digite o e-mail do convidado"}
+        />
+        {errorMessage && <p className={styles.error} role="alert">{errorMessage}</p>}
+        <button className={styles.button} type="submit" disabled={isLoading}>
+          {isLoading ? "Enviando convite..." : "Enviar convite"}
+        </button>
+      </form>
     </Modal>
   );
 }

@@ -2,7 +2,6 @@ import styles from "./ModalAdminsOrg.module.css";
 import SelectCheckbox from "../form/SelectCheckbox";
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import ModalLoading from "./ModalLoading";
 import { updateOrganization } from "../../api/services/organizationService";
 import { toast } from "react-toastify";
 import { useOrganization } from "../../context/OrganizationContext";
@@ -13,6 +12,7 @@ function ModalAdminsOrg({ isOpen, onClose }) {
   const [admins, setAdmins] = useState(organization?.admins || []);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const adminsIds = admins.map((admin) => admin.id);
@@ -37,20 +37,24 @@ function ModalAdminsOrg({ isOpen, onClose }) {
 
   const updateAdmins = async () => {
     try {
+      setErrorMessage("");
       setIsLoading(true);
       const adminsIds = admins.map((admin) => admin.id);
       await updateOrganization(organization.id, { admins: adminsIds });
-      toast.success("Administradores atualizados com sucesso!");
-    } catch (error) {
-      console.error("Erro ao atualizar administradores:", error);
-      toast.error("Erro ao atualizar administradores");
-    } finally {
       setOrganization((prev) => ({
         ...prev,
-        admins: admins,
+        admins,
       }));
-      setIsLoading(false);
+      toast.success("Administradores atualizados com sucesso!");
       onClose();
+    } catch (error) {
+      console.error("Erro ao atualizar administradores:", error);
+      setErrorMessage(
+        "Não foi possível atualizar os administradores. Tente novamente."
+      );
+      toast.error("Erro ao atualizar administradores");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -64,22 +68,46 @@ function ModalAdminsOrg({ isOpen, onClose }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={"Administradores"}>
-      <div className={styles.container}>
-        <SelectCheckbox
-          options={members}
-          info={"first_name"}
-          checked={admins}
-          handleOnChange={(user) => handleAdminsChange(user)}
-        />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={"Administradores"}
+      isBusy={isLoading}
+    >
+      <div className={styles.container} aria-busy={isLoading}>
+        {members.length > 0 ? (
+          <fieldset className={styles.selection} disabled={isLoading}>
+            <legend className={styles.legend}>Selecione os administradores</legend>
+            <SelectCheckbox
+              options={members}
+              info={"first_name"}
+              checked={admins}
+              handleOnChange={(user) => handleAdminsChange(user)}
+            />
+          </fieldset>
+        ) : (
+          <p className={styles.empty}>Nenhum membro disponível.</p>
+        )}
+        {admins.length === 0 && members.length > 0 && (
+          <p className={styles.validation} role="alert">
+            A organização deve ter ao menos um administrador.
+          </p>
+        )}
+        {errorMessage && (
+          <p className={styles.error} role="alert">
+            {errorMessage}
+          </p>
+        )}
         <button
-          disabled={disabled}
-          className={`${styles.buttonApply} ${disabled ? styles.disabled : ""}`}
+          type="button"
+          disabled={disabled || isLoading}
+          className={`${styles.buttonApply} ${
+            disabled || isLoading ? styles.disabled : ""
+          }`}
           onClick={() => updateAdmins()}
         >
-          Aplicar
+          {isLoading ? "Salvando administradores..." : "Salvar administradores"}
         </button>
-        {isLoading && <ModalLoading isOpen={isLoading} />}
       </div>
     </Modal>
   );
