@@ -1,5 +1,34 @@
+:root {
+  --color-text: #222;
+  --color-text-muted: #666;
+  --color-surface: #fff;
+  --color-surface-subtle: #f7f7f7;
+  --color-surface-hover: #eee;
+  --color-border: #ddd;
+  --color-border-strong: #777;
+  --color-action: #333;
+  --color-action-contrast: #fff;
+  --color-success: #18743b;
+  --color-warning: #9a6700;
+  --color-warning-text: #6b4e00;
+  --color-warning-surface: #fff8e5;
+  --color-warning-border: #f0cf80;
+  --color-danger: #b42318;
+  --color-danger-text: #7a271a;
+  --color-danger-surface: #fff8f7;
+  --color-danger-border: #f0b7b2;
+  --color-backdrop: rgba(0, 0, 0, 0.5);
+  --focus-ring: rgba(51, 51, 51, 0.3);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-dialog: 0 12px 32px rgba(0, 0, 0, 0.2);
+  --radius-control: 0.75rem;
+  --radius-surface: 1rem;
+}
+
 body {
   margin: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -16,5 +45,5 @@ button, input, select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  color: #000;
+  color: var(--color-text);
 }

@@ -1,37 +1,60 @@
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* padding: 20px; */
+  width: 100%;
+}
+
+.message {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .buttons {
   display: flex;
-  /* justify-content: space-between; */
-  /* width: 100%; */
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.confirm,
+.cancel {
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .confirm {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border: 1px solid var(--color-action);
+  background-color: var(--color-action);
+  color: var(--color-action-contrast);
 }
 
 .cancel {
-  background-color: #ff0000;
-  color: white;
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-surface);
+  color: var(--color-action);
 }
 
-.message {
-  text-align: center;
+.danger {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger);
+}
+
+.confirm:disabled,
+.cancel:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 360px) {
+  .buttons {
+    flex-direction: column-reverse;
+  }
+
+  .confirm,
+  .cancel {
+    width: 100%;
+  }
 }
