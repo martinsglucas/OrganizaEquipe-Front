@@ -38,16 +38,25 @@ const selectUpcomingUnavailabilities = (unavailabilities) => {
     .slice(0, HOME_PREVIEW_LIMIT);
 };
 
-const formatUnavailabilityPeriod = ({ start_date, end_date }) => {
+const getUnavailabilityDateContent = ({ start_date, end_date }) => {
   const startDate = dayjs(start_date);
+  const date = startDate.toDate();
+  const hasDateRange = end_date && !dayjs(end_date).isSame(startDate, "day");
 
-  if (end_date && !dayjs(end_date).isSame(startDate, "day")) {
-    return `${startDate.format("DD/MM/YYYY")} a ${dayjs(end_date).format(
-      "DD/MM/YYYY"
-    )}`;
-  }
-
-  return startDate.format("DD/MM/YYYY");
+  return {
+    day: startDate.format("DD"),
+    month: date
+      .toLocaleDateString("pt-BR", { month: "short" })
+      .replace(".", "")
+      .toUpperCase(),
+    weekday: date
+      .toLocaleDateString("pt-BR", { weekday: "short" })
+      .replace(".", "")
+      .toUpperCase(),
+    detail: hasDateRange
+      ? `Até ${dayjs(end_date).format("DD/MM/YYYY")}`
+      : "Indisponível neste dia",
+  };
 };
 
 function Home() {
@@ -324,17 +333,31 @@ function Home() {
               </p>
             ) : upcomingUnavailabilities.length > 0 ? (
               <div className={styles.previewList}>
-                {upcomingUnavailabilities.map((unavailability) => (
-                  <button
-                    type="button"
-                    className={styles.unavailabilityCard}
-                    key={unavailability.id}
-                    onClick={() => navigate("/indisponibilidade")}
-                  >
-                    <strong>{unavailability.description}</strong>
-                    <span>{formatUnavailabilityPeriod(unavailability)}</span>
-                  </button>
-                ))}
+                {upcomingUnavailabilities.map((unavailability) => {
+                  const dateContent =
+                    getUnavailabilityDateContent(unavailability);
+
+                  return (
+                    <button
+                      type="button"
+                      className={styles.unavailabilityCard}
+                      key={unavailability.id}
+                      onClick={() => navigate("/indisponibilidade")}
+                    >
+                      <span className={styles.unavailabilityDate}>
+                        <span className={styles.unavailabilityDay}>
+                          {dateContent.day}
+                        </span>
+                        <span>{dateContent.month}</span>
+                        <span>{dateContent.weekday}</span>
+                      </span>
+                      <span className={styles.unavailabilityInfo}>
+                        <strong>{unavailability.description}</strong>
+                        <span>{dateContent.detail}</span>
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             ) : (
               <p className={styles.overviewState}>
