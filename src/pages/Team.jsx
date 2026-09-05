@@ -11,17 +11,17 @@ function Team() {
   const { team, setTeam } = useTeam();
   const { organization } = useOrganization();
   const [showModal, setShowModal] = useState(false);
-  const [status, setStatus] = useState(team ? "loading" : "ready");
+  const [status, setStatus] = useState("ready");
 
-  const fetchTeam = async () => {
+  const fetchTeam = async ({ blocking = false } = {}) => {
     try {
-      setStatus("loading");
+      if (blocking) setStatus("loading");
       const teamFetched = await getTeam(team.id);
       setTeam(teamFetched);
       setStatus("ready");
     } catch (error) {
       console.error("Erro ao buscar equipe:", error);
-      setStatus("error");
+      if (blocking) setStatus("error");
     }
   };
 
@@ -60,7 +60,6 @@ function Team() {
   if (status === "loading") {
     return (
       <main className={`${styles.container} ${styles.center}`} aria-live="polite">
-        <p className={styles.eyebrow}>Equipes</p>
         <h1>Carregando equipe...</h1>
       </main>
     );
@@ -75,7 +74,10 @@ function Team() {
           <p>Tente novamente ou escolha outra equipe.</p>
           <div className={styles.actions}>
             {team && (
-              <button className={styles.secondaryAction} onClick={fetchTeam}>
+              <button
+                className={styles.secondaryAction}
+                onClick={() => fetchTeam({ blocking: true })}
+              >
                 Tentar novamente
               </button>
             )}

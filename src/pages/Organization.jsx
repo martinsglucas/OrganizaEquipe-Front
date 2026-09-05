@@ -12,23 +12,23 @@ function Organization() {
   const { user, setUser } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [canCreateOrganization, setCanCreateOrganization] = useState(false);
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus] = useState(organization ? "ready" : "loading");
   const [capabilityLoading, setCapabilityLoading] = useState(true);
 
-  const getOrgs = async () => {
+  const getOrgs = async ({ blocking = !organization } = {}) => {
     try {
-      setStatus("loading");
+      if (blocking) setStatus("loading");
       const orgs = await getOrganizations(true);
       setOrganization(orgs[0] || null);
       setStatus("ready");
     } catch (error) {
       console.error("Erro ao buscar organizações:", error);
-      setStatus("error");
+      if (blocking) setStatus("error");
     }
   };
 
   useEffect(() => {
-    getOrgs();
+    getOrgs({ blocking: !organization });
   }, []);
 
   useEffect(() => {
@@ -69,7 +69,6 @@ function Organization() {
   if (status === "loading") {
     return (
       <main className={`${styles.container} ${styles.center}`} aria-live="polite">
-        <p className={styles.eyebrow}>Organizações</p>
         <h1>Carregando organização...</h1>
       </main>
     );
@@ -82,7 +81,10 @@ function Organization() {
           <p className={styles.eyebrow}>Organizações</p>
           <h1>Não foi possível carregar sua organização</h1>
           <p>Verifique sua conexão e tente novamente.</p>
-          <button className={styles.primaryAction} onClick={getOrgs}>
+          <button
+            className={styles.primaryAction}
+            onClick={() => getOrgs({ blocking: true })}
+          >
             Tentar novamente
           </button>
         </section>
