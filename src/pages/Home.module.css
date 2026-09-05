@@ -25,6 +25,92 @@
   max-width: 720px;
 }
 
+.overview {
+  width: 100%;
+  max-width: 900px;
+}
+
+.overview > h2 {
+  margin: 0 0 0.75rem;
+  text-align: center;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.overviewPanel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-subtle);
+}
+
+.overviewPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.overviewPanelHeader h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.overviewPanelHeader a {
+  flex: 0 0 auto;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.previewList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.previewList > * {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.overviewState {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.unavailabilityCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.unavailabilityCard:hover,
+.unavailabilityCard:focus-visible {
+  border-color: var(--color-border-strong);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.unavailabilityCard span {
+  color: var(--color-text-muted);
+}
+
 .container_teams {
   display: flex;
   flex-direction: column;
@@ -103,4 +189,17 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+@media (max-width: 720px) {
+  .overviewGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .overviewPanelHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

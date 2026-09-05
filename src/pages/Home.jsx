@@ -12,6 +12,43 @@ import NotificationCard from "../components/notifications/NotificationCard";
 import IosInstallHint from "../components/notifications/IosInstallHint";
 import { useNotifications } from "../context/NotificationContext";
 import { IoSettingsOutline } from "react-icons/io5";
+import dayjs from "dayjs";
+import { getSchedules } from "../api/services/scheduleService";
+import { getUnavailabilities } from "../api/services/unavailabilityService";
+import ScheduleCard from "../components/ScheduleCard";
+
+const HOME_PREVIEW_LIMIT = 3;
+
+const selectUpcomingUnavailabilities = (unavailabilities) => {
+  const today = dayjs().startOf("day");
+
+  return unavailabilities
+    .filter((unavailability) => {
+      const lastDate = dayjs(
+        unavailability.end_date || unavailability.start_date
+      );
+      return lastDate.isValid() && !lastDate.endOf("day").isBefore(today);
+    })
+    .sort((first, second) => {
+      const dateDifference = dayjs(first.start_date).diff(
+        dayjs(second.start_date)
+      );
+      return dateDifference || first.id - second.id;
+    })
+    .slice(0, HOME_PREVIEW_LIMIT);
+};
+
+const formatUnavailabilityPeriod = ({ start_date, end_date }) => {
+  const startDate = dayjs(start_date);
+
+  if (end_date && !dayjs(end_date).isSame(startDate, "day")) {
+    return `${startDate.format("DD/MM/YYYY")} a ${dayjs(end_date).format(
+      "DD/MM/YYYY"
+    )}`;
+  }
+
+  return startDate.format("DD/MM/YYYY");
+};
 
 function Home() {
   const [manageTeamModal, setManageTeamModal] = useState(false);
@@ -19,6 +56,13 @@ function Home() {
   const { setTeam, teams, setTeams } = useTeam();
   const { organization } = useOrganization();
   const [isTeamLoading, setIsTeamLoading] = useState(false);
+  const [upcomingSchedules, setUpcomingSchedules] = useState([]);
+  const [upcomingUnavailabilities, setUpcomingUnavailabilities] = useState([]);
+  const [areSchedulesLoading, setAreSchedulesLoading] = useState(false);
+  const [areUnavailabilitiesLoading, setAreUnavailabilitiesLoading] =
+    useState(false);
+  const [schedulesError, setSchedulesError] = useState(false);
+  const [unavailabilitiesError, setUnavailabilitiesError] = useState(false);
   const {
     status,
     isLoading: notificationsLoading,
@@ -42,6 +86,74 @@ function Home() {
   useEffect(() => {
     fetchTeams();
   }, [fetchTeams]);
+
+  useEffect(() => {
+    if (!organization) {
+      setUpcomingSchedules([]);
+      setUpcomingUnavailabilities([]);
+      return undefined;
+    }
+
+    let isActive = true;
+
+    const fetchUpcomingSchedules = async () => {
+      setAreSchedulesLoading(true);
+      setSchedulesError(false);
+
+      try {
+        const response = await getSchedules(
+          "mine",
+          "next",
+          1,
+          HOME_PREVIEW_LIMIT
+        );
+        if (isActive) {
+          setUpcomingSchedules(response.results);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar próximas escalas:", error);
+        if (isActive) {
+          setSchedulesError(true);
+          setUpcomingSchedules([]);
+        }
+      } finally {
+        if (isActive) {
+          setAreSchedulesLoading(false);
+        }
+      }
+    };
+
+    const fetchUpcomingUnavailabilities = async () => {
+      setAreUnavailabilitiesLoading(true);
+      setUnavailabilitiesError(false);
+
+      try {
+        const response = await getUnavailabilities(true);
+        if (isActive) {
+          setUpcomingUnavailabilities(
+            selectUpcomingUnavailabilities(response)
+          );
+        }
+      } catch (error) {
+        console.error("Erro ao buscar próximas indisponibilidades:", error);
+        if (isActive) {
+          setUnavailabilitiesError(true);
+          setUpcomingUnavailabilities([]);
+        }
+      } finally {
+        if (isActive) {
+          setAreUnavailabilitiesLoading(false);
+        }
+      }
+    };
+
+    fetchUpcomingSchedules();
+    fetchUpcomingUnavailabilities();
+
+    return () => {
+      isActive = false;
+    };
+  }, [organization]);
 
   const handleTeamClick = async (id) => {
     const teams = await getTeam(id);
@@ -118,6 +230,78 @@ function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.notificationBlock}>{renderNotificationCard()}</div>
+
+      <section className={styles.overview} aria-labelledby="home-overview-title">
+        <h2 id="home-overview-title">Em breve</h2>
+
+        <div className={styles.overviewGrid}>
+          <section
+            className={styles.overviewPanel}
+            aria-labelledby="upcoming-schedules-title"
+          >
+            <div className={styles.overviewPanelHeader}>
+              <h3 id="upcoming-schedules-title">Próximas escalas</h3>
+              <LinkButton text="Ver todas" to="/escala" />
+            </div>
+
+            {areSchedulesLoading ? (
+              <Loading />
+            ) : schedulesError ? (
+              <p className={styles.overviewState} role="alert">
+                Não foi possível carregar suas próximas escalas.
+              </p>
+            ) : upcomingSchedules.length > 0 ? (
+              <div className={styles.previewList}>
+                {upcomingSchedules.map((schedule) => (
+                  <ScheduleCard key={schedule.id} schedule={schedule} />
+                ))}
+              </div>
+            ) : (
+              <p className={styles.overviewState}>
+                Você não está em nenhuma escala futura.
+              </p>
+            )}
+          </section>
+
+          <section
+            className={styles.overviewPanel}
+            aria-labelledby="upcoming-unavailabilities-title"
+          >
+            <div className={styles.overviewPanelHeader}>
+              <h3 id="upcoming-unavailabilities-title">
+                Próximas indisponibilidades
+              </h3>
+              <LinkButton text="Ver todas" to="/indisponibilidade" />
+            </div>
+
+            {areUnavailabilitiesLoading ? (
+              <Loading />
+            ) : unavailabilitiesError ? (
+              <p className={styles.overviewState} role="alert">
+                Não foi possível carregar suas indisponibilidades.
+              </p>
+            ) : upcomingUnavailabilities.length > 0 ? (
+              <div className={styles.previewList}>
+                {upcomingUnavailabilities.map((unavailability) => (
+                  <button
+                    type="button"
+                    className={styles.unavailabilityCard}
+                    key={unavailability.id}
+                    onClick={() => navigate("/indisponibilidade")}
+                  >
+                    <strong>{unavailability.description}</strong>
+                    <span>{formatUnavailabilityPeriod(unavailability)}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.overviewState}>
+                Você não possui indisponibilidades futuras.
+              </p>
+            )}
+          </section>
+        </div>
+      </section>
 
       <div className={styles.container_teams}>
         <div className={styles.teamsHeader}>
