@@ -1,41 +1,54 @@
 .accordion {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
   max-width: 400px;
 }
 
 .item {
-  border-bottom: 1.5px solid #ddd;
+  border-bottom: 1.5px solid var(--color-border);
 }
 
 .button {
-  width: 100%;
-  background: #f7f7f7;
-  border: none;
-  text-align: left;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: var(--color-surface);
+  border: none;
+  text-align: left;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
   transition: background 0.3s ease-in-out;
 }
 
-.button:hover {
-  background: #e0e0e0;
+.button:hover,
+.button:focus-visible {
+  background: var(--color-surface-subtle);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -3px;
 }
 
 .iconOpen {
+  display: inline-flex;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
   font-size: 20px;
   font-weight: bold;
+  line-height: 1;
   transition: transform 0.3s ease;
 }
 
 .content {
-  background: #fafafa;
+  background: var(--color-surface-subtle);
   padding: 0 12px;
   overflow: hidden;
 }
@@ -56,7 +69,7 @@
 
 .empty {
   margin: 0;
-  color: #666;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -72,18 +85,25 @@
   padding: 0.5em 1em;
   text-decoration: none;
   transition: 0.5s;
-  background-color: #333;
+  background-color: var(--color-action);
   border-radius: 1em;
-  color: white;
+  color: var(--color-action-contrast);
   cursor: pointer;
 }
 
 .title {
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .iconTitle {
+  display: inline-flex;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  margin-right: 0.65rem;
   font-size: 20px;
-  margin-right: .5em; 
+  line-height: 1;
 }
