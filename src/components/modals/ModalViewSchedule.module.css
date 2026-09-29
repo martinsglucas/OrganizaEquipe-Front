@@ -118,10 +118,24 @@
 }
 
 .notes p {
+  min-width: 0;
   margin: 0;
   overflow-wrap: anywhere;
   color: #555;
   white-space: pre-wrap;
+}
+
+.notes a {
+  color: var(--color-action);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.notes a:focus-visible {
+  border-radius: 2px;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .alert {

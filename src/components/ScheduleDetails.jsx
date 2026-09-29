@@ -17,6 +17,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import ModalConfirmation from "./modals/ModalConfirmation";
 import ModalCreateSchedule from "./modals/ModalCreateSchedule";
+import SafeLinkText from "./SafeLinkText";
 import styles from "./modals/ModalViewSchedule.module.css";
 
 function ScheduleDetails({ schedule, onDelete, onUpdate, standalone = false }) {
@@ -163,7 +164,9 @@ function ScheduleDetails({ schedule, onDelete, onUpdate, standalone = false }) {
               <MdNotes className={styles.icon} aria-hidden="true" />
               <div>
                 <h3 id="schedule-notes-title">Observações</h3>
-                <p>{currentSchedule.notes.trim()}</p>
+                <p>
+                  <SafeLinkText text={currentSchedule.notes.trim()} />
+                </p>
               </div>
             </section>
           )}
