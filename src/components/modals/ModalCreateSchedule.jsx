@@ -7,7 +7,7 @@ import { getTeam } from "../../api/services/teamService";
 import { toast } from "react-toastify";
 import Input from "../form/Input";
 import Select from "../form/Select";
-import { useTeam } from "../../context/TeamContext";
+import { isTeamAdmin, useTeam } from "../../context/TeamContext";
 import ModalAddParticipation from "./ModalAddParticipation";
 import ModalLoading from "./ModalLoading";
 import { IoMdTrash } from "react-icons/io";
@@ -46,7 +46,7 @@ function ModalCreateSchedule({
   const [hour, setHour] = useState(schedule?.hour || getBrazilHour());
   const [notes, setNotes] = useState(schedule?.notes || "");
   const { teams } = useTeam();
-  const availableTeams = teams.filter((team) => team.admins.includes(user.id));
+  const availableTeams = teams.filter((team) => isTeamAdmin(team, user?.id));
   const [scheduleTeam, setScheduleTeam] = useState(
     schedule?.team || { id: "", name: "" }
   );

@@ -50,15 +50,32 @@
 
 .add {
   position: fixed;
-  right: 0.3em;
-  bottom: 3em;
-  font-size: 2.5em;
-  padding: 0.2em;
+  right: calc(0.75rem + env(safe-area-inset-right));
+  bottom: calc(7.5rem + env(safe-area-inset-bottom));
+  z-index: 110;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 0;
   background: #000;
   color: #fff;
   border-radius: 50%;
   margin: 0;
   cursor: pointer;
+}
+
+.add svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  pointer-events: none;
+}
+
+.add:focus-visible {
+  outline: 3px solid #757575;
+  outline-offset: 3px;
 }
 
 .filterField {

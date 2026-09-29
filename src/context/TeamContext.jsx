@@ -3,13 +3,19 @@ import { useAuth } from "./AuthContext";
 
 const TeamContext = createContext();
 
+export const isTeamAdmin = (team, userId) =>
+  Boolean(
+    userId &&
+      team?.admins?.some((admin) =>
+        typeof admin === "object" ? admin.id === userId : admin === userId
+      )
+  );
+
 export const TeamProvider = ({ children }) => {
   const [team, setTeam] = useState(null);
   const [teams, setTeams] = useState([]);
   const { user } = useAuth();
-  const admin = team?.admins.some(
-    (admin) => admin.id === user?.id
-  ) || false;
+  const admin = isTeamAdmin(team, user?.id);
 
   return (
     <TeamContext.Provider value={{ team, setTeam, admin, teams, setTeams }}>

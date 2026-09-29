@@ -3,7 +3,7 @@ import { getSchedules } from "../api/services/scheduleService";
 import { useState, useEffect, useCallback } from "react";
 import ScheduleCard from "../components/ScheduleCard";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useTeam } from "../context/TeamContext";
+import { isTeamAdmin, useTeam } from "../context/TeamContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ModalCreateSchedule from "../components/modals/ModalCreateSchedule";
@@ -88,9 +88,7 @@ function Schedule() {
 
   const userId = user?.id;
 
-  const isAdminSomeTeam = teams
-    .map((team) => team.admins)
-    .some((admins) => admins.includes(userId));
+  const isAdminSomeTeam = teams.some((team) => isTeamAdmin(team, userId));
 
   useEffect(() => {
     if (!userId) {
@@ -215,12 +213,16 @@ function Schedule() {
       </div>
 
       {isAdminSomeTeam && (
-        <AiOutlinePlus
+        <button
+          type="button"
           className={styles.add}
+          aria-label="Criar escala"
           onClick={() => {
             setShowModal(true);
           }}
-        />
+        >
+          <AiOutlinePlus aria-hidden="true" />
+        </button>
       )}
       {isLoading ? (
         <div className={styles.loading}>
